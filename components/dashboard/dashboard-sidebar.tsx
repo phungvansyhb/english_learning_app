@@ -1,15 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import {
 	BookMarkedIcon,
 	BookOpen,
-	CalendarDays,
 	ChevronLeft,
 	FileHeadphoneIcon,
 	LayoutGrid,
 	LogOut,
-	Mail,
 	MedalIcon,
 	MicVocalIcon,
 	PenToolIcon,
@@ -26,22 +24,25 @@ interface NavItem {
 	label: string;
 	icon: typeof LayoutGrid;
 	hasDot?: boolean;
+	link: string;
 }
 
 const navItems: NavItem[] = [
-	{ id: 'vocabulary', label: 'Vocabulary', icon: WholeWordIcon },
-	{ id: 'listening', label: 'Listening', icon: FileHeadphoneIcon },
-	{ id: 'speaking', label: 'Speaking', icon: MicVocalIcon },
-	{ id: 'reading', label: 'Reading', icon: BookOpen },
-	{ id: 'writing', label: 'Writing', icon: PenToolIcon },
-	{ id: 'test', label: 'Test', icon: BookMarkedIcon },
-	{ id: 'leaderboard', label: 'LeaderBoard', icon: MedalIcon, hasDot: true },
-	{ id: 'settings', label: 'Settings', icon: Settings },
+	{ id: 'vocabulary', label: 'Vocabulary', icon: WholeWordIcon, link: '/vocabulary' },
+	{ id: 'listening', label: 'Listening', icon: FileHeadphoneIcon, link: '#' },
+	{ id: 'speaking', label: 'Speaking', icon: MicVocalIcon, link: '#' },
+	{ id: 'reading', label: 'Reading', icon: BookOpen, link: '#' },
+	{ id: 'writing', label: 'Writing', icon: PenToolIcon, link: '#' },
+	{ id: 'test', label: 'Test', icon: BookMarkedIcon, link: '#' },
+	{ id: 'leaderboard', label: 'LeaderBoard', icon: MedalIcon, hasDot: true, link: '#' },
+	{ id: 'settings', label: 'Settings', icon: Settings, link: '#' },
 ];
 
-function BrandMark() {
+function BrandMark({ onClick }: { onClick: (item: string) => void }) {
 	return (
-		<Link href='/'>
+		<Link
+			href='/'
+			onClick={() => onClick('')}>
 			<div className='flex justify-center items-center bg-primary rounded-xl size-10 shrink-0'>
 				<div className='gap-0.5 grid grid-cols-2 size-5'>
 					<span className='bg-brand-pink rounded-[2px]' />
@@ -55,7 +56,7 @@ function BrandMark() {
 }
 
 export function DashboardSidebar() {
-	const [active, setActive] = useState('courses');
+	const [active, setActive] = useState('');
 	const [expanded, setExpanded] = useState(false);
 
 	return (
@@ -68,7 +69,7 @@ export function DashboardSidebar() {
 				)}>
 				<div
 					className={cn('flex items-center', expanded ? 'gap-3 px-1' : 'justify-center')}>
-					<BrandMark />
+					<BrandMark onClick={(item: string) => setActive(item)} />
 					{expanded && (
 						<span className='font-bold text-foreground text-lg tracking-tight'>
 							Lingua
@@ -95,33 +96,36 @@ export function DashboardSidebar() {
 						const Icon = item.icon;
 						const isActive = active === item.id;
 						return (
-							<button
-								key={item.id}
-								type='button'
-								onClick={() => setActive(item.id)}
-								aria-label={item.label}
-								aria-current={isActive ? 'page' : undefined}
-								className={cn(
-									'relative flex items-center hover:bg-secondary rounded-xl h-11 text-muted-foreground hover:text-foreground transition-colors',
-									expanded
-										? 'w-full gap-3 px-3'
-										: 'w-11 justify-center self-center',
-									isActive &&
-										'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
-								)}>
-								<span className='relative flex justify-center items-center size-5 shrink-0'>
-									<Icon
-										className='size-5'
-										strokeWidth={2}
-									/>
-									{item.hasDot && (
-										<span className='-top-1 -right-1 absolute bg-brand-pink rounded-full size-1.5' />
+							<Link
+								href={item.link || ''}
+								key={item.id}>
+								<button
+									type='button'
+									onClick={() => setActive(item.id)}
+									aria-label={item.label}
+									aria-current={isActive ? 'page' : undefined}
+									className={cn(
+										'relative flex items-center hover:bg-secondary rounded-xl h-11 text-muted-foreground hover:text-foreground transition-colors cursor-pointer',
+										expanded
+											? 'w-full gap-3 px-3'
+											: 'w-11 justify-center self-center',
+										isActive &&
+											'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+									)}>
+									<span className='relative flex justify-center items-center size-5 shrink-0'>
+										<Icon
+											className='size-5'
+											strokeWidth={2}
+										/>
+										{item.hasDot && (
+											<span className='-top-1 -right-1 absolute bg-brand-pink rounded-full size-1.5' />
+										)}
+									</span>
+									{expanded && (
+										<span className='font-medium text-sm'>{item.label}</span>
 									)}
-								</span>
-								{expanded && (
-									<span className='font-medium text-sm'>{item.label}</span>
-								)}
-							</button>
+								</button>
+							</Link>
 						);
 					})}
 				</nav>

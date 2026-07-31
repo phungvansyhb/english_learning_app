@@ -1,9 +1,10 @@
-export type ProgressTone = "purple" | "orange" | "pink"
+export type ProgressTone = "purple" | "orange" | "pink" | "mint"
 
-export interface ProgressCourse {
+export interface ProgressItem {
   id: string
   title: string
-  progress: number
+  learned: number
+  target: number
   tone: ProgressTone
 }
 

@@ -1,15 +1,32 @@
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
+import { Volume1Icon } from 'lucide-react';
 
-export function PromoBanner() {
+export function DailyWordBanner() {
 	return (
 		<section className='relative bg-accent px-6 sm:px-8 py-6 rounded-3xl overflow-hidden'>
 			<div className='z-10 relative max-w-sm'>
 				<h2 className='font-bold text-xl sm:text-2xl text-pretty leading-snug text-accent-foreground'>
-					"Rain like cat and dog"
+					Accommodate (verb)
 				</h2>
-				<div className='text-muted-foreground text-sm'>~ Mưa rơi rào rào</div>
+				<div
+					className='flex gap-2 text-muted-foreground text-sm'
+					aria-label='synonym'>
+					/əˈkɑːmədeɪt/
+					<Volume1Icon className='cursor-pointer' />
+				</div>
+				<div
+					className='mt-2 text-foreground text-sm'
+					aria-label='synonym'>
+					Def: To provide enough space for someone/something.
+				</div>
+				<div
+					className='text-foreground text-sm'
+					aria-label='synonym'>
+					Eg: "The new conference room can accommodate 50."
+				</div>
+
 				<Button className='mt-5 px-6 rounded-full h-11 text-sm'>Học thôi</Button>
 			</div>
 
