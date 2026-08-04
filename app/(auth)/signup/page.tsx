@@ -5,10 +5,11 @@ import Link from 'next/link';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signUp } from './action';
+import { signUp, signUpWithOAuth } from '@/services/auth';
 import { EyeClosedIcon, EyeDashedIcon } from 'lucide-react';
 import GoogleIcon from '@/components/ui/googleIcon';
 import FacebookIcon from '@/components/ui/facebookIcon';
+import GitHubIcon from '@/components/ui/githubIcon';
 
 const schema = z
 	.object({
@@ -40,6 +41,10 @@ export default function SignupPage() {
 				console.log(e);
 			}
 		});
+	};
+
+	const onSSOSignup = async (provider: 'github' | 'google' | 'facebook') => {
+		await signUpWithOAuth(provider);
 	};
 
 	return (
@@ -110,7 +115,7 @@ export default function SignupPage() {
 								className={`bg-card px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 w-full text-foreground placeholder:text-muted-foreground transition ${errors.email ? 'border-red-500' : 'border-border'}`}
 							/>
 							{errors.email && (
-								<p className='mt-1 text-red-500 text-sm'>{errors.email.message}</p>
+								<p className='mt-1 error-text'>{errors.email.message}</p>
 							)}
 						</div>
 
@@ -136,7 +141,7 @@ export default function SignupPage() {
 								</button>
 							</div>
 							{errors.password && (
-								<p className='mt-1 text-red-500 text-sm'>
+								<p className='mt-1 error-text'>
 									{errors.password.message}
 								</p>
 							)}
@@ -156,9 +161,7 @@ export default function SignupPage() {
 								className={`bg-card px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 w-full text-foreground placeholder:text-muted-foreground transition ${errors.repassword ? 'border-red-500' : 'border-border'}`}
 							/>
 							{errors.repassword && (
-								<p className='mt-1 text-red-500 text-sm'>
-									{errors.repassword.message}
-								</p>
+								<p className='mt-1 error-text'>{errors.repassword.message}</p>
 							)}
 						</div>
 
@@ -192,6 +195,12 @@ export default function SignupPage() {
 						<button className='flex flex-1 justify-center items-center gap-2 hover:bg-secondary px-4 py-3 border border-border rounded-lg font-medium text-foreground transition'>
 							<FacebookIcon />
 							Facebook
+						</button>
+						<button
+							className='flex flex-1 justify-center items-center gap-2 hover:bg-secondary px-4 py-3 border border-border rounded-lg font-medium text-foreground transition'
+							onClick={() => onSSOSignup('github')}>
+							<GitHubIcon />
+							Github
 						</button>
 					</div>
 				</div>

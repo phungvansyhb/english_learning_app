@@ -69,3 +69,10 @@ export interface Word {
   order_index: number
   difficulty_level: number
 }
+
+export const ROLE_CONSTANT = {
+  USER: "USER",
+  SYSTEM_ADMIN: "SYSTEM_ADMIN",
+  CONTENT_ADMIN: "CONTENT_ADMIN"
+}
+Object.freeze(ROLE_CONSTANT)

@@ -5,7 +5,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
 export const createClient = (cookieStore: Awaited<ReturnType<typeof cookies>>) => {
-    
+
     return createServerClient(
         supabaseUrl!,
         supabaseKey!,
@@ -26,4 +26,10 @@ export const createClient = (cookieStore: Awaited<ReturnType<typeof cookies>>) =
             },
         },
     );
+};
+
+// Helper function - tránh lặp lại code
+export const getSupabaseServer = async () => {
+    const cookieStore = await cookies();
+    return createClient(cookieStore);
 };

@@ -179,4 +179,8 @@
   body {
     @apply text-foreground;
   }
+
+  .error-text {
+    @apply text-red-500 text-sm animate-in fade-in-5 duration-700
+  }
 }

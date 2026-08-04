@@ -1,6 +1,6 @@
 'use client';
 
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState, useTransition } from 'react';
 import {
 	BookMarkedIcon,
 	BookOpen,
@@ -18,6 +18,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import Link from 'next/link';
+import { signOut } from '@/services/auth';
 
 interface NavItem {
 	id: string;
@@ -58,13 +59,18 @@ function BrandMark({ onClick }: { onClick: (item: string) => void }) {
 export function DashboardSidebar() {
 	const [active, setActive] = useState('');
 	const [expanded, setExpanded] = useState(false);
-
+	const [isPending, startTransition] = useTransition();
+	const handleSignOut = () => {
+		startTransition(async () => {
+			signOut();
+		});
+	};
 	return (
 		<>
 			{/* Desktop sidebar: collapsible */}
 			<aside
 				className={cn(
-					'hidden relative md:flex flex-col gap-8 py-6 border-border border-r transition-[width] duration-300 ease-in-out shrink-0',
+					'hidden relative md:flex flex-col gap-8 py-6 border-border border-r transition-[width] duration-300 ease-in-out shrink-0 overflow-y-auto overflow-x-hidden',
 					expanded ? 'w-60 px-4' : 'w-20 items-center px-0',
 				)}>
 				<div
@@ -133,8 +139,9 @@ export function DashboardSidebar() {
 				<button
 					type='button'
 					aria-label='Log out'
+					onClick={() => handleSignOut()}
 					className={cn(
-						'flex items-center hover:bg-secondary rounded-xl h-11 text-muted-foreground hover:text-foreground transition-colors',
+						'cursor-pointer flex items-center hover:bg-secondary rounded-xl h-11 text-muted-foreground hover:text-foreground transition-colors',
 						expanded ? 'w-full gap-3 px-3' : 'w-11 justify-center self-center',
 					)}>
 					<LogOut className='size-5 shrink-0' />

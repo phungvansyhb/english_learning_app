@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -9,13 +9,16 @@ import { EyeClosedIcon, EyeDashedIcon } from 'lucide-react';
 import GoogleIcon from '@/components/ui/googleIcon';
 import FacebookIcon from '@/components/ui/facebookIcon';
 import { Button } from '@/components/ui/button';
+import { signInWithPassword, signInOAuth } from '@/services/auth';
+import GitHubIcon from '@/components/ui/githubIcon';
+
 export default function LoginPage() {
 	const [showPassword, setShowPassword] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isPending, startTransition] = useTransition();
 
 	const schema = z.object({
 		email: z.string().trim().min(1, 'Email is required').email('Invalid email'),
-		password: z.string().trim().min(6, 'Password must be at least 6 characters'),
+		password: z.string().trim().min(8, 'Password must be at least 8 characters'),
 	});
 
 	type FormData = z.infer<typeof schema>;
@@ -23,14 +26,31 @@ export default function LoginPage() {
 	const {
 		register,
 		handleSubmit,
+		setError,
 		formState: { errors },
 	} = useForm<FormData>({ resolver: zodResolver(schema) });
 
 	const onSubmit = (data: FormData) => {
-		setIsLoading(true);
-		// TODO: Replace with real login logic (call API / supabase)
-		console.log('Login submit', data);
-		setTimeout(() => setIsLoading(false), 800);
+		startTransition(async () => {
+			try {
+				const error = await signInWithPassword(data);
+				if (error) {
+					setError('root.apiError', { type: 'server', message: error });
+				}
+			} catch (e) {
+				console.error(e);
+			}
+		});
+	};
+
+	const onLoginSSO = (provider: 'github' | 'google' | 'facebook') => {
+		startTransition(async () => {
+			try {
+				signInOAuth(provider);
+			} catch (e) {
+				console.error(e);
+			}
+		});
 	};
 
 	return (
@@ -112,7 +132,9 @@ export default function LoginPage() {
 								className={`bg-card px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 w-full text-foreground placeholder:text-muted-foreground transition ${errors.email ? 'border-red-500' : 'border-border'}`}
 							/>
 							{errors.email && (
-								<p className='mt-1 text-red-500 text-sm'>{errors.email.message}</p>
+								<p className='mt-1 error-text'>
+									{errors.email.message}
+								</p>
 							)}
 						</div>
 
@@ -139,7 +161,7 @@ export default function LoginPage() {
 								</button>
 							</div>
 							{errors.password && (
-								<p className='mt-1 text-red-500 text-sm'>
+								<p className='mt-1 error-text'>
 									{errors.password.message}
 								</p>
 							)}
@@ -153,14 +175,18 @@ export default function LoginPage() {
 								Forgot password?
 							</Link>
 						</div>
-
+						{errors.root?.apiError && (
+							<p className='mt-1 error-text animate-in duration-700 fade-in-5'>
+								{errors.root?.apiError.message}
+							</p>
+						)}
 						{/* Login Button */}
 						<Button
 							type='submit'
 							size='lg'
-							disabled={isLoading}
+							disabled={isPending}
 							className='bg-primary hover:bg-primary/80 disabled:opacity-50 mt-6 px-4 py-3 rounded-lg w-full font-semibold text-primary-foreground transition disabled:cursor-not-allowed'>
-							{isLoading ? 'Logging in...' : 'Login'}
+							{isPending ? 'Logging in...' : 'Login'}
 						</Button>
 					</form>
 
@@ -184,6 +210,13 @@ export default function LoginPage() {
 							variant='secondary'>
 							<FacebookIcon />
 							Facebook
+						</Button>
+						<Button
+							size='lg'
+							variant='secondary'
+							onClick={() => onLoginSSO('github')}>
+							<GitHubIcon />
+							Github
 						</Button>
 					</div>
 
