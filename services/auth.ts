@@ -101,26 +101,44 @@ export async function adminSignIn({ email, password }: { email: string, password
             email,
             password,
         });
-
         if (error) {
-            console.error("Sign in error", error)
             return error.message
         } else {
             const { data: userData, error: userError } = await supabase
                 .from('users')
                 .select('role')
-                .eq('id', authData.user.id).limit(1).maybeSingle()
-            if (userError) {
-                console.error("get user info error", error)
-                return userError.message
-            }
-            else if (userData?.role === ROLE_CONSTANT.USER) {
-                await supabase.auth.signOut()
-                forbidden()
+                .eq('id', authData?.user?.id).limit(1).maybeSingle()
+            if (userData) {
+                if (userData?.role === ROLE_CONSTANT.USER) {
+                    await supabase.auth.signOut()
+                    return 'Acess denied'
+                } else {
+                    redirect('/admin')
+                }
             } else {
-                redirect('/admin')
-            }
-        }
+                if (userError) {
+                    return userError.message
+                } else {
+                    return "server error"
+                }
 
+            }
+
+        }
+    }
+}
+
+export async function getCurrentUser() {
+    const supabase = await getSupabaseServer()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+        redirect('/login')
+    } else {
+        const { data: profile, error } = await supabase.from('users').select('*').eq('id', user.id).maybeSingle()
+        if (profile) return profile
+        else {
+            if (error) return error.message
+            else return 'server error'
+        }
     }
 }

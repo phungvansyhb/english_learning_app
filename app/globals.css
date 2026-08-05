@@ -181,6 +181,6 @@
   }
 
   .error-text {
-    @apply text-red-500 text-sm animate-in fade-in-5 duration-700
+    @apply text-red-500 text-sm animate-in fade-in-5 duration-700 text-center
   }
 }

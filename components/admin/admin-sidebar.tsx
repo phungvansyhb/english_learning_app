@@ -5,6 +5,7 @@ import { BookA, ChevronLeft, LayoutGrid, Layers, LogOut, Settings, Users } from 
 
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useAuthStore } from '@/utils/zustand/auth-store';
 
 interface NavItem {
 	id: string;
@@ -38,7 +39,8 @@ function BrandMark() {
 export function AdminSidebar() {
 	const [active, setActive] = useState('words');
 	const [expanded, setExpanded] = useState(false);
-
+	const user = useAuthStore((state) => state.user);
+	console.log(user);
 	return (
 		<>
 			{/* Desktop sidebar: collapsible */}
@@ -56,7 +58,7 @@ export function AdminSidebar() {
 								Lingua
 							</span>
 							<span className='block font-medium text-muted-foreground text-xs'>
-								Admin
+								{user?.role}
 							</span>
 						</div>
 					)}

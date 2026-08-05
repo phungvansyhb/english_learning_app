@@ -76,3 +76,36 @@ export const ROLE_CONSTANT = {
   CONTENT_ADMIN: "CONTENT_ADMIN"
 }
 Object.freeze(ROLE_CONSTANT)
+
+// User types
+export type UserStatus = 'active' | 'suspended' | 'deleted'
+
+export type UserRow = {
+  id: string
+  email: string
+  display_name: string
+  avatar_url?: string | null
+  status: UserStatus
+  created_at: string
+  updated_at: string
+  role: string
+}
+
+export type CreateUserInput = {
+  id?: string
+  email: string
+  display_name: string
+  avatar_url?: string | null
+  status?: UserStatus
+  role?: string
+}
+
+export type ListUsersOptions = {
+  page?: number
+  perPage?: number
+  search?: string
+  role?: string
+  status?: string
+  sortBy?: 'created_at' | 'email' | 'display_name'
+  sortOrder?: 'asc' | 'desc'
+}

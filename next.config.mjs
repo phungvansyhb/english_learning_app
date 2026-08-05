@@ -9,6 +9,7 @@ const nextConfig = {
 	experimental: {
 		authInterrupts: true,
 	},
+	cacheComponents: true,
 };
 
 export default nextConfig;
