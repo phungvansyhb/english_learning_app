@@ -1,5 +1,5 @@
 'use server';
-import { ROLE_CONSTANT } from '@/lib/types';
+import { ROLE_CONSTANT, UserRow } from '@/lib/types';
 import { getSupabaseServer } from '@/utils/supabase/server';
 import { forbidden, redirect } from 'next/navigation';
 
@@ -72,7 +72,7 @@ export async function signInOAuth(provider: 'google' | 'facebook' | 'github') {
     }
 }
 
-export async function signOut() {
+export async function signOut(redirectPath?: string) {
     const supabase = await getSupabaseServer()
     const { error } = await supabase.auth.signOut({
         scope: 'local'
@@ -80,7 +80,7 @@ export async function signOut() {
     if (error) {
         console.error("Sign out error ", error)
     } else {
-        redirect('/login')
+        redirect(redirectPath ?? '/login')
     }
 }
 
@@ -128,14 +128,14 @@ export async function adminSignIn({ email, password }: { email: string, password
     }
 }
 
-export async function getCurrentUser() {
+export async function getCurrentUser(redirectPath?: string) {
     const supabase = await getSupabaseServer()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
-        redirect('/login')
+        redirect(redirectPath ?? '/login')
     } else {
         const { data: profile, error } = await supabase.from('users').select('*').eq('id', user.id).maybeSingle()
-        if (profile) return profile
+        if (profile) return profile as UserRow
         else {
             if (error) return error.message
             else return 'server error'

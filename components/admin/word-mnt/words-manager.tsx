@@ -7,7 +7,7 @@ import type { Word } from "@/lib/types"
 import { seedWords } from "@/lib/words-data"
 import { cn } from "@/lib/utils"
 import { Modal } from "@/components/admin/modal"
-import { WordFormModal } from "@/components/admin/word-form-modal"
+import { WordFormModal } from "@/components/admin/word-mnt/word-form-modal"
 
 const difficultyTone: Record<number, string> = {
   1: "bg-brand-mint text-brand-mint-foreground",

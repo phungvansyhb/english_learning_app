@@ -1,3 +1,5 @@
+'use server';
+
 import { getSupabaseServer } from '@/utils/supabase/server'
 import { ROLE_CONSTANT, UserRow, CreateUserInput, ListUsersOptions } from '@/lib/types'
 
@@ -92,10 +94,3 @@ export async function listUsers(opts: ListUsersOptions = {}) {
     }
 }
 
-export default {
-    createUser,
-    getUserById,
-    updateUser,
-    deleteUser,
-    listUsers,
-}

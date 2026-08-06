@@ -1,24 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { BookA, ChevronLeft, LayoutGrid, Layers, LogOut, Settings, Users } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useAuthStore } from '@/utils/zustand/auth-store';
+import { signOut } from '@/services/auth';
 
 interface NavItem {
 	id: string;
 	label: string;
+	link: string;
 	icon: typeof LayoutGrid;
 }
 
 const navItems: NavItem[] = [
-	{ id: 'overview', label: 'Overview', icon: LayoutGrid },
-	{ id: 'words', label: 'Words', icon: BookA },
-	{ id: 'parts', label: 'Parts', icon: Layers },
-	{ id: 'students', label: 'Students', icon: Users },
-	{ id: 'settings', label: 'Settings', icon: Settings },
+	{ id: 'dashboard', link: '/admin/dashboard', label: 'Overview', icon: LayoutGrid },
+	{ id: 'user', link: '/admin/user', label: 'Users', icon: Users },
+	{ id: 'masterData', link: '/admin/master-data', label: 'Master Data', icon: Layers },
+	{ id: 'words', link: '/admin/word', label: 'Words', icon: BookA },
+	{ id: 'settings', link: '/admin/setting', label: 'Settings', icon: Settings },
 ];
 
 function BrandMark() {
@@ -38,9 +40,14 @@ function BrandMark() {
 
 export function AdminSidebar() {
 	const [active, setActive] = useState('words');
-	const [expanded, setExpanded] = useState(false);
+	const [expanded, setExpanded] = useState(true);
 	const user = useAuthStore((state) => state.user);
-	console.log(user);
+	const [isPending, startTransition] = useTransition();
+	const handleLogout = () => {
+		startTransition(async () => {
+			signOut('/adnin/login');
+		});
+	};
 	return (
 		<>
 			{/* Desktop sidebar: collapsible */}
@@ -83,28 +90,31 @@ export function AdminSidebar() {
 						const Icon = item.icon;
 						const isActive = active === item.id;
 						return (
-							<button
-								key={item.id}
-								type='button'
-								onClick={() => setActive(item.id)}
-								aria-label={item.label}
-								aria-current={isActive ? 'page' : undefined}
-								className={cn(
-									'relative flex items-center hover:bg-secondary rounded-xl h-11 text-muted-foreground hover:text-foreground transition-colors',
-									expanded
-										? 'w-full gap-3 px-3'
-										: 'w-11 justify-center self-center',
-									isActive &&
-										'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
-								)}>
-								<Icon
-									className='size-5 shrink-0'
-									strokeWidth={2}
-								/>
-								{expanded && (
-									<span className='font-medium text-sm'>{item.label}</span>
-								)}
-							</button>
+							<Link
+								href={item.link}
+								key={item.id}>
+								<button
+									type='button'
+									onClick={() => setActive(item.id)}
+									aria-label={item.label}
+									aria-current={isActive ? 'page' : undefined}
+									className={cn(
+										'relative cursor-pointer flex items-center hover:bg-secondary rounded-xl h-11 text-muted-foreground hover:text-foreground transition-colors',
+										expanded
+											? 'w-full gap-3 px-3'
+											: 'w-11 justify-center self-center',
+										isActive &&
+											'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+									)}>
+									<Icon
+										className='size-5 shrink-0'
+										strokeWidth={2}
+									/>
+									{expanded && (
+										<span className='font-medium text-sm'>{item.label}</span>
+									)}
+								</button>
+							</Link>
 						);
 					})}
 				</nav>
@@ -112,6 +122,8 @@ export function AdminSidebar() {
 				<button
 					type='button'
 					aria-label='Log out'
+					onClick={() => handleLogout()}
+					disabled={isPending}
 					className={cn(
 						'flex items-center hover:bg-secondary rounded-xl h-11 text-muted-foreground hover:text-foreground transition-colors',
 						expanded ? 'w-full gap-3 px-3' : 'w-11 justify-center self-center',
