@@ -263,9 +263,6 @@ CREATE TABLE public.vocab_words (
   id bigint NOT NULL DEFAULT nextval('vocab_words_id_seq'::regclass),
   word character varying NOT NULL,
   ipa character varying,
-  part_of_speech character varying,
-  audio_url text,
-  meaning_vi text NOT NULL,
   difficulty_id smallint NOT NULL,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT vocab_words_pkey PRIMARY KEY (id),
@@ -430,4 +427,16 @@ CREATE TABLE public.profiles (
   email text,
   CONSTRAINT profiles_pkey PRIMARY KEY (id),
   CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.word_meaning (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  part_of_speech USER-DEFINED,
+  meaning text,
+  example text,
+  example meaning text,
+  word_id bigint,
+  is_primary_use boolean,
+  CONSTRAINT word_meaning_pkey PRIMARY KEY (id),
+  CONSTRAINT word_meaning_word_id_fkey FOREIGN KEY (word_id) REFERENCES public.vocab_words(id)
 );

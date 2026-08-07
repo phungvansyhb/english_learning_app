@@ -1,5 +1,10 @@
 export type ProgressTone = "purple" | "orange" | "pink" | "mint"
 
+export interface Option {
+  label: string;
+  value: string | number;
+}
+
 export interface ProgressItem {
   id: string
   title: string
@@ -7,6 +12,8 @@ export interface ProgressItem {
   target: number
   tone: ProgressTone
 }
+
+
 
 export interface Article {
   id: string
