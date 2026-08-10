@@ -1,8 +1,12 @@
 'use client';
 import * as React from 'react';
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox';
-import { CheckIcon, ChevronDownIcon, XIcon } from 'lucide-react';
+import { CheckIcon, XIcon } from 'lucide-react';
 import { Option } from '@/lib/types';
+
+type ComboboxOption = Option & {
+	__isNew?: boolean;
+};
 
 type Props = {
 	label: string;
@@ -10,10 +14,130 @@ type Props = {
 	notFoundLabel?: string;
 	items: Option[];
 	isMultiple?: boolean;
+	defaultValue?: Option | Option[] | null;
+	value?: Option | Option[] | null;
+	onValueChange?: (value: Option | Option[] | null) => void;
+	creatable?: boolean;
+	onCreate?: (value: string) => Option | void;
+	createLabel?: (value: string) => string;
 };
 
 export default function Combobox(props: Props) {
 	const id = React.useId();
+	const [inputValue, setInputValue] = React.useState('');
+	const isControlled = props.value !== undefined;
+	const [internalValue, setInternalValue] = React.useState<Option | Option[] | null>(
+		props.defaultValue ?? (props.isMultiple ? [] : null),
+	);
+	const value = isControlled ? props.value : internalValue;
+
+	const createItemLabel = React.useCallback(
+		(query: string) => props.createLabel?.(query) ?? `Create "${query}"`,
+		[props.createLabel],
+	);
+
+	const trimmedInput = inputValue.trim();
+	const containsMatchingOption = React.useMemo(() => {
+		if (!trimmedInput) {
+			return false;
+		}
+		const lowerQuery = trimmedInput.toLowerCase();
+		return props.items.some(
+			(item) =>
+				item.label.toLowerCase() === lowerQuery ||
+				String(item.value).toLowerCase() === lowerQuery,
+		);
+	}, [props.items, trimmedInput]);
+
+	const combinedItems = React.useMemo<ComboboxOption[]>(() => {
+		if (!props.creatable || !trimmedInput || containsMatchingOption) {
+			return props.items;
+		}
+		return [
+			...props.items,
+			{
+				label: createItemLabel(trimmedInput),
+				value: trimmedInput,
+				__isNew: true,
+			},
+		];
+	}, [props.creatable, props.items, trimmedInput, containsMatchingOption, createItemLabel]);
+
+	const updateValue = React.useCallback(
+		(nextValue: Option | Option[] | null) => {
+			if (!isControlled) {
+				setInternalValue(nextValue);
+			}
+			props.onValueChange?.(nextValue);
+		},
+		[isControlled, props.onValueChange],
+	);
+
+	const resolveCreatedOption = React.useCallback(
+		(value: string) => props.onCreate?.(value) ?? { label: value, value },
+		[props.onCreate],
+	);
+
+	const isCreateOption = React.useCallback(
+		(item: Option | ComboboxOption | null | undefined): item is ComboboxOption =>
+			Boolean(item && (item as ComboboxOption).__isNew),
+		[],
+	);
+
+	const handleValueChange = React.useCallback(
+		(nextValue: Option | Option[] | null) => {
+			if (props.isMultiple && Array.isArray(nextValue)) {
+				const createOption = nextValue.find(isCreateOption);
+				if (createOption) {
+					const resolved = resolveCreatedOption(createOption.label);
+					updateValue([...nextValue.filter((item) => !isCreateOption(item)), resolved]);
+					setInputValue('');
+					return;
+				}
+			} else if (
+				!props.isMultiple &&
+				nextValue &&
+				!Array.isArray(nextValue) &&
+				isCreateOption(nextValue)
+			) {
+				updateValue(resolveCreatedOption(nextValue.label));
+				setInputValue('');
+				return;
+			}
+			updateValue(nextValue);
+		},
+		[props.isMultiple, isCreateOption, resolveCreatedOption, updateValue],
+	);
+
+	const handleInputKeyDown = React.useCallback(
+		(event: React.KeyboardEvent<HTMLInputElement>) => {
+			if (
+				event.key !== 'Enter' ||
+				!props.creatable ||
+				!trimmedInput ||
+				containsMatchingOption
+			) {
+				return;
+			}
+
+			event.preventDefault();
+			const created = resolveCreatedOption(trimmedInput);
+			const nextValue = props.isMultiple
+				? ([...(Array.isArray(value) ? value : []), created] as Option[])
+				: created;
+			updateValue(nextValue);
+			setInputValue('');
+		},
+		[
+			containsMatchingOption,
+			props.creatable,
+			props.isMultiple,
+			resolveCreatedOption,
+			trimmedInput,
+			updateValue,
+			value,
+		],
+	);
 
 	const ComboBoxInput = React.useCallback(() => {
 		if (props.isMultiple) {
@@ -38,6 +162,7 @@ export default function Combobox(props: Props) {
 								<BaseCombobox.Input
 									id={id}
 									placeholder={props.placeholder || 'placeholder'}
+									onKeyDown={handleInputKeyDown}
 									className='min-h-11 h-full w-full border-0 bg-white pl-2 dark:bg-neutral-950 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:text-white'
 								/>
 							</React.Fragment>
@@ -51,6 +176,7 @@ export default function Combobox(props: Props) {
 					<BaseCombobox.Input
 						placeholder={props.placeholder || 'placeholder'}
 						id={id}
+						onKeyDown={handleInputKeyDown}
 						className='h-full w-full border-0 bg-white pl-2 dark:bg-neutral-950 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:text-white'
 					/>
 					<div className='absolute right-0 bottom-0 flex h-full items-center justify-center text-neutral-500 dark:text-neutral-400'>
@@ -68,12 +194,18 @@ export default function Combobox(props: Props) {
 				</>
 			);
 		}
-	}, [props.isMultiple]);
+	}, [props.isMultiple, id, props.placeholder, handleInputKeyDown, inputValue]);
 
 	return (
 		<BaseCombobox.Root
-			items={props.items}
-			multiple={props.isMultiple}>
+			items={combinedItems}
+			multiple={props.isMultiple}
+			value={value as any}
+			onValueChange={handleValueChange as any}
+			inputValue={inputValue}
+			onInputValueChange={(nextValue) => setInputValue(String(nextValue))}
+			itemToStringLabel={(item: Option) => item.label}
+			itemToStringValue={(item: Option) => String(item.value)}>
 			<div className='relative flex flex-col gap-1 text-sm leading-5 font-bold text-neutral-950 dark:text-white'>
 				<label
 					htmlFor={id}

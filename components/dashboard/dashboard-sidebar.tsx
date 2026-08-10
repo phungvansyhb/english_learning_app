@@ -58,7 +58,7 @@ function BrandMark({ onClick }: { onClick: (item: string) => void }) {
 
 export function DashboardSidebar() {
 	const [active, setActive] = useState('');
-	const [expanded, setExpanded] = useState(false);
+	const [expanded, setExpanded] = useState(true);
 	const [isPending, startTransition] = useTransition();
 	const handleSignOut = () => {
 		startTransition(async () => {
@@ -70,8 +70,8 @@ export function DashboardSidebar() {
 			{/* Desktop sidebar: collapsible */}
 			<aside
 				className={cn(
-					'hidden relative md:flex flex-col gap-8 py-6 border-border border-r transition-[width] duration-300 ease-in-out shrink-0 overflow-y-auto overflow-x-hidden',
-					expanded ? 'w-60 px-4' : 'w-20 items-center px-0',
+					'hidden relative md:flex flex-col gap-8 py-6 border-border border-r transition-[width] duration-300 ease-in-out shrink-0 ',
+					expanded ? 'w-45 px-4' : 'w-20 items-center px-0',
 				)}>
 				<div
 					className={cn('flex items-center', expanded ? 'gap-3 px-1' : 'justify-center')}>
@@ -84,18 +84,18 @@ export function DashboardSidebar() {
 				</div>
 
 				{/* Collapse / expand toggle */}
-				<Button
+				<button
 					onClick={() => setExpanded((v) => !v)}
 					aria-label={expanded ? 'Collapse sidebar' : 'Expand sidebar'}
 					aria-expanded={expanded}
-					className='top-9 -right-3 absolute flex justify-center items-center bg-card shadow-sm border border-border rounded-full size-6 text-muted-foreground hover:text-foreground transition-colors'>
+					className='z-100 top-9 -right-3 absolute flex justify-center items-center bg-card shadow-sm border border-border rounded-full size-6 text-muted-foreground hover:text-foreground transition-colors'>
 					<ChevronLeft
 						className={cn(
 							'size-4 transition-transform duration-300',
 							!expanded && 'rotate-180',
 						)}
 					/>
-				</Button>
+				</button>
 
 				<nav className='flex flex-col flex-1 gap-2'>
 					{navItems.map((item) => {

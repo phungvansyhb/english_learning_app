@@ -11,6 +11,7 @@ import FacebookIcon from '@/components/ui/facebookIcon';
 import { Button } from '@/components/ui/button';
 import { signInWithPassword, signInOAuth } from '@/services/auth';
 import GitHubIcon from '@/components/ui/githubIcon';
+import { Field } from '@/components/ui/field';
 
 export default function LoginPage() {
 	const [showPassword, setShowPassword] = useState(false);
@@ -118,54 +119,30 @@ export default function LoginPage() {
 						onSubmit={handleSubmit(onSubmit)}
 						className='space-y-5'>
 						{/* Email Input */}
-						<div className='space-y-2'>
-							<label
-								htmlFor='email'
-								className='font-medium text-foreground text-sm'>
-								Email address
-							</label>
-							<input
-								id='email'
-								type='email'
-								placeholder='Enter your email'
-								{...register('email')}
-								className={`bg-card px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 w-full text-foreground placeholder:text-muted-foreground transition ${errors.email ? 'border-red-500' : 'border-border'}`}
-							/>
-							{errors.email && (
-								<p className='mt-1 error-text'>
-									{errors.email.message}
-								</p>
-							)}
-						</div>
-
-						{/* Password Input */}
-						<div className='space-y-2'>
-							<label
-								htmlFor='password'
-								className='font-medium text-foreground text-sm'>
-								Password
-							</label>
-							<div className='relative'>
-								<input
-									id='password'
-									type={showPassword ? 'text' : 'password'}
-									placeholder='Enter your password'
-									{...register('password')}
-									className={`bg-card px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 w-full text-foreground placeholder:text-muted-foreground transition ${errors.password ? 'border-red-500' : 'border-border'}`}
-								/>
-								<button
-									type='button'
-									onClick={() => setShowPassword(!showPassword)}
-									className='top-1/2 right-3 absolute text-muted-foreground hover:text-foreground transition -translate-y-1/2'>
-									{showPassword ? <EyeDashedIcon /> : <EyeClosedIcon />}
-								</button>
-							</div>
-							{errors.password && (
-								<p className='mt-1 error-text'>
-									{errors.password.message}
-								</p>
-							)}
-						</div>
+						<Field
+							label='Email address'
+							error={errors.email}
+							placeholder='Enter your email'
+							{...register('email')}
+						/>
+						<Field
+							label='Password'
+							error={errors.password}
+							placeholder='Enter your password'
+							{...register('password')}
+							type={showPassword ? 'text' : 'password'}
+							suffixIcon={
+								<div
+									className='absolute right-4 top-4  cursor-pointer'
+									onClick={() => setShowPassword(!showPassword)}>
+									{showPassword ? (
+										<EyeClosedIcon size={14} />
+									) : (
+										<EyeDashedIcon size={14} />
+									)}
+								</div>
+							}
+						/>
 
 						{/* Forgot Password Link */}
 						<div className='flex justify-end'>

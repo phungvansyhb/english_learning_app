@@ -173,7 +173,8 @@ export function WordFormModal({ open, word, onClose, onSave }: WordFormModalProp
 									{ value: 2, label: '600 medium' },
 								]}
 								isMultiple
-                placeholder='Select difficulty'
+								placeholder='Select difficulty'
+								creatable
 							/>
 						</div>
 

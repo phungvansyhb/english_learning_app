@@ -1,17 +1,10 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
-import Link from 'next/link';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import GoogleIcon from '@/components/ui/googleIcon';
-import FacebookIcon from '@/components/ui/facebookIcon';
-import { Button } from '@/components/ui/button';
-import GitHubIcon from '@/components/ui/githubIcon';
-import { createClient } from '@/utils/supabase/client';
 import EmailForm from '@/components/dashboard/forgot-password/email-form';
 import NewPassForm from '@/components/dashboard/forgot-password/newpass-form';
+import { createClient } from '@/utils/supabase/client';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 export default function LoginPage() {
 	const [step, setStep] = useState(1);
 

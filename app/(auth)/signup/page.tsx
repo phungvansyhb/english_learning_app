@@ -10,6 +10,7 @@ import { EyeClosedIcon, EyeDashedIcon } from 'lucide-react';
 import GoogleIcon from '@/components/ui/googleIcon';
 import FacebookIcon from '@/components/ui/facebookIcon';
 import GitHubIcon from '@/components/ui/githubIcon';
+import { Field } from '@/components/ui/field';
 
 const schema = z
 	.object({
@@ -26,6 +27,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function SignupPage() {
 	const [showPassword, setShowPassword] = useState(false);
+	const [showRePassword, setShowRePassword] = useState(false);
 	const [isPending, startTransition] = useTransition();
 	const {
 		register,
@@ -101,69 +103,49 @@ export default function SignupPage() {
 					<form
 						onSubmit={handleSubmit(onSubmit)}
 						className='space-y-5'>
-						<div className='space-y-2'>
-							<label
-								htmlFor='email'
-								className='font-medium text-foreground text-sm'>
-								Email address
-							</label>
-							<input
-								id='email'
-								type='email'
-								placeholder='Enter your email'
-								{...register('email')}
-								className={`bg-card px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 w-full text-foreground placeholder:text-muted-foreground transition ${errors.email ? 'border-red-500' : 'border-border'}`}
-							/>
-							{errors.email && (
-								<p className='mt-1 error-text'>{errors.email.message}</p>
-							)}
-						</div>
-
-						<div className='space-y-2'>
-							<label
-								htmlFor='password'
-								className='font-medium text-foreground text-sm'>
-								Password
-							</label>
-							<div className='relative'>
-								<input
-									id='password'
-									type={showPassword ? 'text' : 'password'}
-									placeholder='Enter your password'
-									{...register('password')}
-									className={`bg-card px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 w-full text-foreground placeholder:text-muted-foreground transition ${errors.password ? 'border-red-500' : 'border-border'}`}
-								/>
-								<button
-									type='button'
-									onClick={() => setShowPassword(!showPassword)}
-									className='top-1/2 right-3 absolute text-muted-foreground hover:text-foreground transition -translate-y-1/2'>
-									{showPassword ? <EyeDashedIcon /> : <EyeClosedIcon />}
-								</button>
-							</div>
-							{errors.password && (
-								<p className='mt-1 error-text'>
-									{errors.password.message}
-								</p>
-							)}
-						</div>
-
-						<div className='space-y-2'>
-							<label
-								htmlFor='repassword'
-								className='font-medium text-foreground text-sm'>
-								Re-enter Password
-							</label>
-							<input
-								id='repassword'
-								type={showPassword ? 'text' : 'password'}
-								placeholder='Re-enter your password'
-								{...register('repassword')}
-								className={`bg-card px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 w-full text-foreground placeholder:text-muted-foreground transition ${errors.repassword ? 'border-red-500' : 'border-border'}`}
-							/>
-							{errors.repassword && (
-								<p className='mt-1 error-text'>{errors.repassword.message}</p>
-							)}
-						</div>
+						<Field
+							label='Email address'
+							error={errors.email}
+							placeholder='Enter your email'
+							{...register('email')}
+						/>
+						<Field
+							label='Password'
+							error={errors.password}
+							placeholder='Enter your password'
+							{...register('password')}
+							type={showPassword ? 'text' : 'password'}
+							suffixIcon={
+								<div
+									className='absolute right-4 top-4  cursor-pointer'
+									onClick={() => setShowPassword(!showPassword)}>
+									{showPassword ? (
+										<EyeClosedIcon size={14} />
+										
+									) : (
+										<EyeDashedIcon size={14} />
+									)}
+								</div>
+							}
+						/>
+						<Field
+							label='Re-enter Password'
+							error={errors.repassword}
+							placeholder='Re-enter your password'
+							type={showRePassword ? 'text' : 'password'}
+							{...register('repassword')}
+							suffixIcon={
+								<div
+									className='absolute right-4 top-4  cursor-pointer'
+									onClick={() => setShowRePassword(!showRePassword)}>
+									{showRePassword ? (
+										<EyeClosedIcon size={14} />
+									) : (
+										<EyeDashedIcon size={14} />
+									)}
+								</div>
+							}
+						/>
 
 						<div className='flex justify-end'>
 							<Link

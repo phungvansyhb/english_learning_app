@@ -3,13 +3,15 @@
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { startTransition, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
+import { Field } from '@/components/ui/field';
+import { EyeClosedIcon, EyeDashedIcon } from 'lucide-react';
 type Props = {};
 
 export default function NewPassForm({}: Props) {
 	const [isPending, startTransition] = useTransition();
-
+	const [showPassword, setShowPassword] = useState(false);
 	const schema = z.object({
 		password: z.string().trim().min(8, 'New Password must be at least 8 characters'),
 	});
@@ -35,21 +37,20 @@ export default function NewPassForm({}: Props) {
 		<form
 			onSubmit={handleSubmit(onSubmit)}
 			className='space-y-5'>
-			<div className='space-y-2'>
-				<label
-					htmlFor='new-password'
-					className='font-medium text-foreground text-sm'>
-					Email address
-				</label>
-				<input
-					id='new-password'
-					type='password'
-					placeholder='Enter your new password'
-					{...register('password')}
-					className={`bg-card px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 w-full text-foreground placeholder:text-muted-foreground transition ${errors.password ? 'border-red-500' : 'border-border'}`}
-				/>
-				{errors.password && <p className='mt-1 error-text'>{errors.password.message}</p>}
-			</div>
+			<Field
+				label='Email adress'
+				{...register('password')}
+				error={errors.password}
+				placeholder='Enter your new password'
+				type={showPassword ? 'text' : 'password'}
+				suffixIcon={
+					<div
+						className='absolute right-4 top-4  cursor-pointer'
+						onClick={() => setShowPassword(!showPassword)}>
+						{showPassword ? <EyeClosedIcon size={14} /> : <EyeDashedIcon size={14} />}
+					</div>
+				}
+			/>
 			{/* Login Button */}
 			<Button
 				type='submit'
