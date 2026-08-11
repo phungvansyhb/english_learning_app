@@ -35,7 +35,7 @@ const navItems: NavItem[] = [
 	{ id: 'reading', label: 'Reading', icon: BookOpen, link: '#' },
 	{ id: 'writing', label: 'Writing', icon: PenToolIcon, link: '#' },
 	{ id: 'test', label: 'Test', icon: BookMarkedIcon, link: '#' },
-	{ id: 'leaderboard', label: 'LeaderBoard', icon: MedalIcon, hasDot: true, link: '#' },
+	{ id: 'leaderboard', label: 'LeaderBoard', icon: MedalIcon, hasDot: true, link: '/leaderboard' },
 	{ id: 'settings', label: 'Settings', icon: Settings, link: '#' },
 ];
 
