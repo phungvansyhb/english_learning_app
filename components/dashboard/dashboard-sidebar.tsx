@@ -30,7 +30,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
 	{ id: 'vocabulary', label: 'Vocabulary', icon: WholeWordIcon, link: '/vocabulary' },
-	{ id: 'listening', label: 'Listening', icon: FileHeadphoneIcon, link: '#' },
+	{ id: 'listening', label: 'Listening', icon: FileHeadphoneIcon, link: '/listening' },
 	{ id: 'speaking', label: 'Speaking', icon: MicVocalIcon, link: '#' },
 	{ id: 'reading', label: 'Reading', icon: BookOpen, link: '/reading' },
 	{ id: 'writing', label: 'Writing', icon: PenToolIcon, link: '#' },
