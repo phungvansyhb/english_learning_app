@@ -34,8 +34,8 @@ export default function VocabularyDetail({ categoryName, slug }: { categoryName:
   const toggle = (list: string[], setList: (value: string[]) => void, word: string) => setList(list.includes(word) ? list.filter((item) => item !== word) : [...list, word]);
 
   return (
-    <main className='min-h-screen bg-background text-foreground'>
-      <header className='sticky top-0 z-10 border-b bg-background/95 backdrop-blur'>
+    <main className='min-h-screen bg-muted-background text-foreground p-4 md:p-6 lg:p-8'>
+      <header className='sticky top-0 z-10 border-b bg-muted-background/95 backdrop-blur'>
         <div className='mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3'>
           <Link href='/vocabulary' aria-label='Quay lại danh sách chủ đề' className='rounded-md p-2 hover:bg-muted'><ArrowLeft /></Link>
           <div className='flex items-center gap-1 rounded-xl bg-muted p-1 text-sm'>
