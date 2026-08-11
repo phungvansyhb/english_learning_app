@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { MoreHorizontal } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type Props = {
 	imageUrl: string;
@@ -25,24 +25,27 @@ export default function CategoryVocab({
 	return (
 		<article
 			className={cn(
-				'flex flex-col justify-between bg-white shadow rounded-xl min-h-40 overflow-hidden',
+				'group flex flex-col justify-between bg-white shadow rounded-xl min-h-40 overflow-hidden',
 				cardClassName,
 			)}>
-			<div className='relative w-full h-30'>
-				<Image
-					src={imageUrl || '/placeholder.svg'}
-					alt={categoryName}
-					fill
-					className='object-cover group-hover:scale-[1.03] transition-transform duration-300'
-				/>
-				<button
-					type='button'
-					aria-label='progress options'
-					className='top-2 right-2 absolute text-current/60 hover:text-current transition-opacity'>
-					<MoreHorizontal className='size-5' />
-				</button>
-			</div>
-			<div className='p-2 md:p-4'>
+			<Link
+				href={`/vocabulary/${encodeURIComponent(categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}`}
+				className='flex flex-col h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'>
+				<div className='relative w-full h-30'>
+					<Image
+						src={imageUrl || '/placeholder.svg'}
+						alt={categoryName}
+						fill
+						className='object-cover group-hover:scale-[1.03] transition-transform duration-300'
+					/>
+					<button
+						type='button'
+						aria-label='progress options'
+						className='top-2 right-2 absolute text-current/60 hover:text-current transition-opacity'>
+						<MoreHorizontal className='size-5' />
+					</button>
+				</div>
+				<div className='p-2 md:p-4'>
 				<h3 className='font-semibold text-base text-pretty leading-snug'>{categoryName}</h3>
 
 				<div className='mt-4'>
@@ -61,7 +64,8 @@ export default function CategoryVocab({
 						/>
 					</div>
 				</div>
-			</div>
+				</div>
+			</Link>
 		</article>
 	);
 }
