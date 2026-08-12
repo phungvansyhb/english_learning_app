@@ -31,10 +31,10 @@ interface NavItem {
 const navItems: NavItem[] = [
 	{ id: 'vocabulary', label: 'Vocabulary', icon: WholeWordIcon, link: '/vocabulary' },
 	{ id: 'listening', label: 'Listening', icon: FileHeadphoneIcon, link: '/listening' },
-	{ id: 'speaking', label: 'Speaking', icon: MicVocalIcon, link: '#' },
+	{ id: 'speaking', label: 'Speaking', icon: MicVocalIcon, link: '/speaking' },
 	{ id: 'reading', label: 'Reading', icon: BookOpen, link: '/reading' },
-	{ id: 'writing', label: 'Writing', icon: PenToolIcon, link: '#' },
-	{ id: 'test', label: 'Test', icon: BookMarkedIcon, link: '#' },
+	{ id: 'writing', label: 'Writing', icon: PenToolIcon, link: '/writing' },
+	{ id: 'test', label: 'Test', icon: BookMarkedIcon, link: '/test' },
 	{ id: 'leaderboard', label: 'LeaderBoard', icon: MedalIcon, hasDot: true, link: '/leaderboard' },
 	{ id: 'settings', label: 'Settings', icon: Settings, link: '#' },
 ];
