@@ -3,4 +3,177 @@ import Link from 'next/link';
 import { ArrowLeft, Check, ClipboardCheck, Lightbulb, Send, Save, BarChart3 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { countWords, WritingLesson, writingTypeLabels } from '@/lib/writing-data';
-export default function WritingEditor({lesson,nextSlug}:{lesson:WritingLesson;nextSlug?:string}){ const [text,setText]=useState(''); const [submitted,setSubmitted]=useState(false); const [checks,setChecks]=useState<boolean[]>(lesson.rubric.map(()=>false)); const words=useMemo(()=>countWords(text),[text]); const toggle=(i:number)=>setChecks(v=>v.map((x,n)=>n===i?!x:x)); return <main className='min-h-full bg-muted-background p-4 text-foreground md:p-8'><div className='mx-auto flex max-w-6xl flex-col gap-5'><Link href='/writing' className='flex w-fit items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground'><ArrowLeft className='size-4'/> Quay lại danh sách Writing</Link><div className='grid gap-5 lg:grid-cols-[1.05fr_1fr]'><section className='flex flex-col gap-5'><div className='rounded-2xl border bg-card p-6 shadow-sm'><div className='flex items-center justify-between gap-3'><span className='rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary'>{writingTypeLabels[lesson.type]}</span><span className='text-xs text-muted-foreground'>{lesson.difficulty}</span></div><h1 className='mt-5 text-3xl font-bold tracking-tight'>{lesson.title}</h1><p className='mt-3 leading-6 text-muted-foreground'>{lesson.subtitle}</p><div className='mt-6 rounded-xl bg-secondary p-5'><p className='text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground'>Your task</p><p className='mt-3 leading-7'>{lesson.prompt}</p></div>{lesson.chart&&<div className='mt-5 rounded-xl border bg-background p-5'><div className='flex items-center gap-2 text-sm font-semibold'><BarChart3 className='size-4 text-primary'/> Monthly sales (units)</div><div className='mt-6 flex h-40 items-end gap-3'>{lesson.chart.map(item=><div key={item.label} className='flex flex-1 flex-col items-center gap-2'><div className='w-full rounded-t-md bg-primary/75' style={{height:`${item.value*1.35}px`}} title={`${item.label}: ${item.value}`}/><span className='text-xs text-muted-foreground'>{item.label}</span></div>)}</div><p className='mt-4 text-xs leading-5 text-muted-foreground'>Gợi ý: nêu xu hướng tổng thể, tháng đạt đỉnh và một phép so sánh.</p></div>}<div className='mt-5 flex flex-wrap gap-2'>{lesson.keywords.map(word=><span key={word} className='rounded-md border bg-background px-2.5 py-1.5 text-xs text-muted-foreground'>{word}</span>)}</div></div><div className='rounded-xl border bg-card p-5 shadow-sm'><div className='flex items-center gap-2 text-sm font-semibold'><ClipboardCheck className='size-4 text-primary'/> Checklist trước khi nộp</div><div className='mt-4 flex flex-col gap-3'>{lesson.rubric.map((item,i)=><label key={item} className='flex cursor-pointer items-start gap-3 text-sm text-muted-foreground'><input type='checkbox' checked={checks[i]} onChange={()=>toggle(i)} className='mt-0.5 accent-primary'/><span className={checks[i]?'text-foreground line-through':''}>{item}</span></label>)}</div></div></section><section className='rounded-2xl border bg-card p-5 shadow-sm md:p-6'><div className='flex items-center justify-between'><div><h2 className='text-lg font-bold'>Your draft</h2><p className='mt-1 text-xs text-muted-foreground'>Bản nháp được giữ trong phiên hiện tại</p></div><span className='flex items-center gap-1.5 text-xs text-muted-foreground'><Save className='size-3.5'/> Đã lưu</span></div><textarea aria-label='Your writing draft' value={text} onChange={e=>setText(e.target.value)} placeholder='Start writing here...' className='mt-5 min-h-[360px] w-full resize-y rounded-xl border bg-background p-4 text-sm leading-7 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20'/><div className='mt-3 flex items-center justify-between text-xs text-muted-foreground'><span>{words} từ</span><span>Mục tiêu: {lesson.targetWords} từ</span></div><button onClick={()=>setSubmitted(true)} className='mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90'><Send className='size-4'/> Nộp bài</button>{submitted&&<div className='mt-5 rounded-xl border border-primary/20 bg-primary/5 p-4'><div className='flex items-center gap-2 font-semibold text-primary'><Check className='size-4'/> Bài viết đã được ghi nhận</div><p className='mt-2 text-sm leading-6 text-muted-foreground'>Bạn đã hoàn thành bản nháp. Hãy xem lại rubric và thử viết lại để cải thiện độ tự nhiên.</p><div className='mt-4 flex flex-wrap gap-2'>{nextSlug&&<Link href={`/writing/${nextSlug}`} className='rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground'>Bài tiếp theo</Link>}<Link href='/writing' className='rounded-lg border px-3 py-2 text-xs font-semibold'>Về thư viện</Link></div></div>}<div className='mt-5 flex gap-3 rounded-xl bg-secondary p-4'><Lightbulb className='mt-0.5 size-4 shrink-0 text-primary'/><p className='text-xs leading-5 text-muted-foreground'>Mẹo: viết ý chính trước, sau đó quay lại thêm từ nối và chi tiết hỗ trợ.</p></div></section></div></div></main> }
+export default function WritingEditor({
+	lesson,
+	nextSlug,
+}: {
+	lesson: WritingLesson;
+	nextSlug?: string;
+}) {
+	const [text, setText] = useState('');
+	const [submitted, setSubmitted] = useState(false);
+	const [checks, setChecks] = useState<boolean[]>(lesson.rubric.map(() => false));
+	const words = useMemo(() => countWords(text), [text]);
+	const toggle = (i: number) => setChecks((v) => v.map((x, n) => (n === i ? !x : x)));
+	return (
+		<main className='min-h-full bg-muted-background p-4 text-foreground md:p-8'>
+			<div className='mx-auto flex max-w-6xl flex-col gap-5'>
+				<Link
+					href='/writing'
+					className='flex w-fit items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground'>
+					<ArrowLeft className='size-4' /> Quay lại danh sách Writing
+				</Link>
+				<div className='grid gap-5 lg:grid-cols-[1.05fr_1fr]'>
+					<section className='flex flex-col gap-5'>
+						<div className='rounded-2xl border bg-card p-6 shadow-sm'>
+							<div className='flex items-center justify-between gap-3'>
+								<span className='rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary'>
+									{writingTypeLabels[lesson.type]}
+								</span>
+								<span className='text-xs text-muted-foreground'>
+									{lesson.difficulty}
+								</span>
+							</div>
+							<h1 className='mt-5 text-3xl font-bold tracking-tight'>
+								{lesson.title}
+							</h1>
+							<p className='mt-3 leading-6 text-muted-foreground'>
+								{lesson.subtitle}
+							</p>
+							<div className='mt-6 rounded-xl bg-secondary p-5'>
+								<p className='text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground'>
+									Your task
+								</p>
+								<p className='mt-3 leading-7'>{lesson.prompt}</p>
+							</div>
+							{lesson.chart && (
+								<div className='mt-5 rounded-xl border bg-background p-5'>
+									<div className='flex items-center gap-2 text-sm font-semibold'>
+										<BarChart3 className='size-4 text-primary' /> Monthly sales
+										(units)
+									</div>
+									<div className='mt-6 flex h-40 items-end gap-3'>
+										{lesson.chart.map((item) => (
+											<div
+												key={item.label}
+												className='flex flex-1 flex-col items-center gap-2'>
+												<div
+													className='w-full rounded-t-md bg-primary/75'
+													style={{ height: `${item.value * 1.35}px` }}
+													title={`${item.label}: ${item.value}`}
+												/>
+												<span className='text-xs text-muted-foreground'>
+													{item.label}
+												</span>
+											</div>
+										))}
+									</div>
+									<p className='mt-4 text-xs leading-5 text-muted-foreground'>
+										Gợi ý: nêu xu hướng tổng thể, tháng đạt đỉnh và một phép so
+										sánh.
+									</p>
+								</div>
+							)}
+							<div className='mt-5 flex flex-wrap gap-2'>
+								{lesson.keywords.map((word) => (
+									<span
+										key={word}
+										className='rounded-md border bg-background px-2.5 py-1.5 text-xs text-muted-foreground'>
+										{word}
+									</span>
+								))}
+							</div>
+						</div>
+						<div className='rounded-xl border bg-card p-5 shadow-sm'>
+							<div className='flex items-center gap-2 text-sm font-semibold'>
+								<ClipboardCheck className='size-4 text-primary' /> Checklist trước
+								khi nộp
+							</div>
+							<div className='mt-4 flex flex-col gap-3'>
+								{lesson.rubric.map((item, i) => (
+									<label
+										key={item}
+										className='flex cursor-pointer items-start gap-3 text-sm text-muted-foreground'>
+										<input
+											type='checkbox'
+											checked={checks[i]}
+											onChange={() => toggle(i)}
+											className='mt-0.5 accent-primary'
+										/>
+										<span
+											className={
+												checks[i] ? 'text-foreground line-through' : ''
+											}>
+											{item}
+										</span>
+									</label>
+								))}
+							</div>
+						</div>
+					</section>
+					<section className='rounded-2xl border bg-card p-5 shadow-sm md:p-6'>
+						<div className='flex items-center justify-between'>
+							<div>
+								<h2 className='text-lg font-bold'>Your draft</h2>
+								<p className='mt-1 text-xs text-muted-foreground'>
+									Bản nháp được giữ trong phiên hiện tại
+								</p>
+							</div>
+							<span className='flex items-center gap-1.5 text-xs text-muted-foreground'>
+								<Save className='size-3.5' /> Đã lưu
+							</span>
+						</div>
+						<textarea
+							aria-label='Your writing draft'
+							value={text}
+							onChange={(e) => setText(e.target.value)}
+							placeholder='Start writing here...'
+							className='mt-5 min-h-[360px] w-full resize-y rounded-xl border bg-background p-4 text-sm leading-7 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20'
+						/>
+						<div className='mt-3 flex items-center justify-between text-xs text-muted-foreground'>
+							<span>{words} từ</span>
+							<span>Mục tiêu: {lesson.targetWords} từ</span>
+						</div>
+						<button
+							onClick={() => setSubmitted(true)}
+							className='mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90'>
+							<Send className='size-4' /> Nộp bài
+						</button>
+						{submitted && (
+							<div className='mt-5 rounded-xl border border-primary/20 bg-primary/5 p-4'>
+								<div className='flex items-center gap-2 font-semibold text-primary'>
+									<Check className='size-4' /> Bài viết đã được ghi nhận
+								</div>
+								<p className='mt-2 text-sm leading-6 text-muted-foreground'>
+									Bạn đã hoàn thành bản nháp. Hãy xem lại rubric và thử viết lại
+									để cải thiện độ tự nhiên.
+								</p>
+								<div className='mt-4 flex flex-wrap gap-2'>
+									{nextSlug && (
+										<Link
+											href={`/writing/${nextSlug}`}
+											className='rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground'>
+											Bài tiếp theo
+										</Link>
+									)}
+									<Link
+										href='/writing'
+										className='rounded-lg border px-3 py-2 text-xs font-semibold'>
+										Về thư viện
+									</Link>
+								</div>
+							</div>
+						)}
+						<div className='mt-5 flex gap-3 rounded-xl bg-secondary p-4'>
+							<Lightbulb className='mt-0.5 size-4 shrink-0 text-primary' />
+							<p className='text-xs leading-5 text-muted-foreground'>
+								Mẹo: viết ý chính trước, sau đó quay lại thêm từ nối và chi tiết hỗ
+								trợ.
+							</p>
+						</div>
+					</section>
+				</div>
+			</div>
+		</main>
+	);
+}
