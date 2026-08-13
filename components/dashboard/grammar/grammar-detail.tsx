@@ -1,27 +1,207 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { ArrowLeft, ArrowRight, Bookmark, Check, ChevronRight, CircleCheck, List, Play } from 'lucide-react'
-import { useState } from 'react'
-import { difficultyClasses, getRelatedLessons, grammarLessons, type GrammarLesson } from '@/lib/grammar-data'
+import Link from 'next/link';
+import {
+	ArrowLeft,
+	ArrowRight,
+	Bookmark,
+	Check,
+	ChevronRight,
+	CircleCheck,
+	List,
+	Play,
+} from 'lucide-react';
+import { useState } from 'react';
+import {
+	difficultyClasses,
+	getRelatedLessons,
+	grammarLessons,
+	type GrammarLesson,
+} from '@/lib/grammar-data';
 
 export function GrammarDetail({ lesson }: { lesson: GrammarLesson }) {
-  const [completed, setCompleted] = useState(lesson.progress === 100)
-  const [saved, setSaved] = useState(false)
-  const related = getRelatedLessons(lesson)
-  const index = grammarLessons.findIndex((item) => item.id === lesson.id)
-  const previous = grammarLessons[index - 1]
-  const next = grammarLessons[index + 1]
-  return <main className='mx-auto max-w-6xl'>
-    <div className='flex items-center gap-2 mb-8 text-muted-foreground text-sm'><Link href='/grammar' className='hover:text-foreground'>Grammar</Link><ChevronRight className='size-4' /><span className='text-foreground'>{lesson.name}</span></div>
-    <div className='items-start gap-12 grid lg:grid-cols-[minmax(0,1fr)_190px]'>
-      <article className='min-w-0'><header className='pb-8 border-border border-b'><div className='flex flex-wrap items-center gap-3'><span className={`px-2.5 py-1 rounded-full font-semibold text-[11px] ${difficultyClasses[lesson.difficulty]}`}>{lesson.difficulty}</span><span className='text-muted-foreground text-xs'>{lesson.duration}</span></div><h1 className='mt-4 font-bold text-4xl md:text-5xl tracking-tight text-balance'>{lesson.name}</h1><p className='mt-4 max-w-2xl text-muted-foreground text-lg leading-8'>{lesson.description}</p><div className='flex flex-wrap gap-3 mt-6'><button type='button' onClick={() => setCompleted((value) => !value)} className={`inline-flex items-center gap-2 px-4 rounded-xl h-11 font-semibold text-sm transition-colors ${completed ? 'bg-brand-mint text-brand-mint-foreground' : 'bg-primary text-primary-foreground'}`}>{completed ? <CircleCheck className='size-4' /> : <Play className='size-4' />}{completed ? 'Completed' : 'Start lesson'}</button><button type='button' onClick={() => setSaved((value) => !value)} className={`inline-flex items-center gap-2 px-4 rounded-xl h-11 border font-semibold text-sm transition-colors ${saved ? 'bg-brand-purple-soft border-transparent' : 'bg-card border-border text-muted-foreground'}`}><Bookmark className='size-4' />{saved ? 'Saved' : 'Save lesson'}</button></div></header>
-        <div className='lg:hidden bg-card mt-6 p-4 border border-border rounded-2xl'><p className='flex items-center gap-2 font-semibold text-sm'><List className='size-4' />On this lesson</p><div className='flex flex-wrap gap-x-4 gap-y-2 mt-3'>{lesson.sections.map((section) => <a key={section.id} href={`#${section.id}`} className='text-muted-foreground hover:text-primary text-sm'>{section.title}</a>)}</div></div>
-        <div className='content-reading pt-8'>{lesson.sections.map((section) => <section id={section.id} key={section.id} className='scroll-mt-8'><h2>{section.title}</h2>{section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}{section.callout && <div className='bg-brand-purple-soft my-6 p-4 border border-border rounded-xl text-foreground text-sm leading-6'><strong>Good to know:</strong> {section.callout.replace('Good to know: ', '')}</div>}{section.examples?.map((example) => <div key={example.english} className='bg-card my-4 p-4 border border-border rounded-xl'><p className='font-semibold text-foreground'>{example.english}</p><p className='mt-1 text-muted-foreground text-sm'>{example.vietnamese}</p>{example.note && <p className='mt-3 text-muted-foreground text-xs'>{example.note}</p>}</div>)}</section>)}</div>
-        <div className='flex sm:flex-row flex-col gap-3 mt-12 pt-6 border-border border-t'>{previous ? <Link href={`/grammar/${previous.slug}`} className='flex flex-1 items-center gap-3 hover:bg-card p-4 border border-border rounded-xl'><ArrowLeft className='size-4' /><span><small className='block text-muted-foreground text-xs'>Previous</small><strong>{previous.name}</strong></span></Link> : <span />}{next ? <Link href={`/grammar/${next.slug}`} className='flex flex-1 justify-end items-center gap-3 hover:bg-card p-4 border border-border rounded-xl text-right'><span><small className='block text-muted-foreground text-xs'>Next</small><strong>{next.name}</strong></span><ArrowRight className='size-4' /></Link> : <span />}</div>
-        <section className='mt-12'><h2 className='font-bold text-foreground text-xl'>Keep practicing</h2><div className='flex flex-wrap gap-3 mt-4'>{related.map((item) => <Link href={`/grammar/${item.slug}`} key={item.slug} className='flex flex-1 items-center gap-3 bg-card hover:border-primary p-4 border border-border rounded-xl min-w-56 transition-colors'><Check className='size-4 text-primary' /><span className='font-semibold text-sm'>{item.name}</span></Link>)}</div></section>
-      </article>
-      <aside className='top-8 sticky hidden lg:block'><p className='flex items-center gap-2 font-semibold text-sm'><List className='size-4' />On this lesson</p><nav className='flex flex-col gap-3 mt-4 pl-4 border-border border-l'>{lesson.sections.map((section) => <a key={section.id} href={`#${section.id}`} className='text-muted-foreground hover:text-primary text-sm'>{section.title}</a>)}</nav><div className='bg-secondary mt-8 p-4 rounded-2xl'><p className='font-semibold text-sm'>Lesson progress</p><div className='bg-card mt-3 rounded-full h-2 overflow-hidden'><div className='bg-primary h-full' style={{ width: `${completed ? 100 : lesson.progress}%` }} /></div><p className='mt-2 text-muted-foreground text-xs'>{completed ? 100 : lesson.progress}% complete</p></div></aside>
-    </div>
-  </main>
+	const [completed, setCompleted] = useState(lesson.progress === 100);
+	const [saved, setSaved] = useState(false);
+	const related = getRelatedLessons(lesson);
+	const index = grammarLessons.findIndex((item) => item.id === lesson.id);
+	const previous = grammarLessons[index - 1];
+	const next = grammarLessons[index + 1];
+	return (
+		<main className='mx-auto max-w-6xl'>
+			<div className='flex items-center gap-2 mb-8 text-muted-foreground text-sm'>
+				<Link
+					href='/grammar'
+					className='hover:text-foreground'>
+					Grammar
+				</Link>
+				<ChevronRight className='size-4' />
+				<span className='text-foreground'>{lesson.name}</span>
+			</div>
+			<div className='items-start gap-12 grid lg:grid-cols-[minmax(0,1fr)_190px]'>
+				<article className='min-w-0'>
+					<header className='pb-8 border-border border-b'>
+						<div className='flex flex-wrap items-center gap-3'>
+							<span
+								className={`px-2.5 py-1 rounded-full font-semibold text-[11px] ${difficultyClasses[lesson.difficulty]}`}>
+								{lesson.difficulty}
+							</span>
+							<span className='text-muted-foreground text-xs'>{lesson.duration}</span>
+						</div>
+						<h1 className='mt-4 font-bold text-4xl md:text-5xl tracking-tight text-balance'>
+							{lesson.name}
+						</h1>
+						<p className='mt-4 max-w-2xl text-muted-foreground text-lg leading-8'>
+							{lesson.description}
+						</p>
+						<div className='flex flex-wrap gap-3 mt-6'>
+							<button
+								type='button'
+								onClick={() => setCompleted((value) => !value)}
+								className={`inline-flex items-center gap-2 px-4 rounded-xl h-11 font-semibold text-sm transition-colors ${completed ? 'bg-brand-mint text-brand-mint-foreground' : 'bg-primary text-primary-foreground'}`}>
+								{completed ? (
+									<CircleCheck className='size-4' />
+								) : (
+									<Play className='size-4' />
+								)}
+								{completed ? 'Completed' : 'Start lesson'}
+							</button>
+							<button
+								type='button'
+								onClick={() => setSaved((value) => !value)}
+								className={`inline-flex items-center gap-2 px-4 rounded-xl h-11 border font-semibold text-sm transition-colors ${saved ? 'bg-brand-purple-soft border-transparent' : 'bg-card border-border text-muted-foreground'}`}>
+								<Bookmark className='size-4' />
+								{saved ? 'Saved' : 'Save lesson'}
+							</button>
+						</div>
+					</header>
+					<div className='lg:hidden bg-card mt-6 p-4 border border-border rounded-2xl'>
+						<p className='flex items-center gap-2 font-semibold text-sm'>
+							<List className='size-4' />
+							On this lesson
+						</p>
+						<div className='flex flex-wrap gap-x-4 gap-y-2 mt-3'>
+							{lesson.sections.map((section) => (
+								<a
+									key={section.id}
+									href={`#${section.id}`}
+									className='text-muted-foreground hover:text-primary text-sm'>
+									{section.title}
+								</a>
+							))}
+						</div>
+					</div>
+					<div className='content-reading pt-8'>
+						{lesson.sections.map((section) => (
+							<section
+								id={section.id}
+								key={section.id}
+								className='scroll-mt-8'>
+								<h2>{section.title}</h2>
+								{section.paragraphs.map((paragraph) => (
+									<p key={paragraph}>{paragraph}</p>
+								))}
+								{section.callout && (
+									<div className='bg-brand-purple-soft my-6 p-4 border border-border rounded-xl text-foreground text-sm leading-6'>
+										<strong>Good to know:</strong>{' '}
+										{section.callout.replace('Good to know: ', '')}
+									</div>
+								)}
+								{section.examples?.map((example) => (
+									<div
+										key={example.english}
+										className='bg-card my-4 p-4 border border-border rounded-xl'>
+										<p className='font-semibold text-foreground'>
+											{example.english}
+										</p>
+										<p className='mt-1 text-muted-foreground text-sm'>
+											{example.vietnamese}
+										</p>
+										{example.note && (
+											<p className='mt-3 text-muted-foreground text-xs'>
+												{example.note}
+											</p>
+										)}
+									</div>
+								))}
+							</section>
+						))}
+					</div>
+					<div className='flex sm:flex-row flex-col gap-3 mt-12 pt-6 border-border border-t'>
+						{previous ? (
+							<Link
+								href={`/grammar/${previous.slug}`}
+								className='flex flex-1 items-center gap-3 hover:bg-card p-4 border border-border rounded-xl'>
+								<ArrowLeft className='size-4' />
+								<span>
+									<small className='block text-muted-foreground text-xs'>
+										Previous
+									</small>
+									<strong>{previous.name}</strong>
+								</span>
+							</Link>
+						) : (
+							<span />
+						)}
+						{next ? (
+							<Link
+								href={`/grammar/${next.slug}`}
+								className='flex flex-1 justify-end items-center gap-3 hover:bg-card p-4 border border-border rounded-xl text-right'>
+								<span>
+									<small className='block text-muted-foreground text-xs'>
+										Next
+									</small>
+									<strong>{next.name}</strong>
+								</span>
+								<ArrowRight className='size-4' />
+							</Link>
+						) : (
+							<span />
+						)}
+					</div>
+					<section className='mt-12'>
+						<h2 className='font-bold text-foreground text-xl'>Keep practicing</h2>
+						<div className='flex flex-wrap gap-3 mt-4'>
+							{related.map((item) => (
+								<Link
+									href={`/grammar/${item.slug}`}
+									key={item.slug}
+									className='flex flex-1 items-center gap-3 bg-card hover:border-primary p-4 border border-border rounded-xl min-w-56 transition-colors'>
+									<Check className='size-4 text-primary' />
+									<span className='font-semibold text-sm'>{item.name}</span>
+								</Link>
+							))}
+						</div>
+					</section>
+				</article>
+				<aside className='top-8 sticky hidden lg:block'>
+					<p className='flex items-center gap-2 font-semibold text-sm'>
+						<List className='size-4' />
+						On this lesson
+					</p>
+					<nav className='flex flex-col gap-3 mt-4 pl-4 border-border border-l'>
+						{lesson.sections.map((section) => (
+							<a
+								key={section.id}
+								href={`#${section.id}`}
+								className='text-muted-foreground hover:text-primary text-sm'>
+								{section.title}
+							</a>
+						))}
+					</nav>
+					<div className='bg-secondary mt-8 p-4 rounded-2xl'>
+						<p className='font-semibold text-sm'>Lesson progress</p>
+						<div className='bg-card mt-3 rounded-full h-2 overflow-hidden'>
+							<div
+								className='bg-primary h-full'
+								style={{ width: `${completed ? 100 : lesson.progress}%` }}
+							/>
+						</div>
+						<p className='mt-2 text-muted-foreground text-xs'>
+							{completed ? 100 : lesson.progress}% complete
+						</p>
+					</div>
+				</aside>
+			</div>
+		</main>
+	);
 }
