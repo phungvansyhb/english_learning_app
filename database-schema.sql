@@ -89,6 +89,7 @@ CREATE TABLE public.exam_parts (
 CREATE TABLE public.topics (
   id integer NOT NULL DEFAULT nextval('topics_id_seq'::regclass),
   name character varying NOT NULL UNIQUE,
+  is_active boolean DEFAULT false,
   CONSTRAINT topics_pkey PRIMARY KEY (id)
 );
 CREATE TABLE public.difficulty_levels (
@@ -262,9 +263,10 @@ CREATE TABLE public.user_writing_submissions (
 CREATE TABLE public.vocab_words (
   id bigint NOT NULL DEFAULT nextval('vocab_words_id_seq'::regclass),
   word character varying NOT NULL,
-  ipa character varying,
+  ipa_uk character varying,
   difficulty_id smallint NOT NULL,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ipa_us character varying,
   CONSTRAINT vocab_words_pkey PRIMARY KEY (id),
   CONSTRAINT vocab_words_difficulty_id_fkey FOREIGN KEY (difficulty_id) REFERENCES public.difficulty_levels(id)
 );
@@ -285,11 +287,10 @@ CREATE TABLE public.vocab_examples (
 );
 CREATE TABLE public.vocab_relations (
   word_id bigint NOT NULL,
-  related_word_id bigint NOT NULL,
-  relation_type character varying NOT NULL CHECK (relation_type::text = ANY (ARRAY['synonym'::character varying, 'antonym'::character varying]::text[])),
-  CONSTRAINT vocab_relations_pkey PRIMARY KEY (word_id, related_word_id, relation_type),
-  CONSTRAINT vocab_relations_word_id_fkey FOREIGN KEY (word_id) REFERENCES public.vocab_words(id),
-  CONSTRAINT vocab_relations_related_word_id_fkey FOREIGN KEY (related_word_id) REFERENCES public.vocab_words(id)
+  relation_type USER-DEFINED NOT NULL,
+  word character varying,
+  meaning text,
+  CONSTRAINT vocab_relations_word_id_fkey FOREIGN KEY (word_id) REFERENCES public.vocab_words(id)
 );
 CREATE TABLE public.vocab_collocations (
   id bigint NOT NULL DEFAULT nextval('vocab_collocations_id_seq'::regclass),
@@ -431,10 +432,10 @@ CREATE TABLE public.profiles (
 CREATE TABLE public.word_meaning (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
-  part_of_speech USER-DEFINED,
+  part_of_speech character varying,
   meaning text,
   example text,
-  example meaning text,
+  example_meaning text,
   word_id bigint,
   is_primary_use boolean,
   CONSTRAINT word_meaning_pkey PRIMARY KEY (id),
