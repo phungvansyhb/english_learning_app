@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
-import { EyeClosedIcon, EyeDashedIcon } from 'lucide-react';
+import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 type Props = {};
 
 export default function NewPassForm({}: Props) {
@@ -47,7 +47,7 @@ export default function NewPassForm({}: Props) {
 					<div
 						className='absolute right-4 top-4  cursor-pointer'
 						onClick={() => setShowPassword(!showPassword)}>
-						{showPassword ? <EyeClosedIcon size={14} /> : <EyeDashedIcon size={14} />}
+						{showPassword ? <EyeClosedIcon size={14} /> : <EyeIcon size={14} />}
 					</div>
 				}
 			/>

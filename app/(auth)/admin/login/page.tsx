@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
 import { adminSignIn } from '@/services/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EyeClosedIcon, EyeDashedIcon } from 'lucide-react';
+import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
@@ -125,7 +125,7 @@ export default function LoginPage() {
 									{showPassword ? (
 										<EyeClosedIcon size={14} />
 									) : (
-										<EyeDashedIcon size={14} />
+										<EyeIcon size={14} />
 									)}
 								</div>
 							}
