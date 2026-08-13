@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { BookA, ChevronLeft, LayoutGrid, Layers, LogOut, Settings, Users } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { BookA, ChevronLeft, GraduationCap, LayoutGrid, Layers, LogOut, Settings, Users } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -20,6 +21,7 @@ const navItems: NavItem[] = [
 	{ id: 'user', link: '/admin/user', label: 'Users', icon: Users },
 	{ id: 'masterData', link: '/admin/master-data', label: 'Master Data', icon: Layers },
 	{ id: 'words', link: '/admin/word', label: 'Words', icon: BookA },
+	{ id: 'grammar', link: '/admin/grammar', label: 'Grammar', icon: GraduationCap },
 	{ id: 'settings', link: '/admin/setting', label: 'Settings', icon: Settings },
 ];
 
@@ -39,8 +41,10 @@ function BrandMark() {
 }
 
 export function AdminSidebar() {
+	const pathname = usePathname();
 	const [active, setActive] = useState('words');
 	const [expanded, setExpanded] = useState(true);
+	const currentActive = navItems.find((item) => pathname.startsWith(item.link))?.id ?? active;
 	const user = useAuthStore((state) => state.user);
 	const [isPending, startTransition] = useTransition();
 	const handleLogout = () => {
@@ -88,7 +92,7 @@ export function AdminSidebar() {
 				<nav className='flex flex-col flex-1 gap-2'>
 					{navItems.map((item) => {
 						const Icon = item.icon;
-						const isActive = active === item.id;
+						const isActive = currentActive === item.id;
 						return (
 							<Link
 								href={item.link}
@@ -139,7 +143,7 @@ export function AdminSidebar() {
 				className='md:hidden bottom-0 z-50 fixed inset-x-0 flex justify-around items-center bg-card px-2 py-2 border-border border-t'>
 				{navItems.map((item) => {
 					const Icon = item.icon;
-					const isActive = active === item.id;
+					const isActive = currentActive === item.id;
 					return (
 						<button
 							key={item.id}
