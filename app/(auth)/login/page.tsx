@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EyeClosedIcon, EyeDashedIcon } from 'lucide-react';
+import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 import GoogleIcon from '@/components/ui/googleIcon';
 import FacebookIcon from '@/components/ui/facebookIcon';
 import { Button } from '@/components/ui/button';
@@ -138,7 +138,7 @@ export default function LoginPage() {
 									{showPassword ? (
 										<EyeClosedIcon size={14} />
 									) : (
-										<EyeDashedIcon size={14} />
+										<EyeIcon size={14} />
 									)}
 								</div>
 							}

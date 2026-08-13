@@ -9,7 +9,15 @@ type AuthState = {
 }
 
 export const useAuthStore = create<AuthState>()((set) => ({
-    user: null,
+    user: {
+        email: 'admin@gmail.com',
+        id: 'abc123',
+        role: 'admin',
+        status: 'active',
+        created_at: '2026-08-11T11:33:44',
+        display_name: 'sypv',
+        updated_at: '2026-08-11T11:33:44'
+    },
     count: 0,
     getCurrentUser: async (redirectPath?: string) => {
         const userData = await getCurrentUser(redirectPath)

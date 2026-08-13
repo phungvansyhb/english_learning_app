@@ -130,8 +130,9 @@ export async function adminSignIn({ email, password }: { email: string, password
 
 export async function getCurrentUser(redirectPath?: string) {
     const supabase = await getSupabaseServer()
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user }, error } = await supabase.auth.getUser()
     if (!user) {
+        console.log(error)
         redirect(redirectPath ?? '/login')
     } else {
         const { data: profile, error } = await supabase.from('users').select('*').eq('id', user.id).maybeSingle()

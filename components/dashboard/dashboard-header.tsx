@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { AlarmClockIcon, Bell, FlameIcon, Search, ShoppingBag } from 'lucide-react';
 import Ttip from '../ui/ttip';
 
@@ -53,10 +54,10 @@ export function DashboardHeader() {
 				className='flex justify-center items-center bg-secondary hover:bg-accent rounded-full size-11 text-foreground transition-colors'>
 				<Bell className='size-5' />
 			</button>
-			<button
-				type='button'
+			<Link
+				href='/profile'
 				aria-label='Open profile'
-				className='rounded-full ring-2 ring-brand-orange overflow-hidden'>
+				className='rounded-full ring-2 ring-brand-orange overflow-hidden transition-transform hover:scale-105'>
 				<Image
 					src='/avatars/user.png'
 					alt='Your profile'
@@ -64,7 +65,7 @@ export function DashboardHeader() {
 					height={44}
 					className='size-11 object-cover'
 				/>
-			</button>
+			</Link>
 		</header>
 	);
 }
