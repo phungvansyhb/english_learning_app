@@ -1,8 +1,10 @@
 'use client';
 
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
+import { usePathname } from 'next/navigation';
 import {
-	BookMarkedIcon,
+		BookMarkedIcon,
+		LanguagesIcon,
 	BookOpen,
 	ChevronLeft,
 	FileHeadphoneIcon,
@@ -30,6 +32,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
 	{ id: 'vocabulary', label: 'Vocabulary', icon: WholeWordIcon, link: '/vocabulary' },
+	{ id: 'grammar', label: 'Grammar', icon: LanguagesIcon, link: '/grammar' },
 	{ id: 'listening', label: 'Listening', icon: FileHeadphoneIcon, link: '/listening' },
 	{ id: 'speaking', label: 'Speaking', icon: MicVocalIcon, link: '/speaking' },
 	{ id: 'reading', label: 'Reading', icon: BookOpen, link: '/reading' },
@@ -57,7 +60,9 @@ function BrandMark({ onClick }: { onClick: (item: string) => void }) {
 }
 
 export function DashboardSidebar() {
+	const pathname = usePathname();
 	const [active, setActive] = useState('');
+	const currentActive = navItems.find((item) => item.link !== '#' && pathname.startsWith(item.link))?.id ?? active;
 	const [expanded, setExpanded] = useState(true);
 	const [isPending, startTransition] = useTransition();
 	const handleSignOut = () => {
@@ -100,7 +105,7 @@ export function DashboardSidebar() {
 				<nav className='flex flex-col flex-1 gap-2'>
 					{navItems.map((item) => {
 						const Icon = item.icon;
-						const isActive = active === item.id;
+						const isActive = currentActive === item.id;
 						return (
 							<Link
 								href={item.link || ''}
@@ -155,7 +160,7 @@ export function DashboardSidebar() {
 				className='md:hidden bottom-0 z-50 fixed inset-x-0 flex justify-around items-center bg-card px-2 py-2 border-border border-t'>
 				{navItems.map((item) => {
 					const Icon = item.icon;
-					const isActive = active === item.id;
+					const isActive = currentActive === item.id;
 					return (
 						<button
 							key={item.id}
