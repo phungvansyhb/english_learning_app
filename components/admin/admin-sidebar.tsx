@@ -49,7 +49,7 @@ export function AdminSidebar() {
 	const [isPending, startTransition] = useTransition();
 	const handleLogout = () => {
 		startTransition(async () => {
-			signOut('/adnin/login');
+			signOut('/admin/login');
 		});
 	};
 	return (

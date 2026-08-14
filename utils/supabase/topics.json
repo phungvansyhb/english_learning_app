@@ -1,452 +1,252 @@
 [
     {
+        "id": 1,
+        "name": "Office & Administration",
+        "is_active": false
+    },
+    {
+        "id": 2,
+        "name": "Travel & Transportation",
+        "is_active": false
+    },
+    {
+        "id": 3,
+        "name": "Marketing & Advertising",
+        "is_active": false
+    },
+    {
+        "id": 4,
+        "name": "Human Resources",
+        "is_active": false
+    },
+    {
+        "id": 5,
+        "name": "Finance & Banking",
+        "is_active": false
+    },
+    {
+        "id": 6,
+        "name": "Contracts & Agreements",
+        "is_active": false
+    },
+    {
+        "id": 7,
+        "name": "Shopping & Retail",
+        "is_active": false
+    },
+    {
+        "id": 8,
+        "name": "Health & Medicine",
+        "is_active": false
+    },
+    {
+        "id": 9,
+        "name": "Technology",
+        "is_active": false
+    },
+    {
+        "id": 10,
+        "name": "Manufacturing & Production",
+        "is_active": false
+    },
+    {
+        "id": 11,
+        "name": "Restaurants & Dining",
+        "is_active": false
+    },
+    {
+        "id": 12,
+        "name": "Real Estate",
+        "is_active": false
+    },
+    {
+        "id": 13,
+        "name": "Meetings & Conferences",
+        "is_active": false
+    },
+    {
+        "id": 14,
+        "name": "Entertainment & Media",
+        "is_active": false
+    },
+    {
+        "id": 15,
         "name": "Contracts",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "424fca03-358c-4775-92cc-65943156d430",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 1,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 16,
         "name": "Marketing",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "7a924b6a-1527-4311-9d7d-6cd093563f42",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 2,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 17,
         "name": "Warranties",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "9f8c03ab-35c4-4ebe-a784-2472d0f5ddba",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 3,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "Business Planning",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "e867e226-d470-47f9-9b09-ff8881778727",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 4,
-        "access_level": "pro"
-    },
-    {
+        "id": 18,
         "name": "Conferences",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "7f71d86a-790e-41a7-a6a4-6440c5f1e97c",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 5,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 19,
         "name": "Computers",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "d8f0979d-1c9b-4f06-a269-7c9fa43a967b",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 6,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 20,
         "name": "Office Technology",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "fcc53c18-c695-4f97-ad29-5d6172b5fa59",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 7,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "Office Procedures",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "6a1040cc-6321-4a15-a0ba-ec38bc877c1e",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 8,
-        "access_level": "pro"
-    },
-    {
+        "id": 21,
         "name": "Electronics",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "c12689b5-fc55-45c8-83b0-cdd570d43964",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 9,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 22,
         "name": "Correspondence",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "91a01503-0832-44f7-b309-a31664cc1074",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 10,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 23,
         "name": "Job Advertising and Recruiting",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "9ba4cad0-92e1-4c84-9211-cd3a1f6789b9",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 11,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "Applying and Interviewing",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "78fadbc0-5e1a-4c6c-a9d1-5cf96fa2dcc3",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 12,
-        "access_level": "pro"
-    },
-    {
+        "id": 24,
         "name": "Hiring and Training",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "15d48dd7-e20d-463c-9688-80e28ad942a0",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 13,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 25,
         "name": "Salaries and Benefits",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "eb1bbdee-e2e9-462a-8a15-0d61facee06c",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 14,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 26,
         "name": "Promotions Pensions and Awards",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "d42e7090-abff-4586-bd82-f649226a2fd3",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 15,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "Shopping",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "a4a9b950-c4f4-4d9b-a83b-dc1ed8f181e2",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 16,
-        "access_level": "pro"
-    },
-    {
+        "id": 27,
         "name": "Ordering",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "7c31b0f4-6308-4da5-a73c-3a0dce5febde",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 17,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 28,
         "name": "Shipping",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "c527d86e-c35c-4ac6-827e-8554174bc439",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 18,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 29,
         "name": "Invoices",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "84392ea7-f327-4aef-827e-ef3d9435eddf",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 19,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "Inventory",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "06c8ecf6-266d-4ac1-a0e9-28764d32d54c",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 20,
-        "access_level": "pro"
-    },
-    {
+        "id": 30,
         "name": "Banking",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "e5d4c951-633a-46e4-998a-220584052219",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 21,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 31,
         "name": "Accounting",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "f1a590c8-1f7b-411d-a0c7-ad154e70956d",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 22,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 32,
         "name": "Investments",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "2a296171-6dce-4c9e-b9b2-018d658ccbf9",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 23,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "Taxes",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "9d468793-eac6-4aa4-ab02-2ea873e8df05",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 24,
-        "access_level": "pro"
-    },
-    {
+        "id": 33,
         "name": "Financial Statements",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "ce24de54-1606-4e28-9935-b57783aa81d0",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 25,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 34,
         "name": "Property and Department",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "34e70e50-225b-4f2c-917e-c8213b47d834",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 26,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 35,
         "name": "Board Meeting and Committees",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "b9164549-8772-4f99-aa67-ff96234af22c",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 27,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "Quality Control",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "1018ee7f-69be-472b-baf2-bb1bf62644f9",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 28,
-        "access_level": "pro"
-    },
-    {
+        "id": 36,
         "name": "Product Development",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "72c111f5-6fb6-4fb0-af31-9dcb98893bb1",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 29,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 37,
         "name": "Renting and Leasing",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "aa3caa5a-489e-4b15-a850-2883b1e2928d",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 30,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 38,
         "name": "Selecting a Restaurant",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "cf98c48a-6520-497b-8917-b11b7a1e391c",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 31,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "Eating Out",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "54e9b0e8-52e6-48db-a7bd-566cb1969779",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 32,
-        "access_level": "pro"
-    },
-    {
+        "id": 39,
         "name": "Ordering Lunch",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "9a3f6267-dc88-4e74-b33b-70631e58027d",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 33,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 40,
         "name": "Cooking as a Career",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "1aea1ebe-f182-4f31-adc5-62c34c8d7842",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 34,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 41,
         "name": "Events",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "bf854bd0-de20-486a-8967-dbe4155b7387",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 35,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "General Travel",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "04de9f3a-9213-41b4-a461-39893bc6cf03",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 36,
-        "access_level": "pro"
-    },
-    {
+        "id": 42,
         "name": "Airlines",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "f94d05dd-54fb-48ee-b116-938f05a6b194",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 37,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 43,
         "name": "Trains",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "c9d47fda-a81f-423a-9062-8ff9b1d0a796",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 38,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 44,
         "name": "Hotels",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "36946560-314a-492f-939d-cd9b89c3b065",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 39,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "Car Rentals",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "b23ac543-acbd-421e-8964-67a1e31cbe5e",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 40,
-        "access_level": "pro"
-    },
-    {
-        "name": "Movies",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "6c104212-4c82-4de1-a2e1-0b342ddc39d5",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 41,
-        "access_level": "pro"
-    },
-    {
+        "id": 45,
         "name": "Theater",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "e84302c4-8496-4e40-8f21-adf63eed86eb",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 42,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 46,
         "name": "Music",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "d368b1e7-2364-428c-a334-36f5b6f0e495",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 43,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "Museums",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "0737ca01-0af2-4850-beee-0eba857c6527",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 44,
-        "access_level": "pro"
-    },
-    {
+        "id": 47,
         "name": "Media",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "085c7279-d8c3-469a-8f64-4195c0cec325",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 45,
-        "access_level": "free"
+        "is_active": true
     },
     {
-        "name": "Doctor's Office",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "47995fb4-db15-4780-9cfa-f0df6648f0db",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 46,
-        "access_level": "free"
+        "id": 48,
+        "name": "Doctors Office",
+        "is_active": true
     },
     {
-        "name": "Dentist's Office",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "1549af90-f7f2-4e18-9788-4edd01e3d573",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 47,
-        "access_level": "pro"
-    },
-    {
+        "id": 49,
         "name": "Health Insurance",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "4b757459-83d4-4d2d-9cfc-43c7bc3c7d85",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 48,
-        "access_level": "free"
+        "is_active": true
     },
     {
+        "id": 50,
         "name": "Hospitals",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "5fe1f428-93c9-4ff6-b05c-44ee144e93ca",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 49,
-        "access_level": "free"
-    },
-    {
-        "name": "Pharmacy",
-        "set_id": "66c99944-ebc5-43b8-93e2-994a73406b99",
-        "test_id": "e817c5a9-3a99-40d1-8fb3-a3eb11e5e011",
-        "part_count": 1,
-        "word_count": 12,
-        "order_index": 50,
-        "access_level": "pro"
+        "is_active": true
     }
 ]
