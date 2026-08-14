@@ -2,11 +2,30 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
-.content-reading { color: var(--foreground); font-size: 1rem; line-height: 1.8; }
-.content-reading section { margin-bottom: 3rem; }
-.content-reading h2 { margin-bottom: 1rem; font-size: 1.5rem; font-weight: 700; line-height: 1.3; }
-.content-reading p { margin-bottom: 1rem; }
-.content-reading strong { font-weight: 700; }
+.content-reading {
+  color: var(--foreground);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.content-reading section {
+  margin-bottom: 3rem;
+}
+
+.content-reading h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.content-reading p {
+  margin-bottom: 1rem;
+}
+
+.content-reading strong {
+  font-weight: 700;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -192,7 +211,7 @@
   }
 
   .label-text {
-    @apply mb-1.5 block text-xs font-semibold text-foreground
+    @apply block text-xs font-semibold text-foreground
   }
 
   .desc-text {

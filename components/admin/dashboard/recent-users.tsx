@@ -13,7 +13,7 @@ const users = [
 
 export function RecentUsers() {
 	return <Card>
-		<CardHeader className='flex flex-row items-start justify-between gap-3'><div><CardTitle>Recent learners</CardTitle><CardDescription className='mt-1'>The latest people joining Lingua</CardDescription></div><Button asChild variant='outline' size='sm'><a href='/admin/user'>View all</a></Button></CardHeader>
+		<CardHeader className='flex flex-row items-start justify-between gap-3'><div><CardTitle>Recent learners</CardTitle><CardDescription className='mt-1'>The latest people joining Lingua</CardDescription></div><Button  variant='outline' size='sm'><a href='/admin/user'>View all</a></Button></CardHeader>
 		<CardContent className='flex flex-col gap-1'>
 			{users.map((user) => <div key={user.email} className='flex items-center gap-3 rounded-xl px-2 py-3 transition-colors hover:bg-secondary'>
 				<div className='flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-purple-soft text-xs font-bold text-primary'>{user.initials}</div>

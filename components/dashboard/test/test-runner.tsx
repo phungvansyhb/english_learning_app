@@ -57,7 +57,7 @@ export default function TestRunner({
 									<p className='mt-1 text-2xl font-bold text-primary'>Đã lưu</p>
 								</div>
 							</div>
-							<Button asChild>
+							<Button>
 								<Link href='/test'>Về Test Center</Link>
 							</Button>
 						</CardContent>
@@ -72,8 +72,7 @@ export default function TestRunner({
 					<div className='flex items-center gap-3'>
 						<Button
 							variant='ghost'
-							size='icon'
-							asChild>
+							size='icon'>
 							<Link
 								href='/test'
 								aria-label='Quay lại Test Center'>

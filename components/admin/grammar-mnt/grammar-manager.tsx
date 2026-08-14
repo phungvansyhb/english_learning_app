@@ -4,15 +4,7 @@ import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Field } from '@/components/ui/field';
 import { GrammarContentEditor } from './grammar-content-editor';
-import {
-	Check,
-	ChevronDown,
-	Eye,
-	Pencil,
-	Plus,
-	Search,
-	Trash2,
-} from 'lucide-react';
+import { Check, ChevronDown, Eye, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 
 type Difficulty = 'Beginner' | 'Intermediate' | 'Advanced';
 type GrammarPoint = {
@@ -96,7 +88,14 @@ export function GrammarManager() {
 	const [difficulty, setDifficulty] = useState<'All' | Difficulty>('All');
 	const [isPreview, setIsPreview] = useState(false);
 
-	const { register, reset: resetForm, getValues, formState: { errors } } = useForm<{ name: string; description: string; difficulty: Difficulty }>({ defaultValues: { name: '', description: '', difficulty: 'Beginner' } });
+	const {
+		register,
+		reset: resetForm,
+		getValues,
+		formState: { errors },
+	} = useForm<{ name: string; description: string; difficulty: Difficulty }>({
+		defaultValues: { name: '', description: '', difficulty: 'Beginner' },
+	});
 
 	const filtered = useMemo(
 		() =>
@@ -119,7 +118,11 @@ export function GrammarManager() {
 			content: '<h2>New grammar point</h2><p>Start writing your lesson here...</p>',
 		};
 		setSelected(draft);
-		resetForm({ name: draft.name, description: draft.description, difficulty: draft.difficulty });
+		resetForm({
+			name: draft.name,
+			description: draft.description,
+			difficulty: draft.difficulty,
+		});
 		setIsPreview(false);
 	};
 
@@ -127,7 +130,13 @@ export function GrammarManager() {
 		if (!selected || !selected.name.trim()) return;
 		const values = getValues();
 		const content = sanitizeHtml(selected.content);
-		const next = { ...selected, ...values, name: values.name.trim(), content, updated: 'Just now' };
+		const next = {
+			...selected,
+			...values,
+			name: values.name.trim(),
+			content,
+			updated: 'Just now',
+		};
 		setItems((current) =>
 			current.some((item) => item.id === next.id)
 				? current.map((item) => (item.id === next.id ? next : item))
@@ -254,7 +263,7 @@ export function GrammarManager() {
 						role='dialog'
 						aria-modal='true'
 						aria-label='Grammar point editor'
-						className='flex flex-col bg-card shadow-2xl rounded-2xl w-full max-w-4xl max-h-[92vh] overflow-hidden'>
+						className='flex flex-col bg-card shadow-2xl rounded-2xl w-full max-w-6xl max-h-[92vh] overflow-hidden'>
 						<div className='flex justify-between items-start px-6 py-5 border-border border-b'>
 							<div>
 								<p className='font-semibold text-brand-pink text-xs uppercase tracking-[0.16em]'>
@@ -276,10 +285,12 @@ export function GrammarManager() {
 						</div>
 						<div className='flex-1 gap-5 grid md:grid-cols-[260px_1fr] p-6 overflow-y-auto'>
 							<div className='flex flex-col gap-4'>
-								<label className='label-text'>
-									Title
-									<Field label='Title' error={errors.name} placeholder='e.g. Present Simple' {...register('name', { required: 'Title is required.' })} />
-								</label>
+								<Field
+									label='Title'
+									error={errors.name}
+									placeholder='e.g. Present Simple'
+									{...register('name', { required: 'Title is required.' })}
+								/>
 								<label className='label-text'>
 									Short description
 									<textarea
@@ -329,13 +340,23 @@ export function GrammarManager() {
 										{isPreview ? 'Edit content' : 'Preview'}
 									</button>
 								</div>
-					{isPreview ? (
-						<article className='prose prose-sm bg-secondary/50 p-5 rounded-xl min-h-72 max-w-none' dangerouslySetInnerHTML={{ __html: sanitizeHtml(selected.content) }} />
-					) : (
-						<div className='border border-border rounded-xl overflow-hidden'>
-							<GrammarContentEditor value={selected.content} onChange={(content) => setSelected({ ...selected, content })} />
-						</div>
-					)}
+								{isPreview ? (
+									<article
+										className='prose prose-sm bg-secondary/50 p-5 rounded-xl min-h-72 max-w-none'
+										dangerouslySetInnerHTML={{
+											__html: sanitizeHtml(selected.content),
+										}}
+									/>
+								) : (
+									<div className='border border-border rounded-xl overflow-hidden'>
+										<GrammarContentEditor
+											value={selected.content}
+											onChange={(content) =>
+												setSelected({ ...selected, content })
+											}
+										/>
+									</div>
+								)}
 							</div>
 						</div>
 						<div className='flex justify-end items-center gap-3 bg-secondary/40 px-6 py-4 border-border border-t'>

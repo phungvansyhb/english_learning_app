@@ -17,15 +17,41 @@ export const Field = React.forwardRef<HTMLInputElement, Props>(function Field(
 ) {
 	const inputProps = { ...rest, ref, id: rest.name };
 	return (
-		<div className='flex flex-col gap-2'>
-			<label htmlFor={rest.name} className='label-text'>{label}</label>
+		<div className='flex flex-col gap-1'>
+			<label
+				htmlFor={rest.name}
+				className='label-text'>
+				{label}
+			</label>
 			<div className='relative'>
-				{children ? React.cloneElement(children as React.ReactElement<Record<string, unknown>>, { ...inputProps, className: twMerge('input-wrapper', (children.props as Record<string, string | undefined>).className) }) : (
-					<input {...inputProps} className={twMerge('input-wrapper', error?.message ? 'border-destructive' : 'border-border', suffixIcon && 'pr-10', className)} />
+				{children ? (
+					React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
+						...inputProps,
+						className: twMerge(
+							'input-wrapper',
+							(children.props as Record<string, string | undefined>).className,
+						),
+					})
+				) : (
+					<input
+						{...inputProps}
+						className={twMerge(
+							'input-wrapper',
+							error?.message ? 'border-destructive' : 'border-border',
+							suffixIcon && 'pr-10',
+							className,
+						)}
+					/>
 				)}
 				{suffixIcon}
 			</div>
-			{error && <p className='error-text' role='alert'>{error.message}</p>}
+			{error && (
+				<p
+					className='error-text'
+					role='alert'>
+					{error.message}
+				</p>
+			)}
 			{description && <span className='desc-text'>{description}</span>}
 		</div>
 	);

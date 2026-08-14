@@ -48,11 +48,10 @@ const Dropzone = ({
 			<div
 				{...getRootProps({
 					className: cn(
-						'border-2 border-gray-300 rounded-lg p-6 text-center bg-card transition-colors duration-300 text-foreground',
+						'border-2 border-gray-300 rounded-b-2xl  p-6 text-center bg-card transition-colors duration-300 text-foreground',
 						className,
 						isSuccess ? 'border-solid' : 'border-dashed',
 						isActive && 'border-primary bg-primary/10',
-						isInvalid && 'border-destructive bg-destructive/10',
 					),
 				})}>
 				<input {...getInputProps()} />
@@ -174,7 +173,8 @@ const DropzoneContent = ({ className }: { className?: string }) => {
 			{files.length > 0 && !exceedMaxFiles && (
 				<div className='mt-2'>
 					<Button
-						variant='outline'
+						variant='default'
+						size='lg'
 						onClick={onUpload}
 						disabled={files.some((file) => file.errors.length !== 0) || loading}>
 						{loading ? (

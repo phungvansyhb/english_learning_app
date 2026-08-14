@@ -127,7 +127,7 @@ export default function TestLibrary() {
 									{parts.length} Part · {questionCount} câu ·{' '}
 									{mode === 'full' ? 120 : 30} phút
 								</span>
-								<Button asChild>
+								<Button>
 									<Link
 										href={`/test/${selected.slug}?parts=${parts.join(',')}&mode=${mode}`}>
 										<Play data-icon='inline-start' /> Bắt đầu bài test
@@ -154,7 +154,7 @@ export default function TestLibrary() {
 								<Button
 									variant='outline'
 									className='mt-4 w-full'
-									asChild>
+									>
 									<Link href='/test/toeic-reading-focus'>
 										<RotateCcw data-icon='inline-start' /> Tiếp tục
 									</Link>
