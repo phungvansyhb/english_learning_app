@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { Field } from '@/components/ui/field';
 import { Plus, Search, Pencil, Trash2, LoaderIcon } from 'lucide-react';
 
 import type { CreateTopicInput, TopicRow } from '@/lib/types';
@@ -250,6 +252,7 @@ function TopicFormModal({
 	onClose: () => void;
 	onSave: (input: Partial<TopicRow> & { id?: number }) => void;
 }) {
+	const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateTopicInput>({ defaultValues: { name: '' } });
 	const [draft, setDraft] = useState<CreateTopicInput>({ name: '' });
 	const [error, setError] = useState<string | null>(null);
 
@@ -262,20 +265,14 @@ function TopicFormModal({
 			setDraft({ name: '' });
 			setError(null);
 		}
-	}, [open, topic]);
+		reset(topic ? { id: topic.id, name: topic.name } : { name: '' });
+	}, [open, topic, reset]);
 
 	function handleChange<K extends keyof CreateTopicInput>(key: K, value: CreateTopicInput[K]) {
 		setDraft((prev) => ({ ...prev, [key]: value }));
 	}
 
-	function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		if (!draft.name.trim()) {
-			setError('Name is required.');
-			return;
-		}
-		onSave({ ...(topic ? { id: topic.id } : {}), ...draft, name: draft.name.trim() });
-	}
+	const submit = (values: CreateTopicInput) => onSave({ ...(topic ? { id: topic.id } : {}), ...values, name: values.name.trim() });
 
 	return (
 		<Modal
@@ -284,7 +281,7 @@ function TopicFormModal({
 			title={topic ? 'Edit topic' : 'Create topic'}
 			description={topic ? `Update topic ${topic.name}.` : 'Add a new topic.'}>
 			<form
-				onSubmit={handleSubmit}
+				onSubmit={handleSubmit(submit)}
 				className='flex min-h-0 flex-1 flex-col'>
 				<div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
 					<div>
@@ -293,13 +290,7 @@ function TopicFormModal({
 							htmlFor='topic-name'>
 							Name
 						</label>
-						<input
-							id='topic-name'
-							className={fieldClass}
-							value={draft.name}
-							onChange={(e) => handleChange('name', e.target.value)}
-							placeholder='Grammar'
-						/>
+<Field label='Name' placeholder='Grammar' error={errors.name} {...register('name', { required: 'Name is required.' })} />
 					</div>
 				</div>
 

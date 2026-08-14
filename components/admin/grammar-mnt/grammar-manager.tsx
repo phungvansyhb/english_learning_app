@@ -1,19 +1,17 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Field } from '@/components/ui/field';
+import { GrammarContentEditor } from './grammar-content-editor';
 import {
-	Bold,
 	Check,
 	ChevronDown,
 	Eye,
-	Italic,
-	List,
-	ListOrdered,
 	Pencil,
 	Plus,
 	Search,
 	Trash2,
-	Underline,
 } from 'lucide-react';
 
 type Difficulty = 'Beginner' | 'Intermediate' | 'Advanced';
@@ -91,55 +89,14 @@ function sanitizeHtml(value: string) {
 	return doc.body.innerHTML;
 }
 
-function EditorToolbar({ onCommand }: { onCommand: (command: string) => void }) {
-	const actions = [
-		{ command: 'bold', label: 'Bold', icon: Bold },
-		{ command: 'italic', label: 'Italic', icon: Italic },
-		{ command: 'underline', label: 'Underline', icon: Underline },
-		{ command: 'insertUnorderedList', label: 'Bulleted list', icon: List },
-		{ command: 'insertOrderedList', label: 'Numbered list', icon: ListOrdered },
-	];
-	return (
-		<div className='flex flex-wrap items-center gap-1 border-border border-b p-2'>
-			<select
-				aria-label='Text style'
-				className='bg-card px-2 rounded-lg h-9 text-muted-foreground text-xs outline-none'
-				defaultValue='p'
-				onChange={(event) =>
-					onCommand(
-						event.target.value === 'p'
-							? 'formatBlock:p'
-							: `formatBlock:${event.target.value}`,
-					)
-				}>
-				<option value='p'>Paragraph</option>
-				<option value='h2'>Heading 2</option>
-				<option value='h3'>Heading 3</option>
-				<option value='blockquote'>Quote</option>
-			</select>
-			<span className='bg-border mx-1 w-px h-5' />
-			{actions.map(({ command, label, icon: Icon }) => (
-				<button
-					key={command}
-					type='button'
-					aria-label={label}
-					onMouseDown={(event) => event.preventDefault()}
-					onClick={() => onCommand(command)}
-					className='flex justify-center items-center hover:bg-secondary rounded-lg size-9 text-muted-foreground hover:text-foreground transition-colors'>
-					<Icon className='size-4' />
-				</button>
-			))}
-		</div>
-	);
-}
-
 export function GrammarManager() {
 	const [items, setItems] = useState(initialGrammar);
 	const [selected, setSelected] = useState<GrammarPoint | null>(null);
 	const [query, setQuery] = useState('');
 	const [difficulty, setDifficulty] = useState<'All' | Difficulty>('All');
 	const [isPreview, setIsPreview] = useState(false);
-	const editorRef = useRef<HTMLDivElement>(null);
+
+	const { register, reset: resetForm, getValues, formState: { errors } } = useForm<{ name: string; description: string; difficulty: Difficulty }>({ defaultValues: { name: '', description: '', difficulty: 'Beginner' } });
 
 	const filtered = useMemo(
 		() =>
@@ -162,16 +119,15 @@ export function GrammarManager() {
 			content: '<h2>New grammar point</h2><p>Start writing your lesson here...</p>',
 		};
 		setSelected(draft);
+		resetForm({ name: draft.name, description: draft.description, difficulty: draft.difficulty });
 		setIsPreview(false);
-		requestAnimationFrame(() => {
-			if (editorRef.current) editorRef.current.innerHTML = draft.content;
-		});
 	};
 
 	const save = () => {
 		if (!selected || !selected.name.trim()) return;
-		const content = sanitizeHtml(editorRef.current?.innerHTML ?? selected.content);
-		const next = { ...selected, name: selected.name.trim(), content, updated: 'Just now' };
+		const values = getValues();
+		const content = sanitizeHtml(selected.content);
+		const next = { ...selected, ...values, name: values.name.trim(), content, updated: 'Just now' };
 		setItems((current) =>
 			current.some((item) => item.id === next.id)
 				? current.map((item) => (item.id === next.id ? next : item))
@@ -322,14 +278,7 @@ export function GrammarManager() {
 							<div className='flex flex-col gap-4'>
 								<label className='label-text'>
 									Title
-									<input
-										value={selected.name}
-										onChange={(event) =>
-											setSelected({ ...selected, name: event.target.value })
-										}
-										className='input-wrapper mt-1'
-										placeholder='e.g. Present Simple'
-									/>
+									<Field label='Title' error={errors.name} placeholder='e.g. Present Simple' {...register('name', { required: 'Title is required.' })} />
 								</label>
 								<label className='label-text'>
 									Short description
@@ -380,43 +329,13 @@ export function GrammarManager() {
 										{isPreview ? 'Edit content' : 'Preview'}
 									</button>
 								</div>
-								{isPreview ? (
-									<article
-										className='prose prose-sm bg-secondary/50 p-5 rounded-xl min-h-72 max-w-none'
-										dangerouslySetInnerHTML={{
-											__html: sanitizeHtml(
-												editorRef.current?.innerHTML ?? selected.content,
-											),
-										}}
-									/>
-								) : (
-									<div className='border border-border rounded-xl overflow-hidden'>
-										<EditorToolbar
-											onCommand={(command) => {
-												if (command.startsWith('formatBlock:'))
-													document.execCommand(
-														'formatBlock',
-														false,
-														command.split(':')[1],
-													);
-												else document.execCommand(command);
-												editorRef.current?.focus();
-											}}
-										/>
-										<div
-											ref={editorRef}
-											contentEditable
-											suppressContentEditableWarning
-											onInput={(event) =>
-												setSelected({
-													...selected,
-													content: event.currentTarget.innerHTML,
-												})
-											}
-											className='p-5 min-h-72 outline-none prose prose-sm max-w-none'
-										/>
-									</div>
-								)}
+					{isPreview ? (
+						<article className='prose prose-sm bg-secondary/50 p-5 rounded-xl min-h-72 max-w-none' dangerouslySetInnerHTML={{ __html: sanitizeHtml(selected.content) }} />
+					) : (
+						<div className='border border-border rounded-xl overflow-hidden'>
+							<GrammarContentEditor value={selected.content} onChange={(content) => setSelected({ ...selected, content })} />
+						</div>
+					)}
 							</div>
 						</div>
 						<div className='flex justify-end items-center gap-3 bg-secondary/40 px-6 py-4 border-border border-t'>

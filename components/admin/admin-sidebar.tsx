@@ -42,7 +42,7 @@ function BrandMark() {
 
 export function AdminSidebar() {
 	const pathname = usePathname();
-	const [active, setActive] = useState('words');
+	const [active, setActive] = useState('dashboard');
 	const [expanded, setExpanded] = useState(true);
 	const currentActive = navItems.find((item) => pathname.startsWith(item.link))?.id ?? active;
 	const user = useAuthStore((state) => state.user);

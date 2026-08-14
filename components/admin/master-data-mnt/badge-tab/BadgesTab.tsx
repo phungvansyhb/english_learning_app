@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { Field } from '@/components/ui/field';
 import { Plus, Search, Pencil, Trash2, LoaderIcon } from 'lucide-react';
 
 import type { BadgeRow, CreateBadgeInput } from '@/lib/types';
@@ -256,69 +258,16 @@ function BadgeFormModal({
 	onClose: () => void;
 	onSave: (input: Partial<BadgeRow> & { id?: number }) => void;
 }) {
-	const [draft, setDraft] = useState<CreateBadgeInput>({
-		code: '',
-		name: '',
-		description: null,
-		icon_url: null,
-		criteria_type: CRITERIA_TYPES[0],
-		criteria_value: 0,
-	});
-	const [error, setError] = useState<string | null>(null);
+		const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateBadgeInput>({ defaultValues: { code: '', name: '', description: null, icon_url: null, criteria_type: CRITERIA_TYPES[0], criteria_value: 0 } });
+		const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (!open) return;
-		if (badge) {
-			setDraft({
-				id: badge.id,
-				code: badge.code,
-				name: badge.name,
-				description: badge.description ?? null,
-				icon_url: badge.icon_url ?? null,
-				criteria_type: badge.criteria_type,
-				criteria_value: badge.criteria_value,
-			});
-			setError(null);
-		} else {
-			setDraft({
-				code: '',
-				name: '',
-				description: null,
-				icon_url: null,
-				criteria_type: CRITERIA_TYPES[0],
-				criteria_value: 0,
-			});
-			setError(null);
-		}
-	}, [open, badge]);
+		reset(badge ? { id: badge.id, code: badge.code, name: badge.name, description: badge.description ?? null, icon_url: badge.icon_url ?? null, criteria_type: badge.criteria_type, criteria_value: badge.criteria_value } : { code: '', name: '', description: null, icon_url: null, criteria_type: CRITERIA_TYPES[0], criteria_value: 0 });
+		setError(null);
+	}, [open, badge, reset]);
 
-	function handleChange<K extends keyof CreateBadgeInput>(key: K, value: CreateBadgeInput[K]) {
-		setDraft((prev) => ({ ...prev, [key]: value }));
-	}
-
-	function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		if (!draft.code.trim()) {
-			setError('Code is required.');
-			return;
-		}
-		if (!draft.name.trim()) {
-			setError('Name is required.');
-			return;
-		}
-		if (!draft.criteria_type) {
-			setError('Criteria type is required.');
-			return;
-		}
-		onSave({
-			...(badge ? { id: badge.id } : {}),
-			...draft,
-			code: draft.code.trim(),
-			name: draft.name.trim(),
-			description: draft.description?.trim() || null,
-			icon_url: draft.icon_url?.trim() || null,
-		});
-	}
+		const submit = (draft: CreateBadgeInput) => onSave({ ...(badge ? { id: badge.id } : {}), ...draft, code: draft.code.trim(), name: draft.name.trim(), description: draft.description?.trim() || null, icon_url: draft.icon_url?.trim() || null });
 
 	return (
 		<Modal
@@ -327,108 +276,18 @@ function BadgeFormModal({
 			title={badge ? 'Edit badge' : 'Create badge'}
 			description={badge ? `Update badge ${badge.name}.` : 'Add a new badge.'}>
 			<form
-				onSubmit={handleSubmit}
+				onSubmit={handleSubmit(submit)}
 				className='flex min-h-0 flex-1 flex-col'>
 				<div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
-					<div>
-						<label
-							className={labelClass}
-							htmlFor='badge-code'>
-							Code
-						</label>
-						<input
-							id='badge-code'
-							className={fieldClass}
-							value={draft.code}
-							onChange={(e) => handleChange('code', e.target.value)}
-							placeholder='STREAK_7'
-						/>
-					</div>
-					<div>
-						<label
-							className={labelClass}
-							htmlFor='badge-name'>
-							Name
-						</label>
-						<input
-							id='badge-name'
-							className={fieldClass}
-							value={draft.name}
-							onChange={(e) => handleChange('name', e.target.value)}
-							placeholder='7-day streak'
-						/>
-					</div>
-					<div>
-						<label
-							className={labelClass}
-							htmlFor='badge-description'>
-							Description
-						</label>
-						<input
-							id='badge-description'
-							className={fieldClass}
-							value={draft.description ?? ''}
-							onChange={(e) => handleChange('description', e.target.value || null)}
-							placeholder='Awarded for 7 days in a row'
-						/>
-					</div>
-					<div>
-						<label
-							className={labelClass}
-							htmlFor='badge-icon-url'>
-							Icon URL
-						</label>
-						<input
-							id='badge-icon-url'
-							className={fieldClass}
-							value={draft.icon_url ?? ''}
-							onChange={(e) => handleChange('icon_url', e.target.value || null)}
-							placeholder='https://...'
-						/>
-					</div>
+					<Field label='Code' error={errors.code} placeholder='STREAK_7' {...register('code', { required: 'Code is required.' })} />
+					<Field label='Name' error={errors.name} placeholder='7-day streak' {...register('name', { required: 'Name is required.' })} />
+					<Field label='Description' placeholder='Awarded for 7 days in a row' {...register('description')} />
+					<Field label='Icon URL' placeholder='https://...' {...register('icon_url')} />
 					<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-						<div>
-							<label
-								className={labelClass}
-								htmlFor='badge-criteria-type'>
-								Criteria type
-							</label>
-							<select
-								id='badge-criteria-type'
-								className={fieldClass}
-								value={draft.criteria_type}
-								onChange={(e) =>
-									handleChange(
-										'criteria_type',
-										e.target.value as CreateBadgeInput['criteria_type'],
-									)
-								}>
-								{CRITERIA_TYPES.map((type) => (
-									<option
-										key={type}
-										value={type}>
-										{type}
-									</option>
-								))}
-							</select>
-						</div>
-						<div>
-							<label
-								className={labelClass}
-								htmlFor='badge-criteria-value'>
-								Criteria value
-							</label>
-							<input
-								id='badge-criteria-value'
-								type='number'
-								className={fieldClass}
-								value={draft.criteria_value}
-								onChange={(e) =>
-									handleChange('criteria_value', Number(e.target.value))
-								}
-								min={0}
-							/>
-						</div>
+						<Field label='Criteria type' error={errors.criteria_type}>
+							<select className={fieldClass} {...register('criteria_type', { required: 'Criteria type is required.' })}>{CRITERIA_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}</select>
+						</Field>
+						<Field label='Criteria value' error={errors.criteria_value}><input type='number' min={0} className={fieldClass} {...register('criteria_value', { valueAsNumber: true, min: { value: 0, message: 'Must be zero or greater.' } })} /></Field>
 					</div>
 				</div>
 

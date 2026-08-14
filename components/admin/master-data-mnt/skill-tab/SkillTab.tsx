@@ -3,6 +3,8 @@ import { cn } from '@/lib/utils';
 import { createSkill, deleteSkill, listSkills, updateSkill } from '@/services/master-data';
 import { LoaderIcon, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import React, { useEffect, useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { Field } from '@/components/ui/field';
 import { Modal } from '../../modal';
 import { fieldClass, labelClass, StatusError } from '../shared';
 type Props = {};
@@ -248,6 +250,7 @@ function SkillFormModal({
 	onClose: () => void;
 	onSave: (input: Partial<SkillRow> & { id?: number }) => void;
 }) {
+	const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateSkillInput>({ defaultValues: { code: '', name: '' } });
 	const [draft, setDraft] = useState<CreateSkillInput>({ code: '', name: '' });
 	const [error, setError] = useState<string | null>(null);
 
@@ -260,29 +263,14 @@ function SkillFormModal({
 			setDraft({ code: '', name: '' });
 			setError(null);
 		}
-	}, [open, skill]);
+		reset(skill ? { id: skill.id, code: skill.code, name: skill.name } : { code: '', name: '' });
+	}, [open, skill, reset]);
 
 	function handleChange<K extends keyof CreateSkillInput>(key: K, value: CreateSkillInput[K]) {
 		setDraft((prev) => ({ ...prev, [key]: value }));
 	}
 
-	function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		if (!draft.code.trim()) {
-			setError('Code is required.');
-			return;
-		}
-		if (!draft.name.trim()) {
-			setError('Name is required.');
-			return;
-		}
-		onSave({
-			...(skill ? { id: skill.id } : {}),
-			...draft,
-			code: draft.code.trim(),
-			name: draft.name.trim(),
-		});
-	}
+	const submit = (values: CreateSkillInput) => onSave({ ...(skill ? { id: skill.id } : {}), ...values, code: values.code.trim(), name: values.name.trim() });
 
 	return (
 		<Modal
@@ -291,7 +279,7 @@ function SkillFormModal({
 			title={skill ? 'Edit skill' : 'Create skill'}
 			description={skill ? `Update skill ${skill.name}.` : 'Add a new skill.'}>
 			<form
-				onSubmit={handleSubmit}
+				onSubmit={handleSubmit(submit)}
 				className='flex min-h-0 flex-1 flex-col'>
 				<div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
 					<div>
@@ -300,13 +288,7 @@ function SkillFormModal({
 							htmlFor='skill-code'>
 							Code
 						</label>
-						<input
-							id='skill-code'
-							className={fieldClass}
-							value={draft.code}
-							onChange={(e) => handleChange('code', e.target.value)}
-							placeholder='TOEIC'
-						/>
+<Field label='Code' placeholder='TOEIC' error={errors.code} {...register('code', { required: 'Code is required.' })} />
 					</div>
 					<div>
 						<label
@@ -314,13 +296,7 @@ function SkillFormModal({
 							htmlFor='skill-name'>
 							Name
 						</label>
-						<input
-							id='skill-name'
-							className={fieldClass}
-							value={draft.name}
-							onChange={(e) => handleChange('name', e.target.value)}
-							placeholder='Listening'
-						/>
+<Field label='Name' placeholder='Listening' error={errors.name} {...register('name', { required: 'Name is required.' })} />
 					</div>
 				</div>
 

@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { Field } from '@/components/ui/field';
 import { Plus, Search, Pencil, Trash2, LoaderIcon } from 'lucide-react';
 
 import type { CreateDifficultyLevelInput, DifficultyLevelRow } from '@/lib/types';
@@ -255,44 +257,11 @@ function DifficultyLevelFormModal({
 	onClose: () => void;
 	onSave: (input: Partial<DifficultyLevelRow> & { id?: number }) => void;
 }) {
-	const [draft, setDraft] = useState<CreateDifficultyLevelInput>({ code: '', label: '' });
+	const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateDifficultyLevelInput>({ defaultValues: { code: '', label: '' } });
 	const [error, setError] = useState<string | null>(null);
 
-	useEffect(() => {
-		if (!open) return;
-		if (level) {
-			setDraft({ id: level.id, code: level.code, label: level.label });
-			setError(null);
-		} else {
-			setDraft({ code: '', label: '' });
-			setError(null);
-		}
-	}, [open, level]);
-
-	function handleChange<K extends keyof CreateDifficultyLevelInput>(
-		key: K,
-		value: CreateDifficultyLevelInput[K],
-	) {
-		setDraft((prev) => ({ ...prev, [key]: value }));
-	}
-
-	function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		if (!draft.code.trim()) {
-			setError('Code is required.');
-			return;
-		}
-		if (!draft.label.trim()) {
-			setError('Label is required.');
-			return;
-		}
-		onSave({
-			...(level ? { id: level.id } : {}),
-			...draft,
-			code: draft.code.trim(),
-			label: draft.label.trim(),
-		});
-	}
+	useEffect(() => { if (open) reset(level ? { id: level.id, code: level.code, label: level.label } : { code: '', label: '' }); }, [open, level, reset]);
+	const submit = (draft: CreateDifficultyLevelInput) => onSave({ ...(level ? { id: level.id } : {}), ...draft, code: draft.code.trim(), label: draft.label.trim() });
 
 	return (
 		<Modal
@@ -303,37 +272,11 @@ function DifficultyLevelFormModal({
 				level ? `Update difficulty level ${level.label}.` : 'Add a new difficulty level.'
 			}>
 			<form
-				onSubmit={handleSubmit}
+				onSubmit={handleSubmit(submit)}
 				className='flex min-h-0 flex-1 flex-col'>
 				<div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
-					<div>
-						<label
-							className={labelClass}
-							htmlFor='difficulty-code'>
-							Code
-						</label>
-						<input
-							id='difficulty-code'
-							className={fieldClass}
-							value={draft.code}
-							onChange={(e) => handleChange('code', e.target.value)}
-							placeholder='BEGINNER'
-						/>
-					</div>
-					<div>
-						<label
-							className={labelClass}
-							htmlFor='difficulty-label'>
-							Label
-						</label>
-						<input
-							id='difficulty-label'
-							className={fieldClass}
-							value={draft.label}
-							onChange={(e) => handleChange('label', e.target.value)}
-							placeholder='Beginner'
-						/>
-					</div>
+<Field label='Code' placeholder='BEGINNER' error={errors.code} {...register('code', { required: 'Code is required.' })} />
+						<Field label='Label' placeholder='Beginner' error={errors.label} {...register('label', { required: 'Label is required.' })} />
 				</div>
 
 				{error && <StatusError message={error} />}

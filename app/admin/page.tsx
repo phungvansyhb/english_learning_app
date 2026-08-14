@@ -1,4 +1,5 @@
-import type { Metadata } from 'next';
-export default function AdminWordsPage() {
-	return <section>dashboard</section>;
+import { AdminDashboard } from '@/components/admin/admin-dashboard';
+
+export default function AdminDashboardPage() {
+	return <AdminDashboard />;
 }
