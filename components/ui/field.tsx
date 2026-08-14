@@ -1,44 +1,32 @@
-import React, { ComponentProps, forwardRef } from 'react';
+import React, { ComponentProps, ReactElement } from 'react';
 import { FieldError } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-interface Props extends ComponentProps<'input'> {
-	children?: React.ReactElement;
+interface Props extends Omit<ComponentProps<'input'>, 'ref'> {
+	children?: ReactElement;
 	label: string;
 	error?: FieldError;
 	description?: string;
-	ref: React.Ref<HTMLInputElement>;
-	suffixIcon?: React.ReactElement;
+	ref?: React.Ref<HTMLInputElement>;
+	suffixIcon?: ReactElement;
 }
 
-export const Field = (props: Props) => {
-	const { children, label, error, description, ref, suffixIcon, ...rest } = props;
-	const inputProps = { ...rest, ref, id: props.name };
+export const Field = React.forwardRef<HTMLInputElement, Props>(function Field(
+	{ children, label, error, description, suffixIcon, className, ...rest },
+	ref,
+) {
+	const inputProps = { ...rest, ref, id: rest.name };
 	return (
-		<div className='space-y-2'>
-			<label
-				htmlFor={props.name}
-				className='label-text'>
-				{label}
-			</label>
+		<div className='flex flex-col gap-2'>
+			<label htmlFor={rest.name} className='label-text'>{label}</label>
 			<div className='relative'>
-				{children ? (
-					React.cloneElement(children, inputProps)
-				) : (
-					<input
-						{...inputProps}
-						className={twMerge(
-							'input-wrapper',
-							error?.message ? 'border-red-500' : 'border-border',
-							suffixIcon ? 'pr-10' : '',
-						)}
-					/>
+				{children ? React.cloneElement(children as React.ReactElement<Record<string, unknown>>, { ...inputProps, className: twMerge('input-wrapper', (children.props as Record<string, string | undefined>).className) }) : (
+					<input {...inputProps} className={twMerge('input-wrapper', error?.message ? 'border-destructive' : 'border-border', suffixIcon && 'pr-10', className)} />
 				)}
 				{suffixIcon}
 			</div>
-
-			{error && <p className='mt-1 error-text'>{error.message}</p>}
+			{error && <p className='error-text' role='alert'>{error.message}</p>}
 			{description && <span className='desc-text'>{description}</span>}
 		</div>
 	);
-};
+});

@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { Field } from '@/components/ui/field';
 import { Plus, Search, Pencil, Trash2, RotateCwFadingClockIcon, LoaderIcon } from 'lucide-react';
 
 import type { CreateExamPartInput, ExamPartRow, SkillRow } from '@/lib/types';
@@ -282,11 +284,8 @@ function ExamPartFormModal({
 	onClose: () => void;
 	onSave: (input: Partial<ExamPartRow> & { id?: number }) => void;
 }) {
-	const [draft, setDraft] = useState<CreateExamPartInput>({
-		skill_id: skills[0]?.id ?? 0,
-		part_number: 1,
-		name: '',
-	});
+	const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateExamPartInput>({ defaultValues: { skill_id: skills[0]?.id ?? 0, part_number: 1, name: '' } });
+	const [draft, setDraft] = useState<CreateExamPartInput>({ skill_id: skills[0]?.id ?? 0, part_number: 1, name: '' });
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {

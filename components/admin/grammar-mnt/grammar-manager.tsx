@@ -1,6 +1,8 @@
 'use client';
 
 import { useMemo, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Field } from '@/components/ui/field';
 import {
 	Bold,
 	Check,
@@ -140,6 +142,7 @@ export function GrammarManager() {
 	const [difficulty, setDifficulty] = useState<'All' | Difficulty>('All');
 	const [isPreview, setIsPreview] = useState(false);
 	const editorRef = useRef<HTMLDivElement>(null);
+	const { register, reset: resetForm, getValues, formState: { errors } } = useForm<{ name: string; description: string; difficulty: Difficulty }>({ defaultValues: { name: '', description: '', difficulty: 'Beginner' } });
 
 	const filtered = useMemo(
 		() =>
@@ -162,6 +165,7 @@ export function GrammarManager() {
 			content: '<h2>New grammar point</h2><p>Start writing your lesson here...</p>',
 		};
 		setSelected(draft);
+		resetForm({ name: draft.name, description: draft.description, difficulty: draft.difficulty });
 		setIsPreview(false);
 		requestAnimationFrame(() => {
 			if (editorRef.current) editorRef.current.innerHTML = draft.content;
@@ -170,8 +174,9 @@ export function GrammarManager() {
 
 	const save = () => {
 		if (!selected || !selected.name.trim()) return;
+		const values = getValues();
 		const content = sanitizeHtml(editorRef.current?.innerHTML ?? selected.content);
-		const next = { ...selected, name: selected.name.trim(), content, updated: 'Just now' };
+		const next = { ...selected, ...values, name: values.name.trim(), content, updated: 'Just now' };
 		setItems((current) =>
 			current.some((item) => item.id === next.id)
 				? current.map((item) => (item.id === next.id ? next : item))
@@ -322,14 +327,7 @@ export function GrammarManager() {
 							<div className='flex flex-col gap-4'>
 								<label className='label-text'>
 									Title
-									<input
-										value={selected.name}
-										onChange={(event) =>
-											setSelected({ ...selected, name: event.target.value })
-										}
-										className='input-wrapper mt-1'
-										placeholder='e.g. Present Simple'
-									/>
+									<Field label='Title' error={errors.name} placeholder='e.g. Present Simple' {...register('name', { required: 'Title is required.' })} />
 								</label>
 								<label className='label-text'>
 									Short description
