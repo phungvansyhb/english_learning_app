@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { Field } from '@/components/ui/field';
-import { Plus, Search, Pencil, Trash2, RotateCwFadingClockIcon, LoaderIcon } from 'lucide-react';
+import { Plus, Search, Pencil, Trash2, LoaderIcon } from 'lucide-react';
 
 import type { CreateExamPartInput, ExamPartRow, SkillRow } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -285,48 +285,10 @@ function ExamPartFormModal({
 	onSave: (input: Partial<ExamPartRow> & { id?: number }) => void;
 }) {
 	const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateExamPartInput>({ defaultValues: { skill_id: skills[0]?.id ?? 0, part_number: 1, name: '' } });
-	const [draft, setDraft] = useState<CreateExamPartInput>({ skill_id: skills[0]?.id ?? 0, part_number: 1, name: '' });
 	const [error, setError] = useState<string | null>(null);
 
-	useEffect(() => {
-		if (!open) return;
-		if (examPart) {
-			setDraft({
-				id: examPart.id,
-				skill_id: examPart.skill_id,
-				part_number: examPart.part_number,
-				name: examPart.name,
-			});
-			setError(null);
-		} else {
-			setDraft({ skill_id: skills[0]?.id ?? 0, part_number: 1, name: '' });
-			setError(null);
-		}
-	}, [open, examPart, skills]);
-
-	function handleChange<K extends keyof CreateExamPartInput>(
-		key: K,
-		value: CreateExamPartInput[K],
-	) {
-		setDraft((prev) => ({ ...prev, [key]: value }));
-	}
-
-	function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		if (!draft.skill_id) {
-			setError('Skill is required.');
-			return;
-		}
-		if (!draft.part_number) {
-			setError('Part number is required.');
-			return;
-		}
-		if (!draft.name.trim()) {
-			setError('Name is required.');
-			return;
-		}
-		onSave({ ...(examPart ? { id: examPart.id } : {}), ...draft, name: draft.name.trim() });
-	}
+	useEffect(() => { if (open) reset(examPart ? { id: examPart.id, skill_id: examPart.skill_id, part_number: examPart.part_number, name: examPart.name } : { skill_id: skills[0]?.id ?? 0, part_number: 1, name: '' }); }, [open, examPart, skills, reset]);
+	const submit = (values: CreateExamPartInput) => onSave({ ...(examPart ? { id: examPart.id } : {}), ...values, name: values.name.trim() });
 
 	return (
 		<Modal
@@ -335,62 +297,16 @@ function ExamPartFormModal({
 			title={examPart ? 'Edit exam part' : 'Create exam part'}
 			description={examPart ? `Update part ${examPart.name}.` : 'Add a new exam part.'}>
 			<form
-				onSubmit={handleSubmit}
+				onSubmit={handleSubmit(submit)}
 				className='flex min-h-0 flex-1 flex-col'>
 				<div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
-					<div>
-						<label
-							className={labelClass}
-							htmlFor='exam-skill'>
-							Skill
-						</label>
-						<select
-							id='exam-skill'
-							className={fieldClass}
-							value={draft.skill_id}
-							onChange={(e) => handleChange('skill_id', Number(e.target.value))}>
-							{skills.map((skill) => (
-								<option
-									key={skill.id}
-									value={skill.id}>
-									{skill.name}
-								</option>
-							))}
-						</select>
-					</div>
-					<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-						<div>
-							<label
-								className={labelClass}
-								htmlFor='exam-part-number'>
-								Part number
-							</label>
-							<input
-								id='exam-part-number'
-								type='number'
-								className={fieldClass}
-								value={draft.part_number ?? ''}
-								onChange={(e) =>
-									handleChange('part_number', Number(e.target.value))
-								}
-								min={1}
-							/>
+<Field label='Skill' error={errors.skill_id}>
+							<select className={fieldClass} {...register('skill_id', { valueAsNumber: true, required: 'Skill is required.' })}>{skills.map((skill) => <option key={skill.id} value={skill.id}>{skill.name}</option>)}</select>
+						</Field>
+						<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+							<Field label='Part number' error={errors.part_number}><input type='number' min={1} className={fieldClass} {...register('part_number', { valueAsNumber: true, min: { value: 1, message: 'Part number is required.' } })} /></Field>
+							<Field label='Name' placeholder='Part 1' error={errors.name} {...register('name', { required: 'Name is required.' })} />
 						</div>
-						<div>
-							<label
-								className={labelClass}
-								htmlFor='exam-name'>
-								Name
-							</label>
-							<input
-								id='exam-name'
-								className={fieldClass}
-								value={draft.name}
-								onChange={(e) => handleChange('name', e.target.value)}
-								placeholder='Part 1'
-							/>
-						</div>
-					</div>
 				</div>
 
 				{error && <StatusError message={error} />}
