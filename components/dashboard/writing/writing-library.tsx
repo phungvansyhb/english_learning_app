@@ -25,7 +25,7 @@ const icons = {
 	response: MessageSquareText,
 	description: FileText,
 	chart: BarChart3,
-	opinion: PenLine,
+	opinion: PenLine
 };
 export default function WritingLibrary() {
 	const [type, setType] = useState<WritingType | 'all'>('all');

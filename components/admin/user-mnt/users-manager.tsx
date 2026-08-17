@@ -1,88 +1,77 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
 
 import type { CreateUserInput, UserRow } from '@/lib/types';
 import { createUser, deleteUser, listUsers, updateUser } from '@/services/user';
-import { cn } from '@/lib/utils';
 import { Modal } from '@/components/admin/modal';
 import { UserFormModal } from '@/components/admin/user-mnt/user-form-modal';
+import { Pagination } from '@/components/ui/pagination';
+import { usePagination } from '../../../hooks/use-pagination';
 
 const ROLE_OPTIONS = ['USER', 'SYSTEM_ADMIN', 'CONTENT_ADMIN'];
 const STATUS_OPTIONS = ['active', 'suspended', 'deleted'];
 
 export function UsersManager() {
-	const [users, setUsers] = useState<UserRow[]>([]);
 	const [query, setQuery] = useState('');
 	const [roleFilter, setRoleFilter] = useState('');
 	const [statusFilter, setStatusFilter] = useState('');
-	const [page, setPage] = useState(1);
-	const [perPage] = useState(10);
-	const [totalPages, setTotalPages] = useState(1);
 	const [formOpen, setFormOpen] = useState(false);
 	const [editing, setEditing] = useState<UserRow | null>(null);
 	const [deleteTarget, setDeleteTarget] = useState<UserRow | null>(null);
-	const [error, setError] = useState<string | null>(null);
-	const [isPending, startTransition] = useTransition();
+	const [savePending, startSaveTransition] = useTransition();
+	const [deletePending, startDeleteTransition] = useTransition();
 
-	async function fetchUsers() {
-		setError(null);
-
-		startTransition(async () => {
-			try {
-				const data = await listUsers({
-					page,
-					perPage,
-					search: query || undefined,
-					role: roleFilter || undefined,
-					status: statusFilter || undefined,
-				});
-				setUsers(data.data);
-				setTotalPages(data.totalPages);
-			} catch (err) {
-				setError((err as Error).message);
-			}
-		});
-	}
-
-	useEffect(() => {
-		void fetchUsers();
-	}, [query, roleFilter, statusFilter, page, perPage]);
+	const {
+		data: users,
+		page,
+		totalPages,
+		error,
+		pending,
+		setPage,
+		reload,
+	} = usePagination({
+		apiFunction: listUsers,
+		params: {
+			search: query || undefined,
+			role: roleFilter || undefined,
+			status: statusFilter || undefined,
+		},
+	});
 
 	function handleSave(user: Partial<UserRow> & { id?: string }) {
-		setError(null);
-		startTransition(async () => {
+		startSaveTransition(async () => {
 			try {
 				if (user.id) {
 					await updateUser(user.id, user);
 				} else {
 					await createUser(user as CreateUserInput);
 				}
-				await fetchUsers();
+				await reload();
 				setFormOpen(false);
 				setEditing(null);
 			} catch (err) {
-				setError((err as Error).message);
+				console.error(err);
 			}
 		});
 	}
 
 	function handleDelete() {
 		if (!deleteTarget) return;
-		setError(null);
-		startTransition(async () => {
+
+		startDeleteTransition(async () => {
 			try {
 				await deleteUser(deleteTarget.id);
 				setDeleteTarget(null);
-				await fetchUsers();
+				await reload();
 			} catch (err) {
-				setError((err as Error).message);
+				console.error(err);
 			}
 		});
 	}
 
-	const pending = isPending;
+	const loading = pending || savePending || deletePending;
 
 	return (
 		<section className='rounded-3xl border border-border bg-card p-4 sm:p-6'>
@@ -258,37 +247,12 @@ export function UsersManager() {
 				)}
 			</div>
 
-			<div className='mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
-				<p className='text-sm text-muted-foreground'>
-					Page {page} of {totalPages}
-				</p>
-				<div className='flex items-center gap-2'>
-					<button
-						type='button'
-						onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-						disabled={page <= 1 || pending}
-						className={cn(
-							'h-11 rounded-full border border-border px-4 text-sm transition-colors',
-							page <= 1 || pending
-								? 'cursor-not-allowed text-muted-foreground bg-secondary'
-								: 'text-foreground bg-card hover:bg-secondary',
-						)}>
-						Previous
-					</button>
-					<button
-						type='button'
-						onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
-						disabled={page >= totalPages || pending}
-						className={cn(
-							'h-11 rounded-full border border-border px-4 text-sm transition-colors',
-							page >= totalPages || pending
-								? 'cursor-not-allowed text-muted-foreground bg-secondary'
-								: 'text-foreground bg-card hover:bg-secondary',
-						)}>
-						Next
-					</button>
-				</div>
-			</div>
+			<Pagination
+				page={page}
+				totalPages={totalPages}
+				pending={loading}
+				onPageChange={setPage}
+			/>
 
 			{error && (
 				<div className='mt-4 rounded-2xl border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive'>

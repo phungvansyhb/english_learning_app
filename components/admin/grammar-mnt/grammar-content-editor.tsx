@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { Dropzone, DropzoneContent, DropzoneEmptyState } from '@/components/ui/dropzone';
 import { useSupabaseUpload } from '@/hooks/use-supabase-upload';
-import { createClient } from '@/utils/supabase/client';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -184,9 +183,14 @@ export function GrammarContentEditor({
 								bucketName='post'
 								path='grammar'
 								onInsert={(urls) => {
-									urls.forEach((u) =>
-										currentEditor.chain().focus().setImage({ src: u }).run(),
-									);
+									Object.keys(urls).forEach((key) => {
+										currentEditor
+											.chain()
+											.focus()
+											.setImage({ src: urls[key], alt: key })
+											.run();
+									});
+
 									setShowDropzone(false);
 								}}
 							/>
@@ -218,9 +222,7 @@ export function GrammarContentEditor({
 					{imageError}
 				</p>
 			)}
-			<p className='px-5 pb-3 text-muted-foreground text-xs'>
-				Images are embedded directly in the lesson content. Maximum size: 5 MB.
-			</p>
+			
 		</div>
 	);
 }
@@ -262,19 +264,24 @@ function DropzoneWrapper({
 }: {
 	bucketName: string;
 	path: string;
-	onInsert: (urls: string[]) => void;
+	onInsert: (urls: Record<string, string>) => void;
 }) {
 	const upload = useSupabaseUpload({
 		bucketName,
 		path,
 		allowedMimeTypes: ['image/*'],
-		maxFiles: 5,
+		maxFiles: 1,
 		maxFileSize: MAX_IMAGE_SIZE,
 	});
 
 	// When upload successes are available, compute public URLs and call onInsert
-	const { successes, onUpload, files } = upload;
+	const { isSuccess, uploadedUrls } = upload;
 
+	useEffect(() => {
+		if (isSuccess) {
+			onInsert(uploadedUrls);
+		}
+	}, [uploadedUrls, isSuccess]);
 	return (
 		<Dropzone {...upload}>
 			<DropzoneEmptyState />

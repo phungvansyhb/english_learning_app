@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox';
 import { CheckIcon, XIcon } from 'lucide-react';
 import { Option } from '@/lib/types';
+import clsx from 'clsx';
 
 type ComboboxOption = Option & {
 	__isNew?: boolean;
@@ -14,22 +15,49 @@ type Props = {
 	notFoundLabel?: string;
 	items: Option[];
 	isMultiple?: boolean;
-	defaultValue?: Option | Option[] | null;
-	value?: Option | Option[] | null;
-	onValueChange?: (value: Option | Option[] | null) => void;
+	defaultValue?: string | string[] | null;
+	value?: string | string[] | null;
+	onValueChange?: (value: string | string[] | null) => void;
 	creatable?: boolean;
-	onCreate?: (value: string) => Option | void;
+	onCreate?: (value: string) => string | void;
 	createLabel?: (value: string) => string;
 };
+
+function getItemLabel(items: Option[], value: string) {
+	return items.find((item) => String(item.value) === value)?.label ?? value;
+}
+
+function toSelectedOption(items: Option[], value: string | null | undefined): Option | null {
+	if (value == null) {
+		return null;
+	}
+
+	return { label: getItemLabel(items, value), value };
+}
+
+function toSelectedOptions(items: Option[], value: string[] | null | undefined): Option[] {
+	if (!value) {
+		return [];
+	}
+
+	return value.map((item) => ({ label: getItemLabel(items, item), value: item }));
+}
 
 export default function Combobox(props: Props) {
 	const id = React.useId();
 	const [inputValue, setInputValue] = React.useState('');
 	const isControlled = props.value !== undefined;
-	const [internalValue, setInternalValue] = React.useState<Option | Option[] | null>(
+	const [internalValue, setInternalValue] = React.useState<string | string[] | null>(
 		props.defaultValue ?? (props.isMultiple ? [] : null),
 	);
 	const value = isControlled ? props.value : internalValue;
+	const selectedValue = React.useMemo(() => {
+		if (props.isMultiple) {
+			return toSelectedOptions(props.items, Array.isArray(value) ? value : []);
+		}
+
+		return toSelectedOption(props.items, Array.isArray(value) ? value[0] : (value ?? null));
+	}, [props.isMultiple, props.items, value]);
 
 	const createItemLabel = React.useCallback(
 		(query: string) => props.createLabel?.(query) ?? `Create "${query}"`,
@@ -64,7 +92,7 @@ export default function Combobox(props: Props) {
 	}, [props.creatable, props.items, trimmedInput, containsMatchingOption, createItemLabel]);
 
 	const updateValue = React.useCallback(
-		(nextValue: Option | Option[] | null) => {
+		(nextValue: string | string[] | null) => {
 			if (!isControlled) {
 				setInternalValue(nextValue);
 			}
@@ -74,7 +102,7 @@ export default function Combobox(props: Props) {
 	);
 
 	const resolveCreatedOption = React.useCallback(
-		(value: string) => props.onCreate?.(value) ?? { label: value, value },
+		(value: string) => props.onCreate?.(value) ?? value,
 		[props.onCreate],
 	);
 
@@ -90,21 +118,28 @@ export default function Combobox(props: Props) {
 				const createOption = nextValue.find(isCreateOption);
 				if (createOption) {
 					const resolved = resolveCreatedOption(createOption.label);
-					updateValue([...nextValue.filter((item) => !isCreateOption(item)), resolved]);
+					updateValue([
+						...nextValue
+							.filter((item) => !isCreateOption(item))
+							.map((item) => String(item.value)),
+						String(resolved),
+					]);
 					setInputValue('');
 					return;
 				}
+				updateValue(nextValue.map((item) => String(item.value)));
+				return;
 			} else if (
 				!props.isMultiple &&
 				nextValue &&
 				!Array.isArray(nextValue) &&
 				isCreateOption(nextValue)
 			) {
-				updateValue(resolveCreatedOption(nextValue.label));
+				updateValue(String(resolveCreatedOption(nextValue.label)));
 				setInputValue('');
 				return;
 			}
-			updateValue(nextValue);
+			updateValue(nextValue && !Array.isArray(nextValue) ? String(nextValue.value) : null);
 		},
 		[props.isMultiple, isCreateOption, resolveCreatedOption, updateValue],
 	);
@@ -121,9 +156,9 @@ export default function Combobox(props: Props) {
 			}
 
 			event.preventDefault();
-			const created = resolveCreatedOption(trimmedInput);
+			const created = String(resolveCreatedOption(trimmedInput));
 			const nextValue = props.isMultiple
-				? ([...(Array.isArray(value) ? value : []), created] as Option[])
+				? [...(Array.isArray(value) ? value : []), created]
 				: created;
 			updateValue(nextValue);
 			setInputValue('');
@@ -161,7 +196,7 @@ export default function Combobox(props: Props) {
 								))}
 								<BaseCombobox.Input
 									id={id}
-									placeholder={props.placeholder || 'placeholder'}
+									placeholder={props.placeholder || 'Placeholder'}
 									onKeyDown={handleInputKeyDown}
 									className='min-h-11 h-full w-full border-0 bg-white pl-2 dark:bg-neutral-950 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:text-white'
 								/>
@@ -177,13 +212,13 @@ export default function Combobox(props: Props) {
 						placeholder={props.placeholder || 'placeholder'}
 						id={id}
 						onKeyDown={handleInputKeyDown}
-						className='h-full w-full border-0 bg-white pl-2 dark:bg-neutral-950 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:text-white'
+						className='min-h-11 h-full w-full border-0 bg-white pl-2 dark:bg-neutral-950 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:text-white '
 					/>
 					<div className='absolute right-0 bottom-0 flex h-full items-center justify-center text-neutral-500 dark:text-neutral-400'>
 						<BaseCombobox.Clear
 							className='BaseCombobox-clear flex h-full w-6 items-center justify-center border-0 bg-transparent p-0 text-neutral-950 dark:text-white'
 							aria-label='Clear selection'>
-							<XIcon />
+							<XIcon size={12} />
 						</BaseCombobox.Clear>
 						<BaseCombobox.Trigger
 							className='flex h-6 w-6 items-center justify-center border-0 bg-transparent p-0 dark:text-white'
@@ -200,19 +235,22 @@ export default function Combobox(props: Props) {
 		<BaseCombobox.Root
 			items={combinedItems}
 			multiple={props.isMultiple}
-			value={value as any}
+			value={selectedValue as any}
 			onValueChange={handleValueChange as any}
 			inputValue={inputValue}
 			onInputValueChange={(nextValue) => setInputValue(String(nextValue))}
 			itemToStringLabel={(item: Option) => item.label}
 			itemToStringValue={(item: Option) => String(item.value)}>
-			<div className='relative flex flex-col gap-1 text-sm leading-5 font-bold text-neutral-950 dark:text-white'>
+			<div className='relative flex flex-col text-sm leading-5 font-bold text-neutral-950 dark:text-white'>
 				<label
 					htmlFor={id}
-					className="'mb-1.5 block text-xs font-semibold text-foreground'">
+					className={clsx(
+						'block text-xs font-semibold text-foreground',
+						props.label && 'mb-1',
+					)}>
 					{props.label}
 				</label>
-				<BaseCombobox.InputGroup className='min-h-11 h-max w-full rounded-xl border border-border bg-card px-3.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-3 focus:ring-ring/30 relative'>
+				<BaseCombobox.InputGroup className='min-h-11 h-max w-full rounded-xl border border-border bg-card px-3.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground has-focus:border-ring has-focus:ring-3 has-focus:ring-ring/30 relative'>
 					{ComboBoxInput()}
 				</BaseCombobox.InputGroup>
 			</div>

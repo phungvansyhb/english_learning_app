@@ -49,6 +49,16 @@ type UseSupabaseUploadOptions = {
      * When set to false, an error is thrown if the object already exists. Defaults to `false`
      */
     upsert?: boolean
+    /**
+     * When true, returns a signed URL instead of the bucket's public URL for each uploaded file.
+     * Useful for private buckets.
+     */
+    useSignedUrls?: boolean
+    /**
+     * Number of seconds a signed URL remains valid when `useSignedUrls` is true.
+     * Defaults to 3600 seconds.
+     */
+    signedUrlExpiresIn?: number
 }
 
 type UseSupabaseUploadReturn = ReturnType<typeof useSupabaseUpload>
@@ -62,12 +72,15 @@ const useSupabaseUpload = (options: UseSupabaseUploadOptions) => {
         maxFiles = 1,
         cacheControl = 3600,
         upsert = false,
+        useSignedUrls = false,
+        signedUrlExpiresIn = 3600,
     } = options
 
     const [files, setFiles] = useState<FileWithPreview[]>([])
     const [loading, setLoading] = useState<boolean>(false)
     const [errors, setErrors] = useState<{ name: string; message: string }[]>([])
     const [successes, setSuccesses] = useState<string[]>([])
+    const [uploadedUrls, setUploadedUrls] = useState<Record<string, string>>({})
 
     const isSuccess = useMemo(() => {
         if (errors.length === 0 && successes.length === 0) {
@@ -127,17 +140,36 @@ const useSupabaseUpload = (options: UseSupabaseUploadOptions) => {
 
         const responses = await Promise.all(
             filesToUpload.map(async (file) => {
+                const objectPath = !!path ? `${path}/${file.name}` : file.name
                 const { error } = await supabase.storage
                     .from(bucketName)
-                    .upload(!!path ? `${path}/${file.name}` : file.name, file, {
+                    .upload(objectPath, file, {
                         cacheControl: cacheControl.toString(),
                         upsert,
                     })
+
                 if (error) {
-                    return { name: file.name, message: error.message }
-                } else {
-                    return { name: file.name, message: undefined }
+                    return { name: file.name, message: error.message, url: undefined }
                 }
+
+                let url: string | undefined
+
+                if (useSignedUrls) {
+                    const { data, error: signedUrlError } = await supabase.storage
+                        .from(bucketName)
+                        .createSignedUrl(objectPath, signedUrlExpiresIn)
+
+                    if (signedUrlError) {
+                        return { name: file.name, message: signedUrlError.message, url: undefined }
+                    }
+
+                    url = data.signedUrl
+                } else {
+                    const { data } = supabase.storage.from(bucketName).getPublicUrl(objectPath)
+                    url = data.publicUrl
+                }
+
+                return { name: file.name, message: undefined, url }
             })
         )
 
@@ -151,8 +183,21 @@ const useSupabaseUpload = (options: UseSupabaseUploadOptions) => {
         )
         setSuccesses(newSuccesses)
 
+        const nextUploadedUrls = responseSuccesses.reduce<Record<string, string>>((acc, item) => {
+            if (item.url) {
+                acc[item.name] = item.url
+            }
+            return acc
+        }, {})
+
+        setUploadedUrls((current) => ({
+            ...current,
+            ...nextUploadedUrls,
+        }))
+
         setLoading(false)
-    }, [files, path, bucketName, errors, successes])
+        return responses
+    }, [files, path, bucketName, errors, successes, cacheControl, upsert, useSignedUrls, signedUrlExpiresIn])
 
     useEffect(() => {
         if (files.length === 0) {
@@ -179,6 +224,7 @@ const useSupabaseUpload = (options: UseSupabaseUploadOptions) => {
         files,
         setFiles,
         successes,
+        uploadedUrls,
         isSuccess,
         loading,
         errors,

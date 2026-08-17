@@ -157,6 +157,29 @@ export type CreateExamPartInput = {
   name: string
 }
 
+export type GrammarPointRow = {
+  id: number
+  name: string
+  description?: string | null
+  difficulty_id: number
+  content?: string | null
+}
+
+export type CreateGrammarPointInput = {
+  id?: number
+  name: string
+  description?: string | null
+  difficulty_id: string
+  content?: string | null
+}
+
+export type ListGrammarPointsOptions = {
+  page?: number
+  perPage?: number
+  search?: string
+  difficulty_id?: string
+}
+
 export type TopicRow = {
   id: number
   name: string
