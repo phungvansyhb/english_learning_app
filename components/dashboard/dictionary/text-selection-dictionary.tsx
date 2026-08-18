@@ -4,7 +4,9 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import { BookOpenText } from "lucide-react"
 import { lookupWord, type DictionaryEntry } from "@/lib/dictionary-data"
+import { useLookedUpStore } from "@/utils/zustand/looked-up-store"
 import { DictionaryPopup } from "./dictionary-popup"
+import { LookedUpHighlighter } from "./looked-up-highlighter"
 
 type Position = { top: number; left: number }
 type TriggerState = { position: Position; text: string } | null
@@ -25,6 +27,7 @@ export function TextSelectionDictionary({ children }: { children: React.ReactNod
   const [trigger, setTrigger] = useState<TriggerState>(null)
   const [popup, setPopup] = useState<PopupState>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const markLookedUp = useLookedUpStore((state) => state.markLookedUp)
 
   useEffect(() => setMounted(true), [])
 
@@ -84,6 +87,7 @@ export function TextSelectionDictionary({ children }: { children: React.ReactNod
   const openPopup = () => {
     if (!trigger) return
     const entry = lookupWord(trigger.text)
+    markLookedUp(trigger.text)
 
     const left = Math.min(
       Math.max(GAP, trigger.position.left - POPUP_WIDTH / 2 + TRIGGER_SIZE / 2),
@@ -102,6 +106,7 @@ export function TextSelectionDictionary({ children }: { children: React.ReactNod
   return (
     <div ref={containerRef}>
       {children}
+      <LookedUpHighlighter containerRef={containerRef} />
       {mounted &&
         trigger &&
         !popup &&
