@@ -1,5 +1,6 @@
 import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
+import { TextSelectionDictionary } from '@/components/dashboard/dictionary/text-selection-dictionary';
 
 export default function RootLayout({
 	children,
@@ -12,7 +13,7 @@ export default function RootLayout({
 				<DashboardSidebar />
 				<div className='flex-1 bg-secondary/40 md:p-6 lg:p-8 pb-24 md:pb-6 overflow-auto'>
 					<DashboardHeader />
-					{children}
+					<TextSelectionDictionary>{children}</TextSelectionDictionary>
 				</div>
 			</div>
 		</main>
