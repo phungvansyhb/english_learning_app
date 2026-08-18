@@ -13,7 +13,7 @@ import {
 	listDifficultyLevels,
 	updateDifficultyLevel,
 } from '@/services/master-data';
-import { Modal } from '../../modal';
+import { Modal } from '../../../ui/modal';
 import { fieldClass, labelClass, StatusError } from '../shared';
 
 export default function DifficultyLevelsTab() {
@@ -257,11 +257,29 @@ function DifficultyLevelFormModal({
 	onClose: () => void;
 	onSave: (input: Partial<DifficultyLevelRow> & { id?: number }) => void;
 }) {
-	const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateDifficultyLevelInput>({ defaultValues: { code: '', label: '' } });
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
+	} = useForm<CreateDifficultyLevelInput>({ defaultValues: { code: '', label: '' } });
 	const [error, setError] = useState<string | null>(null);
 
-	useEffect(() => { if (open) reset(level ? { id: level.id, code: level.code, label: level.label } : { code: '', label: '' }); }, [open, level, reset]);
-	const submit = (draft: CreateDifficultyLevelInput) => onSave({ ...(level ? { id: level.id } : {}), ...draft, code: draft.code.trim(), label: draft.label.trim() });
+	useEffect(() => {
+		if (open)
+			reset(
+				level
+					? { id: level.id, code: level.code, label: level.label }
+					: { code: '', label: '' },
+			);
+	}, [open, level, reset]);
+	const submit = (draft: CreateDifficultyLevelInput) =>
+		onSave({
+			...(level ? { id: level.id } : {}),
+			...draft,
+			code: draft.code.trim(),
+			label: draft.label.trim(),
+		});
 
 	return (
 		<Modal
@@ -275,8 +293,18 @@ function DifficultyLevelFormModal({
 				onSubmit={handleSubmit(submit)}
 				className='flex min-h-0 flex-1 flex-col'>
 				<div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
-<Field label='Code' placeholder='BEGINNER' error={errors.code} {...register('code', { required: 'Code is required.' })} />
-						<Field label='Label' placeholder='Beginner' error={errors.label} {...register('label', { required: 'Label is required.' })} />
+					<Field
+						label='Code'
+						placeholder='BEGINNER'
+						error={errors.code}
+						{...register('code', { required: 'Code is required.' })}
+					/>
+					<Field
+						label='Label'
+						placeholder='Beginner'
+						error={errors.label}
+						{...register('label', { required: 'Label is required.' })}
+					/>
 				</div>
 
 				{error && <StatusError message={error} />}

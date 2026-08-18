@@ -8,7 +8,7 @@ import { Plus, Search, Pencil, Trash2, LoaderIcon } from 'lucide-react';
 import type { BadgeRow, CreateBadgeInput } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { createBadge, deleteBadge, listBadges, updateBadge } from '@/services/master-data';
-import { Modal } from '../../modal';
+import { Modal } from '../../../ui/modal';
 import { fieldClass, labelClass, StatusError } from '../shared';
 
 const CRITERIA_TYPES = ['points', 'streak', 'completed'] as const;
@@ -258,16 +258,57 @@ function BadgeFormModal({
 	onClose: () => void;
 	onSave: (input: Partial<BadgeRow> & { id?: number }) => void;
 }) {
-		const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateBadgeInput>({ defaultValues: { code: '', name: '', description: null, icon_url: null, criteria_type: CRITERIA_TYPES[0], criteria_value: 0 } });
-		const [error, setError] = useState<string | null>(null);
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
+	} = useForm<CreateBadgeInput>({
+		defaultValues: {
+			code: '',
+			name: '',
+			description: null,
+			icon_url: null,
+			criteria_type: CRITERIA_TYPES[0],
+			criteria_value: 0,
+		},
+	});
+	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (!open) return;
-		reset(badge ? { id: badge.id, code: badge.code, name: badge.name, description: badge.description ?? null, icon_url: badge.icon_url ?? null, criteria_type: badge.criteria_type, criteria_value: badge.criteria_value } : { code: '', name: '', description: null, icon_url: null, criteria_type: CRITERIA_TYPES[0], criteria_value: 0 });
+		reset(
+			badge
+				? {
+						id: badge.id,
+						code: badge.code,
+						name: badge.name,
+						description: badge.description ?? null,
+						icon_url: badge.icon_url ?? null,
+						criteria_type: badge.criteria_type,
+						criteria_value: badge.criteria_value,
+					}
+				: {
+						code: '',
+						name: '',
+						description: null,
+						icon_url: null,
+						criteria_type: CRITERIA_TYPES[0],
+						criteria_value: 0,
+					},
+		);
 		setError(null);
 	}, [open, badge, reset]);
 
-		const submit = (draft: CreateBadgeInput) => onSave({ ...(badge ? { id: badge.id } : {}), ...draft, code: draft.code.trim(), name: draft.name.trim(), description: draft.description?.trim() || null, icon_url: draft.icon_url?.trim() || null });
+	const submit = (draft: CreateBadgeInput) =>
+		onSave({
+			...(badge ? { id: badge.id } : {}),
+			...draft,
+			code: draft.code.trim(),
+			name: draft.name.trim(),
+			description: draft.description?.trim() || null,
+			icon_url: draft.icon_url?.trim() || null,
+		});
 
 	return (
 		<Modal
@@ -279,15 +320,59 @@ function BadgeFormModal({
 				onSubmit={handleSubmit(submit)}
 				className='flex min-h-0 flex-1 flex-col'>
 				<div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
-					<Field label='Code' error={errors.code} placeholder='STREAK_7' {...register('code', { required: 'Code is required.' })} />
-					<Field label='Name' error={errors.name} placeholder='7-day streak' {...register('name', { required: 'Name is required.' })} />
-					<Field label='Description' placeholder='Awarded for 7 days in a row' {...register('description')} />
-					<Field label='Icon URL' placeholder='https://...' {...register('icon_url')} />
+					<Field
+						label='Code'
+						error={errors.code}
+						placeholder='STREAK_7'
+						{...register('code', { required: 'Code is required.' })}
+					/>
+					<Field
+						label='Name'
+						error={errors.name}
+						placeholder='7-day streak'
+						{...register('name', { required: 'Name is required.' })}
+					/>
+					<Field
+						label='Description'
+						placeholder='Awarded for 7 days in a row'
+						{...register('description')}
+					/>
+					<Field
+						label='Icon URL'
+						placeholder='https://...'
+						{...register('icon_url')}
+					/>
 					<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-						<Field label='Criteria type' error={errors.criteria_type}>
-							<select className={fieldClass} {...register('criteria_type', { required: 'Criteria type is required.' })}>{CRITERIA_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}</select>
+						<Field
+							label='Criteria type'
+							error={errors.criteria_type}>
+							<select
+								className={fieldClass}
+								{...register('criteria_type', {
+									required: 'Criteria type is required.',
+								})}>
+								{CRITERIA_TYPES.map((type) => (
+									<option
+										key={type}
+										value={type}>
+										{type}
+									</option>
+								))}
+							</select>
 						</Field>
-						<Field label='Criteria value' error={errors.criteria_value}><input type='number' min={0} className={fieldClass} {...register('criteria_value', { valueAsNumber: true, min: { value: 0, message: 'Must be zero or greater.' } })} /></Field>
+						<Field
+							label='Criteria value'
+							error={errors.criteria_value}>
+							<input
+								type='number'
+								min={0}
+								className={fieldClass}
+								{...register('criteria_value', {
+									valueAsNumber: true,
+									min: { value: 0, message: 'Must be zero or greater.' },
+								})}
+							/>
+						</Field>
 					</div>
 				</div>
 

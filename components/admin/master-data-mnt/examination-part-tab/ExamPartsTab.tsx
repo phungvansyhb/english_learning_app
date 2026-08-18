@@ -14,7 +14,7 @@ import {
 	listSkills,
 	updateExamPart,
 } from '@/services/master-data';
-import { Modal } from '../../modal';
+import { Modal } from '../../../ui/modal';
 import { fieldClass, labelClass, StatusError } from '../shared';
 
 export default function ExamPartsTab() {
@@ -284,11 +284,31 @@ function ExamPartFormModal({
 	onClose: () => void;
 	onSave: (input: Partial<ExamPartRow> & { id?: number }) => void;
 }) {
-	const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateExamPartInput>({ defaultValues: { skill_id: skills[0]?.id ?? 0, part_number: 1, name: '' } });
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
+	} = useForm<CreateExamPartInput>({
+		defaultValues: { skill_id: skills[0]?.id ?? 0, part_number: 1, name: '' },
+	});
 	const [error, setError] = useState<string | null>(null);
 
-	useEffect(() => { if (open) reset(examPart ? { id: examPart.id, skill_id: examPart.skill_id, part_number: examPart.part_number, name: examPart.name } : { skill_id: skills[0]?.id ?? 0, part_number: 1, name: '' }); }, [open, examPart, skills, reset]);
-	const submit = (values: CreateExamPartInput) => onSave({ ...(examPart ? { id: examPart.id } : {}), ...values, name: values.name.trim() });
+	useEffect(() => {
+		if (open)
+			reset(
+				examPart
+					? {
+							id: examPart.id,
+							skill_id: examPart.skill_id,
+							part_number: examPart.part_number,
+							name: examPart.name,
+						}
+					: { skill_id: skills[0]?.id ?? 0, part_number: 1, name: '' },
+			);
+	}, [open, examPart, skills, reset]);
+	const submit = (values: CreateExamPartInput) =>
+		onSave({ ...(examPart ? { id: examPart.id } : {}), ...values, name: values.name.trim() });
 
 	return (
 		<Modal
@@ -300,13 +320,45 @@ function ExamPartFormModal({
 				onSubmit={handleSubmit(submit)}
 				className='flex min-h-0 flex-1 flex-col'>
 				<div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
-<Field label='Skill' error={errors.skill_id}>
-							<select className={fieldClass} {...register('skill_id', { valueAsNumber: true, required: 'Skill is required.' })}>{skills.map((skill) => <option key={skill.id} value={skill.id}>{skill.name}</option>)}</select>
+					<Field
+						label='Skill'
+						error={errors.skill_id}>
+						<select
+							className={fieldClass}
+							{...register('skill_id', {
+								valueAsNumber: true,
+								required: 'Skill is required.',
+							})}>
+							{skills.map((skill) => (
+								<option
+									key={skill.id}
+									value={skill.id}>
+									{skill.name}
+								</option>
+							))}
+						</select>
+					</Field>
+					<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+						<Field
+							label='Part number'
+							error={errors.part_number}>
+							<input
+								type='number'
+								min={1}
+								className={fieldClass}
+								{...register('part_number', {
+									valueAsNumber: true,
+									min: { value: 1, message: 'Part number is required.' },
+								})}
+							/>
 						</Field>
-						<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-							<Field label='Part number' error={errors.part_number}><input type='number' min={1} className={fieldClass} {...register('part_number', { valueAsNumber: true, min: { value: 1, message: 'Part number is required.' } })} /></Field>
-							<Field label='Name' placeholder='Part 1' error={errors.name} {...register('name', { required: 'Name is required.' })} />
-						</div>
+						<Field
+							label='Name'
+							placeholder='Part 1'
+							error={errors.name}
+							{...register('name', { required: 'Name is required.' })}
+						/>
+					</div>
 				</div>
 
 				{error && <StatusError message={error} />}

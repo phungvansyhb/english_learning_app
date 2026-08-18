@@ -215,11 +215,14 @@ export default function Combobox(props: Props) {
 						className='min-h-11 h-full w-full border-0 bg-white pl-2 dark:bg-neutral-950 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:text-white '
 					/>
 					<div className='absolute right-0 bottom-0 flex h-full items-center justify-center text-neutral-500 dark:text-neutral-400'>
-						<BaseCombobox.Clear
-							className='BaseCombobox-clear flex h-full w-6 items-center justify-center border-0 bg-transparent p-0 text-neutral-950 dark:text-white'
-							aria-label='Clear selection'>
-							<XIcon size={12} />
-						</BaseCombobox.Clear>
+						<React.Activity mode={value ? 'visible' : 'hidden'}>
+							<BaseCombobox.Clear
+								className='BaseCombobox-clear flex h-full w-6 items-center justify-center border-0 bg-transparent p-0 text-neutral-950 dark:text-white'
+								aria-label='Clear selection'>
+								<XIcon size={12} />
+							</BaseCombobox.Clear>
+						</React.Activity>
+
 						<BaseCombobox.Trigger
 							className='flex h-6 w-6 items-center justify-center border-0 bg-transparent p-0 dark:text-white'
 							aria-label='Open popup'>
@@ -261,7 +264,7 @@ export default function Combobox(props: Props) {
 					sideOffset={4}>
 					<BaseCombobox.Popup className='w-(--anchor-width) max-w-(--available-width) origin-(--transform-origin) border bg-white text-neutral-950 shadow-[0.25rem_0.25rem_0_rgb(0_0_0/12%)] transition-[scale,opacity] duration-100 data-starting-style:scale-95 data-starting-style:opacity-0 data-ending-style:scale-95 data-ending-style:opacity-0 dark:border-white dark:bg-neutral-950 dark:text-white dark:shadow-none rounded'>
 						<BaseCombobox.Empty>
-							<div className='py-4 pr-4 pl-2 text-sm leading-4 text-neutral-500 dark:text-neutral-400'>
+							<div className='py-4 pr-4 pl-2 text-xs leading-4 text-neutral-500 dark:text-neutral-400 text-center'>
 								{props.notFoundLabel || 'Not Found'}
 							</div>
 						</BaseCombobox.Empty>

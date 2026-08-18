@@ -122,16 +122,14 @@ export async function deleteDifficultyLevel(id: number) {
     return data as DifficultyLevelRow;
 }
 
-export async function listDifficultyLevels(opts: ListMasterDataOptions & { level_type?: string } = {}) {
-    const { page = 1, perPage = 10, search, level_type } = opts;
+export async function listDifficultyLevels(opts: ListMasterDataOptions) {
+    const { page = 1, perPage = 10, search } = opts;
     const supabase = await getSupabaseServer();
     const from = (page - 1) * perPage;
     const to = from + perPage - 1;
 
     let query = supabase.from('difficulty_levels').select('*', { count: 'exact' });
-    if (level_type) {
-        query = query.eq('level_type', level_type);
-    }
+
     if (search) {
         const esc = search.replace(/%/g, '\\%');
         query = query.or(`code.ilike.%${esc}%,label.ilike.%${esc}%`);

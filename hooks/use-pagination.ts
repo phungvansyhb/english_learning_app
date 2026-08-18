@@ -45,22 +45,26 @@ export function usePagination<TApiFunction extends ApiFunction<any, any>>({
     const [total, setTotal] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+
     const pageRef = useRef(initialPage);
     const paramsRef = useRef<ParamsOf<TApiFunction>>(params ?? ({} as ParamsOf<TApiFunction>));
-
-    const normalizedParams = useMemo(() => (params ?? ({} as ParamsOf<TApiFunction>)), [params]);
+    const paramsKey = useMemo(
+        () => JSON.stringify(params ?? ({} as ParamsOf<TApiFunction>)),
+        [params],
+    );
 
     useEffect(() => {
         pageRef.current = page;
     }, [page]);
 
     useEffect(() => {
-        paramsRef.current = normalizedParams;
-    }, [normalizedParams]);
+        paramsRef.current = params ?? ({} as ParamsOf<TApiFunction>);
+    }, [paramsKey]);
 
     const fetchPage = useCallback(
         async (nextPage = pageRef.current) => {
             setError(null);
+
             startTransition(async () => {
                 try {
                     const result = await apiFunction({
@@ -85,8 +89,11 @@ export function usePagination<TApiFunction extends ApiFunction<any, any>>({
     );
 
     useEffect(() => {
-        void fetchPage(initialPage);
-    }, [fetchPage, initialPage]);
+        const nextPage = initialPage;
+        pageRef.current = nextPage;
+        setPage(nextPage);
+        void fetchPage(nextPage);
+    }, [apiFunction, initialPage, paramsKey, perPage, fetchPage]);
 
     return {
         data,

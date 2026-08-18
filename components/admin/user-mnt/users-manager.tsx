@@ -5,9 +5,10 @@ import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
 
 import type { CreateUserInput, UserRow } from '@/lib/types';
 import { createUser, deleteUser, listUsers, updateUser } from '@/services/user';
-import { Modal } from '@/components/admin/modal';
+import { Modal } from '@/components/ui/modal';
 import { UserFormModal } from '@/components/admin/user-mnt/user-form-modal';
 import { Pagination } from '@/components/ui/pagination';
+import { DataTable } from '@/components/ui/data-table';
 import { usePagination } from '../../../hooks/use-pagination';
 
 const ROLE_OPTIONS = ['USER', 'SYSTEM_ADMIN', 'CONTENT_ADMIN'];
@@ -145,69 +146,60 @@ export function UsersManager() {
 				</div>
 			</div>
 
-			<div className='mt-6 hidden overflow-hidden rounded-2xl border border-border md:block'>
-				<table className='w-full border-collapse text-left text-sm'>
-					<thead>
-						<tr className='bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground'>
-							<th className='px-4 py-3 font-semibold'>Email</th>
-							<th className='px-4 py-3 font-semibold'>Display name</th>
-							<th className='px-4 py-3 font-semibold'>Role</th>
-							<th className='px-4 py-3 font-semibold'>Status</th>
-							<th className='px-4 py-3 font-semibold'>Created</th>
-							<th className='px-4 py-3 text-right font-semibold'>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{users.map((user) => (
-							<tr
-								key={user.id}
-								className='border-t border-border align-top'>
-								<td className='px-4 py-3 break-all text-foreground'>
-									{user.email}
-								</td>
-								<td className='px-4 py-3 text-foreground'>{user.display_name}</td>
-								<td className='px-4 py-3 text-foreground'>{user.role}</td>
-								<td className='px-4 py-3 text-foreground'>{user.status}</td>
-								<td className='px-4 py-3 text-muted-foreground'>
-									{new Date(user.created_at).toLocaleDateString()}
-								</td>
-								<td className='px-4 py-3'>
-									<div className='flex justify-end gap-1'>
-										<button
-											type='button'
-											onClick={() => {
-												setEditing(user);
-												setFormOpen(true);
-											}}
-											aria-label={`Edit ${user.email}`}
-											className='flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground'>
-											<Pencil className='size-4' />
-										</button>
-										<button
-											type='button'
-											onClick={() => setDeleteTarget(user)}
-											aria-label={`Delete ${user.email}`}
-											className='flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive'>
-											<Trash2 className='size-4' />
-										</button>
-									</div>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-				{users.length === 0 && (
-					<div className='p-6 text-center text-sm text-muted-foreground'>
-						No users found.
-					</div>
-				)}
-			</div>
-
-			<div className='mt-6 space-y-3 md:hidden'>
-				{users.map((user) => (
-					<div
-						key={user.id}
-						className='rounded-2xl border border-border p-4'>
+			<DataTable
+				isLoading={loading}
+				columns={[
+					{
+						key: 'email',
+						header: 'Email',
+						cellClassName: 'break-all text-foreground',
+					},
+					{
+						key: 'display_name',
+						header: 'Display name',
+						cellClassName: 'text-foreground',
+					},
+					{ key: 'role', header: 'Role', cellClassName: 'text-foreground' },
+					{ key: 'status', header: 'Status', cellClassName: 'text-foreground' },
+					{
+						key: 'created_at',
+						header: 'Created',
+						cellClassName: 'text-muted-foreground',
+						render: (user) => new Date(user.created_at).toLocaleDateString(),
+					},
+					{
+						key: 'actions',
+						header: 'Actions',
+						className: 'text-right',
+						cellClassName: 'text-right',
+						render: (user) => (
+							<div className='flex justify-end gap-1'>
+								<button
+									type='button'
+									onClick={() => {
+										setEditing(user);
+										setFormOpen(true);
+									}}
+									aria-label={`Edit ${user.email}`}
+									className='flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground'>
+									<Pencil className='size-4' />
+								</button>
+								<button
+									type='button'
+									onClick={() => setDeleteTarget(user)}
+									aria-label={`Delete ${user.email}`}
+									className='flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive'>
+									<Trash2 className='size-4' />
+								</button>
+							</div>
+						),
+					},
+				]}
+				data={users}
+				rowKey={(user) => user.id}
+				emptyState='No users found.'
+				renderMobileCard={(user) => (
+					<div>
 						<div className='flex items-start justify-between gap-3'>
 							<div>
 								<p className='font-semibold text-foreground'>{user.display_name}</p>
@@ -239,13 +231,9 @@ export function UsersManager() {
 							</button>
 						</div>
 					</div>
-				))}
-				{users.length === 0 && (
-					<div className='rounded-2xl border border-border bg-secondary/40 p-6 text-center text-sm text-muted-foreground'>
-						No users found.
-					</div>
 				)}
-			</div>
+				className='mt-6'
+			/>
 
 			<Pagination
 				page={page}

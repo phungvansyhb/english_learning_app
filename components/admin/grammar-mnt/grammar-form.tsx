@@ -1,4 +1,4 @@
-import DifficultySelect from '@/components/ui/components/difficulty-select';
+import DifficultySelect from '@/components/admin/difficulty-select';
 import { Field } from '@/components/ui/field';
 import { Check } from 'lucide-react';
 import React, { useEffect, useTransition } from 'react';
@@ -125,7 +125,6 @@ export default function GrammarForm(props: Props) {
 								error={fieldState.error}>
 								<DifficultySelect
 									placeholder='Select difficult level'
-									type='grammar'
 									label=''
 									value={field.value}
 									onValueChange={(value) =>

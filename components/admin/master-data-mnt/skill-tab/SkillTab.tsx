@@ -5,7 +5,7 @@ import { LoaderIcon, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import React, { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { Field } from '@/components/ui/field';
-import { Modal } from '../../modal';
+import { Modal } from '../../../ui/modal';
 import { fieldClass, labelClass, StatusError } from '../shared';
 type Props = {};
 
@@ -250,7 +250,12 @@ function SkillFormModal({
 	onClose: () => void;
 	onSave: (input: Partial<SkillRow> & { id?: number }) => void;
 }) {
-	const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateSkillInput>({ defaultValues: { code: '', name: '' } });
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
+	} = useForm<CreateSkillInput>({ defaultValues: { code: '', name: '' } });
 	const [draft, setDraft] = useState<CreateSkillInput>({ code: '', name: '' });
 	const [error, setError] = useState<string | null>(null);
 
@@ -263,14 +268,22 @@ function SkillFormModal({
 			setDraft({ code: '', name: '' });
 			setError(null);
 		}
-		reset(skill ? { id: skill.id, code: skill.code, name: skill.name } : { code: '', name: '' });
+		reset(
+			skill ? { id: skill.id, code: skill.code, name: skill.name } : { code: '', name: '' },
+		);
 	}, [open, skill, reset]);
 
 	function handleChange<K extends keyof CreateSkillInput>(key: K, value: CreateSkillInput[K]) {
 		setDraft((prev) => ({ ...prev, [key]: value }));
 	}
 
-	const submit = (values: CreateSkillInput) => onSave({ ...(skill ? { id: skill.id } : {}), ...values, code: values.code.trim(), name: values.name.trim() });
+	const submit = (values: CreateSkillInput) =>
+		onSave({
+			...(skill ? { id: skill.id } : {}),
+			...values,
+			code: values.code.trim(),
+			name: values.name.trim(),
+		});
 
 	return (
 		<Modal
@@ -288,7 +301,12 @@ function SkillFormModal({
 							htmlFor='skill-code'>
 							Code
 						</label>
-<Field label='Code' placeholder='TOEIC' error={errors.code} {...register('code', { required: 'Code is required.' })} />
+						<Field
+							label='Code'
+							placeholder='TOEIC'
+							error={errors.code}
+							{...register('code', { required: 'Code is required.' })}
+						/>
 					</div>
 					<div>
 						<label
@@ -296,7 +314,12 @@ function SkillFormModal({
 							htmlFor='skill-name'>
 							Name
 						</label>
-<Field label='Name' placeholder='Listening' error={errors.name} {...register('name', { required: 'Name is required.' })} />
+						<Field
+							label='Name'
+							placeholder='Listening'
+							error={errors.name}
+							{...register('name', { required: 'Name is required.' })}
+						/>
 					</div>
 				</div>
 

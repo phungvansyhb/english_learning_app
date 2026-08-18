@@ -8,7 +8,7 @@ import { Plus, Search, Pencil, Trash2, LoaderIcon } from 'lucide-react';
 import type { CreateTopicInput, TopicRow } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { createTopic, deleteTopic, listTopics, updateTopic } from '@/services/master-data';
-import { Modal } from '../../modal';
+import { Modal } from '../../../ui/modal';
 import { fieldClass, labelClass, StatusError } from '../shared';
 
 export default function TopicsTab() {
@@ -252,7 +252,12 @@ function TopicFormModal({
 	onClose: () => void;
 	onSave: (input: Partial<TopicRow> & { id?: number }) => void;
 }) {
-	const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateTopicInput>({ defaultValues: { name: '' } });
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
+	} = useForm<CreateTopicInput>({ defaultValues: { name: '' } });
 	const [draft, setDraft] = useState<CreateTopicInput>({ name: '' });
 	const [error, setError] = useState<string | null>(null);
 
@@ -272,7 +277,8 @@ function TopicFormModal({
 		setDraft((prev) => ({ ...prev, [key]: value }));
 	}
 
-	const submit = (values: CreateTopicInput) => onSave({ ...(topic ? { id: topic.id } : {}), ...values, name: values.name.trim() });
+	const submit = (values: CreateTopicInput) =>
+		onSave({ ...(topic ? { id: topic.id } : {}), ...values, name: values.name.trim() });
 
 	return (
 		<Modal
@@ -290,7 +296,12 @@ function TopicFormModal({
 							htmlFor='topic-name'>
 							Name
 						</label>
-<Field label='Name' placeholder='Grammar' error={errors.name} {...register('name', { required: 'Name is required.' })} />
+						<Field
+							label='Name'
+							placeholder='Grammar'
+							error={errors.name}
+							{...register('name', { required: 'Name is required.' })}
+						/>
 					</div>
 				</div>
 

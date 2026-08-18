@@ -6,7 +6,7 @@ import { Pencil, Plus, Search, Trash2, Volume2 } from 'lucide-react';
 import type { Word } from '@/lib/types';
 import { seedWords } from '@/lib/words-data';
 import { cn } from '@/lib/utils';
-import { Modal } from '@/components/admin/modal';
+import { Modal } from '@/components/ui/modal';
 import { WordFormModal } from '@/components/admin/word-mnt/word-form-modal';
 
 const difficultyTone: Record<number, string> = {
@@ -249,6 +249,7 @@ export function WordsManager() {
 				open={Boolean(deleteTarget)}
 				onClose={() => setDeleteTarget(null)}
 				title='Delete word'
+				className='w-xl'
 				description={`This will permanently remove "${deleteTarget?.word}".`}>
 				<div className='flex justify-end gap-3 px-6 py-5'>
 					<button
