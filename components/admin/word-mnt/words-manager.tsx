@@ -1,11 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Pencil, Plus, Search, Trash2, Volume2 } from 'lucide-react';
 
+import { DataTable } from '@/components/ui/data-table';
+import { Pagination } from '@/components/ui/pagination';
+import { usePagination } from '@/hooks/use-pagination';
 import type { Word } from '@/lib/types';
 import { seedWords } from '@/lib/words-data';
-import { cn } from '@/lib/utils';
 import { Modal } from '@/components/ui/modal';
 import { WordFormModal } from '@/components/admin/word-mnt/word-form-modal';
 
@@ -24,17 +26,49 @@ export function WordsManager() {
 	const [editing, setEditing] = useState<Word | null>(null);
 	const [deleteTarget, setDeleteTarget] = useState<Word | null>(null);
 
-	const filtered = useMemo(() => {
-		const q = query.trim().toLowerCase();
-		const list = q
-			? words.filter(
-					(w) =>
-						w.word.toLowerCase().includes(q) ||
-						w.meanings.some((m) => m.meaning.toLowerCase().includes(q)),
-				)
-			: words;
-		return [...list].sort((a, b) => a.order_index - b.order_index);
-	}, [words, query]);
+	const listWords = useCallback(
+		async ({ page, perPage, search }: { page: number; perPage: number; search?: string }) => {
+			const q = search?.trim().toLowerCase();
+			const filtered = q
+				? words.filter(
+						(word) =>
+							word.word.toLowerCase().includes(q) ||
+							word.meanings.some((meaning) =>
+								meaning.meaning.toLowerCase().includes(q),
+							),
+					)
+				: words;
+
+			const sorted = [...filtered].sort((a, b) => a.order_index - b.order_index);
+			const total = sorted.length;
+			const totalPages = Math.max(1, Math.ceil(total / perPage));
+			const safePage = Math.min(Math.max(page, 1), totalPages);
+			const start = (safePage - 1) * perPage;
+			const data = sorted.slice(start, start + perPage);
+
+			return {
+				data,
+				total,
+				page: safePage,
+				perPage,
+				totalPages,
+			};
+		},
+		[words],
+	);
+
+	const {
+		data: wordsPage,
+		page,
+		totalPages,
+		pending,
+		setPage,
+		reload,
+	} = usePagination({
+		apiFunction: listWords,
+		perPage: 10,
+		params: { search: query || undefined },
+	});
 
 	function openCreate() {
 		setEditing(null);
@@ -53,18 +87,20 @@ export function WordsManager() {
 		});
 		setFormOpen(false);
 		setEditing(null);
+		reload();
 	}
 
 	function confirmDelete() {
 		if (!deleteTarget) return;
 		setWords((prev) => prev.filter((w) => w.id !== deleteTarget.id));
 		setDeleteTarget(null);
+		reload();
 	}
 
 	return (
-		<section className='rounded-3xl border border-border bg-card p-4 sm:p-6'>
+		<section className='rounded-3xl border border-border bg-card p-4 sm:p-6 '>
 			{/* Toolbar */}
-			<div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
+			<div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6'>
 				<div>
 					<h1 className='text-xl font-bold text-foreground'>Words</h1>
 					<p className='mt-0.5 text-sm text-muted-foreground'>
@@ -78,7 +114,10 @@ export function WordsManager() {
 						<input
 							type='search'
 							value={query}
-							onChange={(e) => setQuery(e.target.value)}
+							onChange={(e) => {
+								setQuery(e.target.value);
+								setPage(1);
+							}}
 							placeholder='Search words'
 							aria-label='Search words'
 							className='h-11 w-full rounded-full border border-border bg-secondary/50 pl-10 pr-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-3 focus:ring-ring/30'
@@ -94,97 +133,86 @@ export function WordsManager() {
 				</div>
 			</div>
 
-			{/* Desktop table */}
-			<div className='mt-6 hidden overflow-hidden rounded-2xl border border-border md:block'>
-				<table className='w-full border-collapse text-left text-sm'>
-					<thead>
-						<tr className='bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground'>
-							<th className='px-4 py-3 font-semibold'>Word</th>
-							<th className='px-4 py-3 font-semibold'>Meaning</th>
-							<th className='px-4 py-3 font-semibold'>Difficulty</th>
-							<th className='px-4 py-3 font-semibold'>Order</th>
-							<th className='px-4 py-3 text-right font-semibold'>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{filtered.map((word) => (
-							<tr
-								key={word.id}
-								className='border-t border-border align-top'>
-								<td className='px-4 py-3'>
-									<div className='flex items-center gap-2'>
-										<span className='font-semibold text-foreground'>
-											{word.word}
-										</span>
-										{(word.audio_uk || word.audio_us) && (
-											<Volume2
-												className='size-3.5 text-muted-foreground'
-												aria-label='Has audio'
-											/>
-										)}
-									</div>
-									<span className='text-xs text-muted-foreground'>
-										{word.ipa}
+			<DataTable
+				data={wordsPage}
+				isLoading={pending}
+				rowKey={(word) => word.id}
+				emptyState={<EmptyState onCreate={openCreate} />}
+				columns={[
+					{
+						key: 'word',
+						header: 'Word',
+						render: (word) => (
+							<div>
+								<div className='flex items-center gap-2'>
+									<span className='font-semibold text-foreground'>
+										{word.word}
 									</span>
-								</td>
-								<td className='px-4 py-3'>
-									<div className='flex flex-wrap gap-1.5'>
-										{word.meanings.slice(0, 3).map((m, i) => (
-											<span
-												key={i}
-												className='rounded-md bg-secondary px-2 py-0.5 text-xs text-foreground'>
-												<span className='text-muted-foreground'>
-													{m.pos}
-												</span>{' '}
-												· {m.meaning}
-											</span>
-										))}
-									</div>
-								</td>
-								<td className='px-4 py-3'>
+									{(word.audio_uk || word.audio_us) && (
+										<Volume2
+											className='size-3.5 text-muted-foreground'
+											aria-label='Has audio'
+										/>
+									)}
+								</div>
+								<span className='text-xs text-muted-foreground'>{word.ipa}</span>
+							</div>
+						),
+					},
+					{
+						key: 'meanings',
+						header: 'Meaning',
+						render: (word) => (
+							<div className='flex flex-wrap gap-1.5'>
+								{word.meanings.slice(0, 3).map((meaning, index) => (
 									<span
-										className={cn(
-											'inline-flex rounded-full px-2.5 py-1 text-xs font-semibold',
-											difficultyTone[word.difficulty_level] ??
-												difficultyTone[1],
-										)}>
-										Level {word.difficulty_level}
+										key={index}
+										className='rounded-md bg-secondary px-2 py-0.5 text-xs text-foreground'>
+										<span className='text-muted-foreground'>{meaning.pos}</span>{' '}
+										· {meaning.meaning}
 									</span>
-								</td>
-								<td className='px-4 py-3 text-muted-foreground'>
-									{word.order_index}
-								</td>
-								<td className='px-4 py-3'>
-									<div className='flex justify-end gap-1'>
-										<button
-											type='button'
-											onClick={() => openEdit(word)}
-											aria-label={`Edit ${word.word}`}
-											className='flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground'>
-											<Pencil className='size-4' />
-										</button>
-										<button
-											type='button'
-											onClick={() => setDeleteTarget(word)}
-											aria-label={`Delete ${word.word}`}
-											className='flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive'>
-											<Trash2 className='size-4' />
-										</button>
-									</div>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-				{filtered.length === 0 && <EmptyState onCreate={openCreate} />}
-			</div>
-
-			{/* Mobile cards */}
-			<div className='mt-6 space-y-3 md:hidden'>
-				{filtered.map((word) => (
-					<div
-						key={word.id}
-						className='rounded-2xl border border-border p-4'>
+								))}
+							</div>
+						),
+					},
+					{
+						key: 'difficulty_level',
+						header: 'Difficulty',
+						render: (word) => (
+							<span
+								className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${difficultyTone[word.difficulty_level] ?? difficultyTone[1]}`}>
+								Level {word.difficulty_level}
+							</span>
+						),
+					},
+					{ key: 'order_index', header: 'Order', cellClassName: 'text-muted-foreground' },
+					{
+						key: 'actions',
+						header: 'Actions',
+						className: 'text-right',
+						cellClassName: 'w-24',
+						render: (word) => (
+							<div className='flex justify-end gap-1'>
+								<button
+									type='button'
+									onClick={() => openEdit(word)}
+									aria-label={`Edit ${word.word}`}
+									className='flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground'>
+									<Pencil className='size-4' />
+								</button>
+								<button
+									type='button'
+									onClick={() => setDeleteTarget(word)}
+									aria-label={`Delete ${word.word}`}
+									className='flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive'>
+									<Trash2 className='size-4' />
+								</button>
+							</div>
+						),
+					},
+				]}
+				renderMobileCard={(word) => (
+					<div className='space-y-3'>
 						<div className='flex items-start justify-between gap-3'>
 							<div>
 								<div className='flex items-center gap-2'>
@@ -201,47 +229,54 @@ export function WordsManager() {
 								<span className='text-xs text-muted-foreground'>{word.ipa}</span>
 							</div>
 							<span
-								className={cn(
-									'inline-flex shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold',
-									difficultyTone[word.difficulty_level] ?? difficultyTone[1],
-								)}>
+								className={`inline-flex shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${difficultyTone[word.difficulty_level] ?? difficultyTone[1]}`}>
 								Level {word.difficulty_level}
 							</span>
 						</div>
-						<div className='mt-3 flex flex-wrap gap-1.5'>
-							{word.meanings.map((m, i) => (
+						<div className='flex flex-wrap gap-1.5'>
+							{word.meanings.map((meaning, index) => (
 								<span
-									key={i}
+									key={index}
 									className='rounded-md bg-secondary px-2 py-0.5 text-xs text-foreground'>
-									<span className='text-muted-foreground'>{m.pos}</span> ·{' '}
-									{m.meaning}
+									<span className='text-muted-foreground'>{meaning.pos}</span> ·{' '}
+									{meaning.meaning}
 								</span>
 							))}
 						</div>
-						<div className='mt-4 flex gap-2'>
+						<div className='flex gap-2 pt-1'>
 							<button
 								type='button'
 								onClick={() => openEdit(word)}
-								className='inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-secondary text-sm font-semibold text-foreground transition-colors hover:bg-accent'>
-								<Pencil className='size-4' /> Edit
+								className='flex h-10 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-medium text-foreground transition-colors hover:bg-secondary'>
+								<Pencil className='size-4' />
+								Edit
 							</button>
 							<button
 								type='button'
 								onClick={() => setDeleteTarget(word)}
-								aria-label={`Delete ${word.word}`}
-								className='flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive'>
+								className='flex h-10 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-medium text-destructive transition-colors hover:bg-destructive/10'>
 								<Trash2 className='size-4' />
+								Delete
 							</button>
 						</div>
 					</div>
-				))}
-				{filtered.length === 0 && <EmptyState onCreate={openCreate} />}
-			</div>
+				)}
+			/>
+
+			<Pagination
+				page={page}
+				totalPages={totalPages}
+				onPageChange={setPage}
+				pending={pending}
+			/>
 
 			<WordFormModal
 				open={formOpen}
 				word={editing}
-				onClose={() => setFormOpen(false)}
+				onClose={() => {
+					setFormOpen(false);
+					setEditing(null);
+				}}
 				onSave={handleSave}
 			/>
 

@@ -42,7 +42,7 @@ export function Modal({ open, onClose, title, description, children, className }
 				aria-modal='true'
 				aria-label={title}
 				className={cn(
-					'relative z-10 flex max-h-[92vh] flex-col overflow-hidden rounded-t-3xl bg-card shadow-2xl w-full lg:max-w-5xl sm:rounded-3xl',
+					'relative z-10 flex max-h-[92vh] flex-col overflow-hidden rounded-t-3xl bg-card shadow-2xl w-full lg:max-w-5xl xl:max-w-6xl sm:rounded-3xl',
 					className,
 				)}>
 				<div className='flex items-start justify-between gap-4 border-b border-border px-6 py-5'>

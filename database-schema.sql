@@ -277,7 +277,7 @@ CREATE TABLE public.vocab_word_topics (
   CONSTRAINT vocab_word_topics_word_id_fkey FOREIGN KEY (word_id) REFERENCES public.vocab_words(id),
   CONSTRAINT vocab_word_topics_topic_id_fkey FOREIGN KEY (topic_id) REFERENCES public.topics(id)
 );
-CREATE TABLE public.vocab_examples (
+CREATE TABLE public.vocab_examples_deprecated (
   id bigint NOT NULL DEFAULT nextval('vocab_examples_id_seq'::regclass),
   word_id bigint NOT NULL,
   sentence_en text NOT NULL,

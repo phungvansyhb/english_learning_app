@@ -55,7 +55,9 @@ export function GrammarContentEditor({
 		],
 		content: value,
 		editorProps: {
-			attributes: { class: 'prose prose-sm max-w-none min-h-72 p-5 outline-none' },
+			attributes: {
+				class: 'prose prose-sm max-w-none min-h-72 p-5 outline-none tiptap-editor',
+			},
 		},
 		onUpdate: ({ editor: nextEditor }) => onChange(nextEditor.getHTML()),
 	});
@@ -222,7 +224,6 @@ export function GrammarContentEditor({
 					{imageError}
 				</p>
 			)}
-			
 		</div>
 	);
 }

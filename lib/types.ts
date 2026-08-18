@@ -45,16 +45,9 @@ export interface CalendarDay {
   date: number
   active?: boolean
 }
+export const PARTS_OF_SPEECH = ['noun', 'verb', 'adjective', 'adverb', "preposition", "pronoun", "conjunction", "interjection"] as const;
 
-export type PartOfSpeech =
-  | "noun"
-  | "verb"
-  | "adjective"
-  | "adverb"
-  | "preposition"
-  | "pronoun"
-  | "conjunction"
-  | "interjection"
+export type PartOfSpeech = (typeof PARTS_OF_SPEECH)[number]
 
 export interface WordMeaning {
   pos: PartOfSpeech

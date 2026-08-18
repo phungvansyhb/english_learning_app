@@ -1,95 +1,70 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Field } from '@/components/ui/field';
-import { Plus, Search, Pencil, Trash2, LoaderIcon } from 'lucide-react';
+import { Plus, Search, Pencil, Trash2 } from 'lucide-react';
 
 import type { CreateDifficultyLevelInput, DifficultyLevelRow } from '@/lib/types';
-import { cn } from '@/lib/utils';
 import {
 	createDifficultyLevel,
 	deleteDifficultyLevel,
 	listDifficultyLevels,
 	updateDifficultyLevel,
 } from '@/services/master-data';
+import { DataTable } from '@/components/ui/data-table';
+import { Pagination } from '@/components/ui/pagination';
+import { usePagination } from '@/hooks/use-pagination';
 import { Modal } from '../../../ui/modal';
 import { fieldClass, labelClass, StatusError } from '../shared';
 
 export default function DifficultyLevelsTab() {
-	const [items, setItems] = useState<DifficultyLevelRow[]>([]);
 	const [query, setQuery] = useState('');
-	const [page, setPage] = useState(1);
-	const [perPage] = useState(10);
-	const [totalPages, setTotalPages] = useState(1);
 	const [formOpen, setFormOpen] = useState(false);
 	const [editing, setEditing] = useState<DifficultyLevelRow | null>(null);
 	const [deleteTarget, setDeleteTarget] = useState<DifficultyLevelRow | null>(null);
-	const [error, setError] = useState<string | null>(null);
-	const [isPending, startTransition] = useTransition();
-
-	useEffect(() => {
-		setError(null);
-		startTransition(async () => {
-			try {
-				const response = await listDifficultyLevels({
-					page,
-					perPage,
-					search: query || undefined,
-				});
-				setItems(response.data);
-				setTotalPages(response.totalPages);
-			} catch (err) {
-				setError((err as Error).message);
-			}
-		});
-	}, [query, page, perPage]);
+	const [mutationError, setMutationError] = useState<string | null>(null);
+	const {
+		data: items,
+		page,
+		totalPages,
+		pending,
+		error,
+		setPage,
+		reload,
+	} = usePagination({
+		apiFunction: listDifficultyLevels,
+		perPage: 10,
+		params: { search: query || undefined },
+	});
 
 	async function handleSave(item: Partial<DifficultyLevelRow> & { id?: number }) {
-		setError(null);
-		startTransition(async () => {
-			try {
-				if (item.id) {
-					await updateDifficultyLevel(item.id, item);
-				} else {
-					await createDifficultyLevel(item as CreateDifficultyLevelInput);
-				}
-				setFormOpen(false);
-				setEditing(null);
-				const response = await listDifficultyLevels({
-					page,
-					perPage,
-					search: query || undefined,
-				});
-				setItems(response.data);
-				setTotalPages(response.totalPages);
-			} catch (err) {
-				setError((err as Error).message);
+		setMutationError(null);
+		try {
+			if (item.id) {
+				await updateDifficultyLevel(item.id, item);
+			} else {
+				await createDifficultyLevel(item as CreateDifficultyLevelInput);
 			}
-		});
+			setFormOpen(false);
+			setEditing(null);
+			reload();
+		} catch (err) {
+			setMutationError((err as Error).message);
+		}
 	}
 
 	async function handleDelete() {
 		if (!deleteTarget) return;
-		setError(null);
-		startTransition(async () => {
-			try {
-				await deleteDifficultyLevel(deleteTarget.id);
-				setDeleteTarget(null);
-				const response = await listDifficultyLevels({
-					page,
-					perPage,
-					search: query || undefined,
-				});
-				setItems(response.data);
-				setTotalPages(response.totalPages);
-			} catch (err) {
-				setError((err as Error).message);
-			}
-		});
+		setMutationError(null);
+		try {
+			await deleteDifficultyLevel(deleteTarget.id);
+			setDeleteTarget(null);
+			reload();
+		} catch (err) {
+			setMutationError((err as Error).message);
+		}
 	}
-
-	const pending = isPending;
 
 	return (
 		<div className='space-y-6'>
@@ -107,8 +82,8 @@ export default function DifficultyLevelsTab() {
 							type='search'
 							value={query}
 							onChange={(e) => {
-								setPage(1);
 								setQuery(e.target.value);
+								setPage(1);
 							}}
 							placeholder='Search difficulty'
 							className={fieldClass}
@@ -127,90 +102,85 @@ export default function DifficultyLevelsTab() {
 				</div>
 			</div>
 
-			<div className='overflow-hidden rounded-2xl border border-border'>
-				<table className='w-full border-collapse text-left text-sm'>
-					<thead>
-						<tr className='bg-secondary/60 text-xs uppercase tracking-wide text-muted-foreground'>
-							<th className='px-4 py-3 font-semibold'>Code</th>
-							<th className='px-4 py-3 font-semibold'>Label</th>
-							<th className='px-4 py-3 text-right font-semibold'>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{items.map((item) => (
-							<tr
-								key={item.id}
-								className='border-t border-border align-baseline'>
-								<td className='px-4 py-2 text-foreground'>{item.code}</td>
-								<td className='px-4 py-2 text-foreground'>{item.label}</td>
-								<td className='px-4 py-2'>
-									<div className='flex justify-end gap-1'>
-										<button
-											type='button'
-											onClick={() => {
-												setEditing(item);
-												setFormOpen(true);
-											}}
-											className='flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground'>
-											<Pencil className='size-4' />
-										</button>
-										<button
-											type='button'
-											onClick={() => setDeleteTarget(item)}
-											className='flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive'>
-											<Trash2 className='size-4' />
-										</button>
-									</div>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-				{items.length === 0 && !pending && (
-					<div className='p-6 text-center text-sm text-muted-foreground'>
-						No levels found.
+			<DataTable
+				data={items}
+				isLoading={pending}
+				rowKey={(item) => item.id}
+				emptyState='No levels found.'
+				columns={[
+					{ key: 'code', header: 'Code' },
+					{ key: 'label', header: 'Label' },
+					{
+						key: 'actions',
+						header: 'Actions',
+						className: 'text-right',
+						cellClassName: 'w-24',
+						render: (item) => (
+							<div className='flex justify-end gap-1'>
+								<button
+									type='button'
+									onClick={() => {
+										setEditing(item);
+										setFormOpen(true);
+									}}
+									className='flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground'>
+									<Pencil className='size-4' />
+								</button>
+								<button
+									type='button'
+									onClick={() => setDeleteTarget(item)}
+									className='flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive'>
+									<Trash2 className='size-4' />
+								</button>
+							</div>
+						),
+					},
+				]}
+				renderMobileCard={(item) => (
+					<div className='space-y-3'>
+						<div>
+							<p className='text-xs uppercase tracking-wide text-muted-foreground'>
+								Code
+							</p>
+							<p className='mt-1 text-sm font-medium text-foreground'>{item.code}</p>
+						</div>
+						<div>
+							<p className='text-xs uppercase tracking-wide text-muted-foreground'>
+								Label
+							</p>
+							<p className='mt-1 text-sm text-foreground'>{item.label}</p>
+						</div>
+						<div className='flex gap-2 pt-1'>
+							<button
+								type='button'
+								onClick={() => {
+									setEditing(item);
+									setFormOpen(true);
+								}}
+								className='flex h-10 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-medium text-foreground transition-colors hover:bg-secondary'>
+								<Pencil className='size-4' />
+								Edit
+							</button>
+							<button
+								type='button'
+								onClick={() => setDeleteTarget(item)}
+								className='flex h-10 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-medium text-destructive transition-colors hover:bg-destructive/10'>
+								<Trash2 className='size-4' />
+								Delete
+							</button>
+						</div>
 					</div>
 				)}
-				{pending && (
-					<div className='p-6 flex justify-center text-muted-foreground'>
-						<LoaderIcon className='animate animate-spin' />
-					</div>
-				)}
-			</div>
+			/>
 
-			<div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-				<p className='text-sm text-muted-foreground'>
-					Page {page} of {totalPages}
-				</p>
-				<div className='flex items-center gap-2'>
-					<button
-						type='button'
-						onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-						disabled={page <= 1 || pending}
-						className={cn(
-							'h-11 rounded-full border border-border px-4 text-sm transition-colors',
-							page <= 1 || pending
-								? 'cursor-not-allowed text-muted-foreground bg-secondary'
-								: 'text-foreground bg-card hover:bg-secondary',
-						)}>
-						Previous
-					</button>
-					<button
-						type='button'
-						onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
-						disabled={page >= totalPages || pending}
-						className={cn(
-							'h-11 rounded-full border border-border px-4 text-sm transition-colors',
-							page >= totalPages || pending
-								? 'cursor-not-allowed text-muted-foreground bg-secondary'
-								: 'text-foreground bg-card hover:bg-secondary',
-						)}>
-						Next
-					</button>
-				</div>
-			</div>
+			<Pagination
+				page={page}
+				totalPages={totalPages}
+				onPageChange={setPage}
+				pending={pending}
+			/>
 
-			{error && <StatusError message={error} />}
+			{(mutationError || error) && <StatusError message={mutationError || error || ''} />}
 
 			<DifficultyLevelFormModal
 				open={formOpen}
@@ -226,6 +196,7 @@ export default function DifficultyLevelsTab() {
 				open={Boolean(deleteTarget)}
 				onClose={() => setDeleteTarget(null)}
 				title='Delete difficulty level'
+				className='w-2xl'
 				description={`This will permanently remove ${deleteTarget?.label}.`}>
 				<div className='flex justify-end gap-3 px-6 py-5'>
 					<button
