@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { usePathname } from 'next/navigation';
-import { BookA, ChevronLeft, GraduationCap, LayoutGrid, Layers, LogOut, Settings, Users } from 'lucide-react';
+import { BookA, ChevronLeft, GraduationCap, LayoutGrid, Layers, LogOut, Settings, Users, BookCheckIcon, ClipboardListIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -22,6 +22,7 @@ const navItems: NavItem[] = [
 	{ id: 'masterData', link: '/admin/master-data', label: 'Master Data', icon: Layers },
 	{ id: 'words', link: '/admin/word', label: 'Words', icon: BookA },
 	{ id: 'grammar', link: '/admin/grammar', label: 'Grammar', icon: GraduationCap },
+	{ id: 'test', link: '/admin/test', label: 'Test', icon: ClipboardListIcon },
 	{ id: 'settings', link: '/admin/setting', label: 'Settings', icon: Settings },
 ];
 
@@ -30,10 +31,10 @@ function BrandMark() {
 		<Link href='/'>
 			<div className='flex justify-center items-center bg-primary rounded-xl size-10 shrink-0'>
 				<div className='gap-0.5 grid grid-cols-2 size-5'>
-					<span className='bg-brand-pink rounded-[2px]' />
-					<span className='bg-primary-foreground rounded-[2px]' />
-					<span className='bg-primary-foreground rounded-[2px]' />
-					<span className='bg-brand-pink rounded-[2px]' />
+					<span className='bg-brand-pink rounded-xs' />
+					<span className='bg-primary-foreground rounded-xs' />
+					<span className='bg-primary-foreground rounded-xs' />
+					<span className='bg-brand-pink rounded-xs' />
 				</div>
 			</div>
 		</Link>

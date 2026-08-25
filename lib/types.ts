@@ -1,5 +1,12 @@
 export type ProgressTone = "purple" | "orange" | "pink" | "mint"
 
+export type BasePaginationOptions = {
+  page?: number
+  perPage?: number
+  search?: string
+  sortBy?: 'created_at'
+  sortOrder?: 'asc' | 'desc'
+}
 export interface Option {
   label: string;
   value: string | number;
@@ -210,3 +217,16 @@ export type ListMasterDataOptions = {
   skill_id?: number
   part_number?: number
 }
+
+
+export type TestRow = {
+  id: number
+  title: string
+  test_type: 'FULL' | 'SHORT',
+  status: 'ACTIVE' | 'INACTIVE',
+  duration_minutes: number
+  created_at: string
+}
+export type CreateTestInput = Partial<TestRow>
+
+export type QuestionCreateInput = {}

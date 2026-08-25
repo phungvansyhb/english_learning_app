@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import type { CreateUserInput, UserRow } from '@/lib/types';
 import { Modal } from '@/components/ui/modal';
 import { Field } from '@/components/ui/field';
+import { Button } from '@/components/ui/button';
 
 interface UserFormModalProps {
 	open: boolean;
@@ -107,17 +108,17 @@ export function UserFormModal({ open, user, onClose, onSave }: UserFormModalProp
 					</div>
 				</div>
 				<div className='flex justify-end gap-3 border-t border-border px-6 py-5'>
-					<button
+					<Button
 						type='button'
 						onClick={onClose}
-						className='h-11 rounded-full px-5 text-sm font-semibold hover:bg-secondary'>
+						variant='secondary'>
 						Cancel
-					</button>
-					<button
+					</Button>
+					<Button
 						type='submit'
-						className='h-11 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground'>
+						>
 						{isEditing ? 'Save changes' : 'Create user'}
-					</button>
+					</Button>
 				</div>
 			</form>
 		</Modal>

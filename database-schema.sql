@@ -83,6 +83,8 @@ CREATE TABLE public.exam_parts (
   skill_id smallint NOT NULL,
   part_number smallint NOT NULL CHECK (part_number >= 1 AND part_number <= 7),
   name character varying NOT NULL,
+  audio_direction text,
+  image_direction text,
   CONSTRAINT exam_parts_pkey PRIMARY KEY (id),
   CONSTRAINT exam_parts_skill_id_fkey FOREIGN KEY (skill_id) REFERENCES public.skills(id)
 );
@@ -111,7 +113,6 @@ CREATE TABLE public.questions (
   id bigint NOT NULL DEFAULT nextval('questions_id_seq'::regclass),
   skill_id smallint NOT NULL,
   exam_part_id smallint,
-  content_category character varying NOT NULL DEFAULT 'exam_part'::character varying CHECK (content_category::text = ANY (ARRAY['exam_part'::character varying, 'skill_drill'::character varying, 'grammar_point'::character varying]::text[])),
   difficulty_id smallint NOT NULL,
   content text NOT NULL,
   audio_url text,
@@ -120,6 +121,9 @@ CREATE TABLE public.questions (
   explanation text,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   updated_at timestamp with time zone NOT NULL DEFAULT now(),
+  answer_type USER-DEFINED DEFAULT 'ONE'::answer_type_enum,
+  paraphrasing text,
+  group_data jsonb,
   CONSTRAINT questions_pkey PRIMARY KEY (id),
   CONSTRAINT questions_skill_id_fkey FOREIGN KEY (skill_id) REFERENCES public.skills(id),
   CONSTRAINT questions_exam_part_id_fkey FOREIGN KEY (exam_part_id) REFERENCES public.exam_parts(id),
@@ -155,13 +159,14 @@ CREATE TABLE public.question_choices (
   label character NOT NULL CHECK (label = ANY (ARRAY['A'::bpchar, 'B'::bpchar, 'C'::bpchar, 'D'::bpchar])),
   content text NOT NULL,
   is_correct boolean NOT NULL DEFAULT false,
+  transcript text,
   CONSTRAINT question_choices_pkey PRIMARY KEY (id),
   CONSTRAINT question_choices_question_id_fkey FOREIGN KEY (question_id) REFERENCES public.questions(id)
 );
 CREATE TABLE public.tests (
   id bigint NOT NULL DEFAULT nextval('tests_id_seq'::regclass),
   title character varying NOT NULL,
-  test_type character varying NOT NULL CHECK (test_type::text = ANY (ARRAY['full_mock'::character varying, 'part_practice'::character varying, 'custom'::character varying]::text[])),
+  test_type character varying NOT NULL,
   duration_minutes smallint NOT NULL,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT tests_pkey PRIMARY KEY (id)
@@ -282,7 +287,7 @@ CREATE TABLE public.vocab_examples_deprecated (
   word_id bigint NOT NULL,
   sentence_en text NOT NULL,
   sentence_vi text,
-  CONSTRAINT vocab_examples_pkey PRIMARY KEY (id),
+  CONSTRAINT vocab_examples_deprecated_pkey PRIMARY KEY (id),
   CONSTRAINT vocab_examples_word_id_fkey FOREIGN KEY (word_id) REFERENCES public.vocab_words(id)
 );
 CREATE TABLE public.vocab_relations (

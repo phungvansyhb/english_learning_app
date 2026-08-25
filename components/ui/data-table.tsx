@@ -124,7 +124,7 @@ export function DataTable<T>({
 												<td
 													key={`${String(rowId)}-${String(column.key)}`}
 													className={cn(
-														'px-4 py-3',
+														'px-4 py-3 align-baseline',
 														column.cellClassName,
 													)}>
 													{content}
