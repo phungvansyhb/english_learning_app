@@ -12,13 +12,22 @@ interface ModalProps {
 	description?: string;
 	children: React.ReactNode;
 	className?: string;
+	closeOnOutsideClick?: boolean;
 }
 
-export function Modal({ open, onClose, title, description, children, className }: ModalProps) {
+export function Modal({
+	open,
+	onClose,
+	title,
+	description,
+	children,
+	className,
+	closeOnOutsideClick = true,
+}: ModalProps) {
 	useEffect(() => {
 		if (!open) return;
 		const onKey = (e: KeyboardEvent) => {
-			if (e.key === 'Escape') onClose();
+			if (e.key === 'Escape' && closeOnOutsideClick) onClose();
 		};
 		document.addEventListener('keydown', onKey);
 		document.body.style.overflow = 'hidden';
@@ -26,7 +35,7 @@ export function Modal({ open, onClose, title, description, children, className }
 			document.removeEventListener('keydown', onKey);
 			document.body.style.overflow = '';
 		};
-	}, [open, onClose]);
+	}, [open, onClose, closeOnOutsideClick]);
 
 	if (!open) return null;
 
@@ -34,7 +43,7 @@ export function Modal({ open, onClose, title, description, children, className }
 		<div className='fixed inset-0 z-60 flex items-end justify-center p-0 sm:items-center sm:p-4'>
 			<div
 				aria-hidden
-				onClick={onClose}
+				onClick={closeOnOutsideClick ? onClose : undefined}
 				className='absolute inset-0 bg-foreground/40 backdrop-blur-sm'
 			/>
 			<div

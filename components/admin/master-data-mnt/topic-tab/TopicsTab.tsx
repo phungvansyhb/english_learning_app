@@ -254,19 +254,12 @@ function TopicFormModal({
 				onSubmit={handleSubmit(submit)}
 				className='flex min-h-0 flex-1 flex-col'>
 				<div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
-					<div>
-						<label
-							className={labelClass}
-							htmlFor='topic-name'>
-							Name
-						</label>
 						<Field
 							label='Name'
-							placeholder='Grammar'
+							placeholder='Enter topic name'
 							error={errors.name}
 							{...register('name', { required: 'Name is required.' })}
 						/>
-					</div>
 				</div>
 
 				{error && <StatusError message={error} />}

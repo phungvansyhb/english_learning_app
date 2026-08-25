@@ -27,15 +27,7 @@
   font-weight: 700;
 }
 
-/* Words the user has already looked up in the dictionary. Painted via the
-   CSS Custom Highlight API (see LookedUpHighlighter). Only a limited set of
-   properties are allowed on ::highlight — background, color, text-decoration. */
-::highlight(looked-up) {
-  background-color: color-mix(in oklab, var(--brand-mint) 55%, transparent);
-  color: var(--brand-mint-foreground);
-  text-decoration: underline dotted;
-  text-underline-offset: 3px;
-}
+
 
 @custom-variant dark (&:is(.dark *));
 

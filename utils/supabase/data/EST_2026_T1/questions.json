@@ -1,0 +1,1061 @@
+[
+    {
+        "content": "",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-01.mp3",
+        "image_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/media/E26-T01-01.jpg",
+        "transcript": "",
+        "explanation": "Ảnh có 1 người - Mô tả hành động/trạng thái của người\n(A) Sai động từ. Người phụ nữ không phải đang bê một khay thức ăn nên chọn sai.\n(B) Đúng. Người phụ nữ đang mặc một chiếc áo khoác nên chọn đáp án này.\n(C) Sai động từ. Người phụ nữ không phải đang buộc tóc nên chọn sai.\n(D) Sai động từ. Người phụ nữ không phải đang cởi mũ ra nên chọn sai.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "The woman is carrying a tray of food.",
+                "is_correct": false,
+                "transcript": "Người phụ nữ đang bê một khay thức ăn."
+            },
+            {
+                "label": "B",
+                "content": "The woman is wearing a jacket.",
+                "is_correct": true,
+                "transcript": "Người phụ nữ đang mặc một chiếc áo khoác."
+            },
+            {
+                "label": "C",
+                "content": "The woman is tying up her hair.",
+                "is_correct": false,
+                "transcript": "Người phụ nữ đang buộc tóc."
+            },
+            {
+                "label": "D",
+                "content": "The woman is removing her hat.",
+                "is_correct": false,
+                "transcript": "Người phụ nữ đang cởi mũ ra."
+            }
+        ],
+        "order_index": "1",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "1",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-02.mp3",
+        "image_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/media/E26-T01-02.jpg",
+        "transcript": "",
+        "explanation": "Ảnh có từ 2 người trở lên - Mô tả hành động/trạng thái của người\n(A) Sai động từ. Không thấy hình ảnh mọi người đứng cạnh tủ đựng hồ sơ nên chọn sai.\n(B) Sai động từ. Không thấy hình ảnh mọi người đang lục tìm trong bàn làm việc nên chọn sai.\n(C) Sai danh từ (danh từ không có trong ảnh). Không thấy hình ảnh xem thuyết trình trong bức ảnh nên chọn sai.\n(D) Đúng. Thấy hình ảnh mọi người đang nhìn vào một cuốn sách nên chọn đáp án này.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "Some people are standing next to a filing cabinet.",
+                "is_correct": false,
+                "transcript": "Một vài người đang đứng cạnh tủ đựng hồ sơ."
+            },
+            {
+                "label": "B",
+                "content": "Some people are searching through a desk.",
+                "is_correct": false,
+                "transcript": "Một vài người đang lục tìm trong bàn làm việc."
+            },
+            {
+                "label": "C",
+                "content": "Some people are watching a presentation.",
+                "is_correct": false,
+                "transcript": "Một vài người đang xem một bài thuyết trình."
+            },
+            {
+                "label": "D",
+                "content": "Some people are looking at a book.",
+                "is_correct": true,
+                "transcript": "Một vài người đang nhìn vào một cuốn sách."
+            }
+        ],
+        "order_index": "2",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "1",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-03.mp3",
+        "image_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/media/E26-T01-03.jpg",
+        "transcript": "",
+        "explanation": "Ảnh có từ 2 người trở lên - Mô tả kết hợp Người/Vật/Phong cảnh\n(A) Sai động từ. Người phụ nữ không phải đang áp điện thoại lên tai nên chọn sai.\n(B) Sai động từ. Người phụ nữ không phải đang rót đồ uống vào ly nên chọn sai.\n(C) Đúng. Có hình ảnh những bộ đèn đang treo trên trần nhà nên chọn đáp án này.\n(D) Sai động từ. Các viên gạch không phải đang được lắp đặt/lát nên chọn sai.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "A woman is holding a phone up to her ear.",
+                "is_correct": false,
+                "transcript": "Người phụ nữ đang áp điện thoại lên tai."
+            },
+            {
+                "label": "B",
+                "content": "A woman is pouring a beverage into a glass.",
+                "is_correct": false,
+                "transcript": "Người phụ nữ đang rót đồ uống vào ly."
+            },
+            {
+                "label": "C",
+                "content": "Some light fixtures are hanging from the ceiling.",
+                "is_correct": true,
+                "transcript": "Một vài bộ đèn đang treo trên trần nhà."
+            },
+            {
+                "label": "D",
+                "content": "Some tiles are being installed in a hallway.",
+                "is_correct": false,
+                "transcript": "Một vài viên gạch đang được lát ở hành lang."
+            }
+        ],
+        "order_index": "3",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "1",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-04.mp3",
+        "image_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/media/E26-T01-04.jpg",
+        "transcript": "",
+        "explanation": "Ảnh có 1 người - Mô tả kết hợp Người/Vật/Phong cảnh\n(A) Đúng. Các dụng cụ sơn đang được bày/trải ra trên sàn nhà nên chọn đáp án này.\n(B) Sai động từ. Người đàn ông không phải đang đặt cọ sơn xuống bệ cửa sổ nên chọn sai.\n(C) Sai động từ. Người đàn ông không phải đang xách lon sơn lên nên chọn sai.\n(D) Sai vị trí. Các lon sơn không phải được đặt trên ghế bậc thang nên chọn sai.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "Painting supplies have been laid out on the floor.",
+                "is_correct": true,
+                "transcript": "Các dụng cụ sơn đã được trải ra trên sàn nhà."
+            },
+            {
+                "label": "B",
+                "content": "He's laying a brush down on a windowsill.",
+                "is_correct": false,
+                "transcript": "Người đàn ông đang đặt một chiếc cọ sơn xuống bệ cửa sổ."
+            },
+            {
+                "label": "C",
+                "content": "He's lifting a can of paint by its handle.",
+                "is_correct": false,
+                "transcript": "Người đàn ông đang xách lon sơn lên bằng quai cầm."
+            },
+            {
+                "label": "D",
+                "content": "Cans of paint have been placed on a step stool.",
+                "is_correct": false,
+                "transcript": "Các lon sơn đã được đặt trên ghế bậc thang."
+            }
+        ],
+        "order_index": "4",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "1",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-05.mp3",
+        "image_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/media/E26-T01-05.jpg",
+        "transcript": "",
+        "explanation": "Ảnh có từ 2 người trở lên - Mô tả kết hợp Người/Vật/Phong cảnh\n(A) Đúng. Thùng gỗ chứa đầy rau củ nên chọn đáp án này.\n(B) Sai động từ. Không có người đàn ông nào đang bỏ rau củ vào túi mua sắm nên chọn sai.\n(C) Sai động từ. Không có chiếc ba lô nào đang được đặt trên mặt đất nên chọn sai.\n(D) Sai động từ. Không có người đàn ông nào đang thò tay vào trong xô nên chọn sai.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "A wooden crate is filled with vegetables.",
+                "is_correct": true,
+                "transcript": "Một chiếc thùng gỗ chứa đầy rau củ."
+            },
+            {
+                "label": "B",
+                "content": "One of the men is putting vegetables into a shopping bag.",
+                "is_correct": false,
+                "transcript": "Một trong những người đàn ông đang cho rau củ vào túi mua sắm."
+            },
+            {
+                "label": "C",
+                "content": "A backpack has been set on the ground.",
+                "is_correct": false,
+                "transcript": "Một chiếc ba lô đã được đặt trên mặt đất."
+            },
+            {
+                "label": "D",
+                "content": "One of the men is reaching into a bucket.",
+                "is_correct": false,
+                "transcript": "Một trong những người đàn ông đang thò tay vào trong một chiếc xô."
+            }
+        ],
+        "order_index": "5",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "1",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-06.mp3",
+        "image_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/media/E26-T01-06.jpg",
+        "transcript": "",
+        "explanation": "Ảnh chỉ có Đồ vật/Phong cảnh - Mô tả phong cảnh\n(A) Sai danh từ (danh từ không có trong ảnh). Không thấy hình ảnh những cành cây gãy rơi xuống trong bức ảnh nên chọn sai.\n(B) Sai động từ. Cái cây không phải đang nằm ngửa/ngang ra trên bãi cỏ nên chọn sai.\n(C) Đúng. Nước đang đọng lại thành vũng trên lối đi nên chọn đáp án này.\n(D) Sai danh từ (danh từ không có trong ảnh). Không thấy hình ảnh những người đi xe đạp trong bức ảnh nên chọn sai.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "A path is covered with fallen branches.",
+                "is_correct": false,
+                "transcript": "Lối đi bị phủ đầy bởi những cành cây gãy rơi xuống."
+            },
+            {
+                "label": "B",
+                "content": "A tree is lying across a grassy area.",
+                "is_correct": false,
+                "transcript": "Một cái cây đang nằm ngửa ra trên bãi cỏ."
+            },
+            {
+                "label": "C",
+                "content": "Some water has pooled on a path.",
+                "is_correct": true,
+                "transcript": "Nước đọng lại thành vũng trên lối đi."
+            },
+            {
+                "label": "D",
+                "content": "Some cyclists are riding through a field.",
+                "is_correct": false,
+                "transcript": "Một vài người đi xe đạp đang chạy qua cánh đồng."
+            }
+        ],
+        "order_index": "6",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "1",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Where is the conference being held?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-07.mp3",
+        "image_url": "",
+        "transcript": "Hội nghị được tổ chức ở đâu?",
+        "explanation": "Câu hỏi 'Where' hỏi về địa điểm tổ chức hội nghị.\n(A) Không liên quan đến câu hỏi. Đây là câu trả lời cho câu hỏi 'How long'.\n(B) Đúng. Trả lời bằng một địa điểm cụ thể (Tại khách sạn Riverview) nơi hội nghị diễn ra.\n(C) Không liên quan. Mặc dù là cụm từ chỉ vị trí phù hợp với 'Where', nhưng đây không phải là nơi thích hợp để tổ chức một sự kiện.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "A three-day vacation.",
+                "is_correct": false,
+                "transcript": "Một kỳ nghỉ kéo dài 3 ngày."
+            },
+            {
+                "label": "B",
+                "content": "At the Riverview Hotel.",
+                "is_correct": true,
+                "transcript": "Tại khách sạn Riverview."
+            },
+            {
+                "label": "C",
+                "content": "In the supply cabinet.",
+                "is_correct": false,
+                "transcript": "Trong tủ đựng đồ dùng."
+            }
+        ],
+        "order_index": "7",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "When does the warehouse manager arrive?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-08.mp3",
+        "image_url": "",
+        "transcript": "Khi nào thì quản lý kho đến?",
+        "explanation": "Câu hỏi 'When' hỏi thời gian đến của quản lý kho.\n(A) Bẫy Yes/No. Câu hỏi bắt đầu bằng từ hỏi 'When' không thể trả lời bằng Yes/No hay các từ đồng ý tương tự như 'Sure'.\n(B) Không liên quan. Đây là câu trả lời cho câu hỏi 'How many'.\n(C) Đúng. Trả lời bằng mốc thời gian ước chừng (Phải đến chiều nay).",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "Sure, no problem.",
+                "is_correct": false,
+                "transcript": "Tất nhiên rồi, không vấn đề gì."
+            },
+            {
+                "label": "B",
+                "content": "About twelve shipping boxes.",
+                "is_correct": false,
+                "transcript": "Khoảng 12 thùng hàng vận chuyển."
+            },
+            {
+                "label": "C",
+                "content": "Not until this afternoon.",
+                "is_correct": true,
+                "transcript": "Phải đến chiều nay."
+            }
+        ],
+        "order_index": "8",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "There's a nice park nearby, right?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-09.mp3",
+        "image_url": "",
+        "transcript": "Có một công viên đẹp ở gần đây, đúng không?",
+        "explanation": "Câu hỏi đuôi xác nhận xem có công viên đẹp ở gần không.\n(A) Không liên quan đến câu hỏi.\n(B) Đúng. Đồng ý (Yes) và bổ sung thông tin vị trí cụ thể (Nó ở cạnh hồ Greendale).\n(C) Bẫy từ gần âm. Dùng từ 'parking' có âm gần giống với từ 'park' trong câu hỏi.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "Did you order paper for the copier?",
+                "is_correct": false,
+                "transcript": "Bạn đã đặt giấy cho máy photo chưa?"
+            },
+            {
+                "label": "B",
+                "content": "Yes—it's next to Greendale Lake.",
+                "is_correct": true,
+                "transcript": "Đúng vậy, nó ở cạnh hồ Greendale."
+            },
+            {
+                "label": "C",
+                "content": "They're in the parking garage.",
+                "is_correct": false,
+                "transcript": "Họ đang ở trong nhà xe."
+            }
+        ],
+        "order_index": "9",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Who sent the meeting minutes to the accounting department?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-10.mp3",
+        "image_url": "",
+        "transcript": "Ai đã gửi biên bản cuộc họp cho bộ phận kế toán?",
+        "explanation": "Câu hỏi 'Who' hỏi người đã gửi biên bản cuộc họp.\n(A) Đúng. Trả lời trực tiếp bằng một chức danh cụ thể (Trợ lý văn phòng của chúng tôi).\n(B) Bẫy từ gần âm. Dùng từ 'account' có phát âm tương tự với 'accounting' trong câu hỏi.\n(C) Bẫy liên tưởng. Dùng các từ 'Cash' và 'credit cards' dễ liên tưởng đến lĩnh vực 'accounting'.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "Our office assistant.",
+                "is_correct": true,
+                "transcript": "Trợ lý văn phòng của chúng tôi."
+            },
+            {
+                "label": "B",
+                "content": "They have a savings account.",
+                "is_correct": false,
+                "transcript": "Họ có một tài khoản tiết kiệm."
+            },
+            {
+                "label": "C",
+                "content": "Cash and credit cards.",
+                "is_correct": false,
+                "transcript": "Tiền mặt và thẻ tín dụng."
+            }
+        ],
+        "order_index": "10",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "I'd like to know what you think of our new finance analyst.",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-11.mp3",
+        "image_url": "",
+        "transcript": "Tôi muốn biết bạn nghĩ gì về chuyên viên phân tích tài chính mới của chúng ta.",
+        "explanation": "Câu trần thuật xin ý kiến/đánh giá về nhân viên mới.\n(A) Không liên quan đến nội dung câu trần thuật.\n(B) Đúng. Đưa ra ý kiến đánh giá trực tiếp (Anh ấy có vẻ rất năng nổ/giỏi giang).\n(C) Bẫy từ gần âm. Dùng từ 'finally' có phát âm tương tự từ 'finance' trong câu hỏi.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "I've prepared the decorations for tomorrow.",
+                "is_correct": false,
+                "transcript": "Tôi đã chuẩn bị đồ trang trí cho ngày mai."
+            },
+            {
+                "label": "B",
+                "content": "He seems very competent.",
+                "is_correct": true,
+                "transcript": "Anh ấy có vẻ rất năng nổ và có năng lực."
+            },
+            {
+                "label": "C",
+                "content": "It's finally stopped raining.",
+                "is_correct": false,
+                "transcript": "Cuối cùng trời cũng tạnh mưa."
+            }
+        ],
+        "order_index": "11",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Let's go on the company retreat.",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-12.mp3",
+        "image_url": "",
+        "transcript": "Chúng ta hãy đi dã ngoại công ty đi.",
+        "explanation": "Câu trần thuật đề xuất/rủ rê đi dã ngoại.\n(A) Không liên quan. Đại từ 'he' không có đối tượng tương ứng được nhắc tới trước đó.\n(B) Đúng. Đồng ý với lời đề nghị (Được đấy, đó là một ý hay).\n(C) Không liên quan. Đại từ 'He' không đề cập đến ai trong câu đề nghị.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "Oh, did he?",
+                "is_correct": false,
+                "transcript": "Ồ, anh ấy đã làm vậy sao?"
+            },
+            {
+                "label": "B",
+                "content": "Yes, that's a good idea.",
+                "is_correct": true,
+                "transcript": "Vâng, đó là một ý kiến hay."
+            },
+            {
+                "label": "C",
+                "content": "He tried to solve that problem.",
+                "is_correct": false,
+                "transcript": "Anh ấy đã cố giải quyết vấn đề đó."
+            }
+        ],
+        "order_index": "12",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "What time can I pick up my glasses?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-13.mp3",
+        "image_url": "",
+        "transcript": "Mấy giờ tôi có thể đến lấy kính của mình?",
+        "explanation": "Câu hỏi 'What time' hỏi về thời gian lấy kính.\n(A) Bẫy Yes/No. Câu hỏi 'What' không thể trả lời bằng Yes/No.\n(B) Không liên quan. Đây là câu trả lời cho câu hỏi độ dài/khoảng cách ('How long' hoặc 'How far').\n(C) Đúng. Trả lời gián tiếp bằng việc thông báo giờ đóng cửa (Chúng tôi đóng cửa lúc 6 giờ), ngụ ý phải đến trước giờ đó.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "No, it's not very heavy.",
+                "is_correct": false,
+                "transcript": "Không, nó không nặng lắm."
+            },
+            {
+                "label": "B",
+                "content": "About twenty meters.",
+                "is_correct": false,
+                "transcript": "Khoảng 20 mét."
+            },
+            {
+                "label": "C",
+                "content": "We close at six o'clock.",
+                "is_correct": true,
+                "transcript": "Chúng tôi đóng cửa lúc 6 giờ."
+            }
+        ],
+        "order_index": "13",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "The sales team knows how to use the tracking software, don't they?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-14.mp3",
+        "image_url": "",
+        "transcript": "Đội bán hàng biết cách sử dụng phần mềm theo dõi rồi chứ, đúng không?",
+        "explanation": "Câu hỏi đuôi xác nhận xem đội bán hàng đã biết dùng phần mềm chưa.\n(A) Không liên quan. Câu trả lời dành cho câu hỏi 'Where'.\n(B) Không liên quan. Câu trả lời dành cho câu hỏi 'When'.\n(C) Đúng. Trả lời gián tiếp rằng bản thân không chắc chắn/chưa rõ (Tôi vẫn chưa thấy họ sử dụng nó).",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "It's on the lower shelf.",
+                "is_correct": false,
+                "transcript": "Nó ở trên kệ bên dưới."
+            },
+            {
+                "label": "B",
+                "content": "A twelve-thirty departure.",
+                "is_correct": false,
+                "transcript": "Chuyến khởi hành lúc 12:30."
+            },
+            {
+                "label": "C",
+                "content": "I haven't seen them using it yet.",
+                "is_correct": true,
+                "transcript": "Tôi vẫn chưa thấy họ sử dụng nó."
+            }
+        ],
+        "order_index": "14",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Are you going to the hardware store on Mill Street?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-15.mp3",
+        "image_url": "",
+        "transcript": "Bạn có đang đi đến cửa hàng kim khí ở đường Mill không?",
+        "explanation": "Câu hỏi Be-verb hỏi xem có phải đang đến cửa hàng kim khí không.\n(A) Đúng. Trả lời gián tiếp phủ định (Cửa hàng đó vẫn chưa mở cửa), ngụ ý không thể đi đến đó được.\n(B) Không liên quan đến câu hỏi.\n(C) Bẫy liên tưởng. Dùng các từ 'nails' và 'hammer' dễ liên tưởng đến cửa hàng kim khí ('hardware store').",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "That store hasn't opened yet.",
+                "is_correct": true,
+                "transcript": "Cửa hàng đó vẫn chưa mở cửa."
+            },
+            {
+                "label": "B",
+                "content": "The blue package you sent me.",
+                "is_correct": false,
+                "transcript": "Bưu kiện màu xanh mà bạn đã gửi cho tôi."
+            },
+            {
+                "label": "C",
+                "content": "Some nails and a hammer.",
+                "is_correct": false,
+                "transcript": "Vài cái đinh và một chiếc búa."
+            }
+        ],
+        "order_index": "15",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Would you be able to write the introduction for the workshop?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-16.mp3",
+        "image_url": "",
+        "transcript": "Bạn có thể viết phần giới thiệu cho buổi hội thảo được không?",
+        "explanation": "Câu hỏi nhờ vả/yêu cầu viết bài giới thiệu.\n(A) Bẫy liên tưởng. Dùng từ 'book' liên tưởng đến hành động 'write'.\n(B) Đúng. Đồng ý nhận lời giúp đỡ (Được chứ, tôi rất sẵn lòng).\n(C) Không liên quan. Đại từ 'He' không xuất hiện đối tượng tham chiếu trong câu hỏi.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "That was a great book.",
+                "is_correct": false,
+                "transcript": "Đó là một cuốn sách tuyệt vời."
+            },
+            {
+                "label": "B",
+                "content": "OK, I'd be happy to.",
+                "is_correct": true,
+                "transcript": "Được chứ, tôi rất sẵn lòng."
+            },
+            {
+                "label": "C",
+                "content": "He doesn't have any more.",
+                "is_correct": false,
+                "transcript": "Anh ấy không còn cái nào nữa."
+            }
+        ],
+        "order_index": "16",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "I picked up some flowers for Tunji's retirement party.",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-17.mp3",
+        "image_url": "",
+        "transcript": "Tôi đã mua một ít hoa cho buổi tiệc nghỉ hưu của Tunji.",
+        "explanation": "Câu trần thuật cung cấp thông tin đã mua hoa.\n(A) Bẫy từ biến thể. Dùng từ 'pick' biến thể từ 'picked' trong câu hỏi.\n(B) Đúng. Lời khen ngợi/cảm ơn lịch sự đáp lại hành động chu đáo (Bạn thật là tinh tế/chu đáo).\n(C) Không liên quan đến nội dung câu trần thuật.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "No, pick any day.",
+                "is_correct": false,
+                "transcript": "Không, hãy chọn bất kỳ ngày nào."
+            },
+            {
+                "label": "B",
+                "content": "That was thoughtful.",
+                "is_correct": true,
+                "transcript": "Bạn thật là chu đáo."
+            },
+            {
+                "label": "C",
+                "content": "A delivery driver.",
+                "is_correct": false,
+                "transcript": "Một tài xế giao hàng."
+            }
+        ],
+        "order_index": "17",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Which meeting room did you tell the interns to go to?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-18.mp3",
+        "image_url": "",
+        "transcript": "Bạn đã bảo các thực tập sinh đến phòng họp nào?",
+        "explanation": "Câu hỏi 'Which' hỏi phòng họp cụ thể.\n(A) Đúng. Chỉ ra tên phòng họp cụ thể (Phòng Jefferson).\n(B) Bẫy lặp từ. Lặp lại từ 'meeting' trong câu hỏi.\n(C) Bẫy Yes/No. Câu hỏi bắt đầu bằng 'Which' không thể trả lời bằng Yes/No.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "The Jefferson Room.",
+                "is_correct": true,
+                "transcript": "Phòng Jefferson."
+            },
+            {
+                "label": "B",
+                "content": "The meeting was fun, thanks.",
+                "is_correct": false,
+                "transcript": "Cuộc họp rất vui, cảm ơn bạn."
+            },
+            {
+                "label": "C",
+                "content": "Yes, it's a conference call.",
+                "is_correct": false,
+                "transcript": "Vâng, đó là một cuộc họp qua điện thoại."
+            }
+        ],
+        "order_index": "18",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Is your dental appointment next Tuesday?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-19.mp3",
+        "image_url": "",
+        "transcript": "Lịch hẹn nha sĩ của bạn là vào Thứ Ba tuần tới phải không?",
+        "explanation": "Câu hỏi Be-verb xác nhận thời gian lịch hẹn nha sĩ.\n(A) Không liên quan đến câu hỏi.\n(B) Đúng. Trả lời gián tiếp rằng bản thân chưa chắc chắn và cần xem lại lịch (Tôi sẽ phải kiểm tra lại lịch của mình).\n(C) Không liên quan đến câu hỏi.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "You can borrow mine.",
+                "is_correct": false,
+                "transcript": "Bạn có thể mượn của tôi."
+            },
+            {
+                "label": "B",
+                "content": "I'll have to check my calendar.",
+                "is_correct": true,
+                "transcript": "Tôi sẽ phải kiểm tra lại lịch của mình."
+            },
+            {
+                "label": "C",
+                "content": "Yes, it was a good meeting.",
+                "is_correct": false,
+                "transcript": "Vâng, đó là một cuộc họp tốt."
+            }
+        ],
+        "order_index": "19",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Why aren't there any brochures in the lobby?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-20.mp3",
+        "image_url": "",
+        "transcript": "Tại sao không có tờ rơi nào ở sảnh vậy?",
+        "explanation": "Câu hỏi 'Why' hỏi lý do không có tờ rơi ở sảnh.\n(A) Bẫy Yes/No. Câu hỏi 'Why' không trả lời bằng Yes/No.\n(B) Không liên quan đến câu hỏi.\n(C) Đúng. Cung cấp nguyên nhân trực tiếp (Vì ai đó vừa lấy đi tờ cuối cùng rồi).",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "No, I haven't received my confirmation e-mail yet.",
+                "is_correct": false,
+                "transcript": "Chưa, tôi vẫn chưa nhận được email xác nhận."
+            },
+            {
+                "label": "B",
+                "content": "My winter coat.",
+                "is_correct": false,
+                "transcript": "Áo khoác mùa đông của tôi."
+            },
+            {
+                "label": "C",
+                "content": "Because someone just took the last one.",
+                "is_correct": true,
+                "transcript": "Bởi vì ai đó vừa lấy đi cái cuối cùng rồi."
+            }
+        ],
+        "order_index": "20",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "What's the process for submitting my expense report?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-21.mp3",
+        "image_url": "",
+        "transcript": "Quy trình nộp báo cáo chi phí của tôi như thế nào?",
+        "explanation": "Câu hỏi 'What' hỏi về quy trình nộp báo cáo chi phí.\n(A) Đúng. Hướng dẫn các bước cụ thể (Bạn gửi nó đến phòng tài chính).\n(B) Không liên quan. Đây là câu trả lời cho câu hỏi 'When'.\n(C) Không liên quan đến nội dung câu hỏi.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "You send it to the finance department.",
+                "is_correct": true,
+                "transcript": "Bạn gửi nó cho bộ phận tài chính."
+            },
+            {
+                "label": "B",
+                "content": "The end of the day.",
+                "is_correct": false,
+                "transcript": "Cuối ngày."
+            },
+            {
+                "label": "C",
+                "content": "That's correct.",
+                "is_correct": false,
+                "transcript": "Đúng rồi."
+            }
+        ],
+        "order_index": "21",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Do you sell your products online or in stores?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-22.mp3",
+        "image_url": "",
+        "transcript": "Bạn bán sản phẩm của mình trực tuyến hay tại các cửa hàng?",
+        "explanation": "Câu hỏi lựa chọn (Option Question) giữa 'online' hay 'in stores'.\n(A) Bẫy liên tưởng. Dùng từ 'twenty percent off' liên tưởng đến việc mua bán 'sell'.\n(B) Bẫy từ biến thể. Dùng 'product' có dạng từ cùng gốc với 'products'.\n(C) Đúng. Đưa ra lựa chọn một trong hai phương án được đưa ra (Chỉ bán trực tuyến).",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "About twenty percent off.",
+                "is_correct": false,
+                "transcript": "Giảm giá khoảng 20%."
+            },
+            {
+                "label": "B",
+                "content": "A product demonstration.",
+                "is_correct": false,
+                "transcript": "Buổi trình diễn sản phẩm."
+            },
+            {
+                "label": "C",
+                "content": "Only online.",
+                "is_correct": true,
+                "transcript": "Chỉ bán trực tuyến."
+            }
+        ],
+        "order_index": "22",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "How often do you charge this device?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-23.mp3",
+        "image_url": "",
+        "transcript": "Bao lâu thì bạn sạc thiết bị này một lần?",
+        "explanation": "Câu hỏi 'How often' hỏi về tần suất sạc thiết bị.\n(A) Đúng. Trả lời bằng tần suất tương ứng (Bất cứ khi nào đèn chuyển sang màu đỏ).\n(B) Bẫy liên tưởng. Dùng từ 'wireless' dễ liên tưởng tới thiết bị điện tử ('device').\n(C) Không liên quan. Câu trả lời dành cho câu hỏi 'Where'.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "Whenever the light turns red.",
+                "is_correct": true,
+                "transcript": "Bất cứ khi nào đèn chuyển sang màu đỏ."
+            },
+            {
+                "label": "B",
+                "content": "A wireless one.",
+                "is_correct": false,
+                "transcript": "Loại không dây."
+            },
+            {
+                "label": "C",
+                "content": "At the hardware store.",
+                "is_correct": false,
+                "transcript": "Tại cửa hàng kim khí."
+            }
+        ],
+        "order_index": "23",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "The tickets to Friday night's concert cost ten dollars each.",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-24.mp3",
+        "image_url": "",
+        "transcript": "Vé cho buổi hòa nhạc tối Thứ Sáu có giá 10 đô la mỗi vé.",
+        "explanation": "Câu trần thuật cung cấp thông tin về giá vé.\n(A) Đúng. Sửa lại/đính chính thông tin chính xác hơn (Thực ra là 15 đô la đấy).\n(B) Bẫy liên tưởng. Dùng từ 'guitar' dễ liên tưởng đến buổi hòa nhạc ('concert').\n(C) Bẫy liên tưởng. Dùng số 'five' do liên tưởng từ số 'ten' trong câu trần thuật.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "Actually, they're fifteen.",
+                "is_correct": true,
+                "transcript": "Thực ra là 15 đô la đấy."
+            },
+            {
+                "label": "B",
+                "content": "No, I can't play the guitar.",
+                "is_correct": false,
+                "transcript": "Không, tôi không biết chơi guitar."
+            },
+            {
+                "label": "C",
+                "content": "It's in aisle five.",
+                "is_correct": false,
+                "transcript": "Nó ở lối đi số 5."
+            }
+        ],
+        "order_index": "24",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Can't you update the database today?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-25.mp3",
+        "image_url": "",
+        "transcript": "Hôm nay bạn không thể cập nhật cơ sở dữ liệu được sao?",
+        "explanation": "Câu hỏi phủ định (Negative Question) xác nhận việc cập nhật cơ sở dữ liệu.\n(A) Đúng. Trả lời gián tiếp rằng công việc đã hoàn thành trước đó rồi (Tôi đã làm việc đó từ hôm qua rồi).\n(B) Không liên quan đến nội dung câu hỏi.\n(C) Không liên quan đến nội dung câu hỏi.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "I did it yesterday.",
+                "is_correct": true,
+                "transcript": "Tôi đã làm việc đó từ hôm qua rồi."
+            },
+            {
+                "label": "B",
+                "content": "That's an interesting movie.",
+                "is_correct": false,
+                "transcript": "Đó là một bộ phim thú vị."
+            },
+            {
+                "label": "C",
+                "content": "No, just me.",
+                "is_correct": false,
+                "transcript": "Không, chỉ có mình tôi."
+            }
+        ],
+        "order_index": "25",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "How are we going to fit the extra supplies in that closet?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-26.mp3",
+        "image_url": "",
+        "transcript": "Làm thế nào chúng ta xếp thêm đồ dùng vào cái tủ đó được đây?",
+        "explanation": "Câu hỏi 'How' hỏi phương cách cất giữ đồ vào tủ.\n(A) Không liên quan đến câu hỏi.\n(B) Đúng. Trả lời gián tiếp bằng cách thông báo người phụ trách công việc đó (Natalie phụ trách mảng đồ dùng/vật tư).\n(C) Không liên quan. Đây là câu trả lời cho câu hỏi 'Where'.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "I've already read them.",
+                "is_correct": false,
+                "transcript": "Tôi đã đọc chúng rồi."
+            },
+            {
+                "label": "B",
+                "content": "Natalie's in charge of supplies.",
+                "is_correct": true,
+                "transcript": "Natalie chịu trách nhiệm về đồ dùng/vật tư."
+            },
+            {
+                "label": "C",
+                "content": "It's the door at the end of the hallway.",
+                "is_correct": false,
+                "transcript": "Đó là cánh cửa ở cuối hành lang."
+            }
+        ],
+        "order_index": "26",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Have all the new windows been installed?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-27.mp3",
+        "image_url": "",
+        "transcript": "Tất cả cửa sổ mới đã được lắp đặt xong chưa?",
+        "explanation": "Câu hỏi trợ động từ (Have) hỏi về tiến độ lắp đặt cửa sổ.\n(A) Bẫy liên tưởng. Dùng từ 'blinds' do liên tưởng từ 'windows'.\n(B) Đúng. Trả lời gián tiếp bằng việc thông báo tiến độ công việc (Đội thi công sắp hoàn thành rồi).\n(C) Bẫy liên tưởng. Dùng từ 'ladder' (xà/thang) liên tưởng đến công việc thi công lắp đặt.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "Sure, I'll close the blinds.",
+                "is_correct": false,
+                "transcript": "Chắc chắn rồi, tôi sẽ kéo rèm xuống."
+            },
+            {
+                "label": "B",
+                "content": "The construction crew is almost finished.",
+                "is_correct": true,
+                "transcript": "Đội thi công sắp hoàn thành xong rồi."
+            },
+            {
+                "label": "C",
+                "content": "This isn't the tallest ladder available.",
+                "is_correct": false,
+                "transcript": "Đây không phải là cái thang cao nhất hiện có."
+            }
+        ],
+        "order_index": "27",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Where did you put the file with the survey results?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-28.mp3",
+        "image_url": "",
+        "transcript": "Bạn đã để hồ sơ có kết quả khảo sát ở đâu?",
+        "explanation": "Câu hỏi 'Where' hỏi vị trí cất giữ hồ sơ.\n(A) Đúng. Trả lời gián tiếp thông qua vị trí của tài liệu liên quan (Nó nằm cùng với các mẫu câu hỏi).\n(B) Không liên quan đến vị trí đặt hồ sơ.\n(C) Không liên quan đến nội dung câu hỏi.",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "It's with the questionnaires.",
+                "is_correct": true,
+                "transcript": "Nó ở cùng với các bảng câu hỏi."
+            },
+            {
+                "label": "B",
+                "content": "Mostly positive reviews.",
+                "is_correct": false,
+                "transcript": "Hầu hết là đánh giá tích cực."
+            },
+            {
+                "label": "C",
+                "content": "No, I haven't filled it out.",
+                "is_correct": false,
+                "transcript": "Chưa, tôi vẫn chưa điền vào đó."
+            }
+        ],
+        "order_index": "28",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Should I pay for the parking now or when we leave?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-29.mp3",
+        "image_url": "",
+        "transcript": "Tôi nên trả tiền đỗ xe bây giờ hay khi chúng ta rời đi?",
+        "explanation": "Câu hỏi lựa chọn giữa thanh toán 'bây giờ' (now) hay 'khi rời đi' (when we leave).\n(A) Bẫy từ gần âm. Dùng 'park' gần âm với 'parking' trong câu hỏi.\n(B) Không liên quan. Đây là câu trả lời cho câu hỏi mức phí/giá tiền ('How much').\n(C) Đúng. Chọn phương án trả tiền khi rời đi bằng cách nêu quy trình (Bạn quét vé tại lối ra).",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "Near the central park.",
+                "is_correct": false,
+                "transcript": "Gần công viên trung tâm."
+            },
+            {
+                "label": "B",
+                "content": "Ten dollars an hour.",
+                "is_correct": false,
+                "transcript": "10 đô la một giờ."
+            },
+            {
+                "label": "C",
+                "content": "You scan your ticket at the exit.",
+                "is_correct": true,
+                "transcript": "Bạn quét vé của mình ở lối ra."
+            }
+        ],
+        "order_index": "29",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Why don't we invite the client to lunch?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-30.mp3",
+        "image_url": "",
+        "transcript": "Tại sao chúng ta không mời khách hàng đi ăn trưa nhỉ?",
+        "explanation": "Cấu trúc 'Why don't we...' mang tính chất đề xuất/gợi ý.\n(A) Không liên quan đến nội dung câu gợi ý.\n(B) Bẫy từ biến thể/lặp từ. Dùng từ 'invited' biến thể từ 'invite'.\n(C) Đúng. Đồng ý với gợi ý và nhận nhiệm vụ đặt bàn (Ý hay đấy, tôi sẽ gọi đặt bàn).",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "A new catering company.",
+                "is_correct": false,
+                "transcript": "Một công ty dịch vụ ăn uống mới."
+            },
+            {
+                "label": "B",
+                "content": "I wasn't invited.",
+                "is_correct": false,
+                "transcript": "Tôi đã không được mời."
+            },
+            {
+                "label": "C",
+                "content": "Great idea, I'll call for a reservation.",
+                "is_correct": true,
+                "transcript": "Ý kiến tuyệt vời, tôi sẽ gọi điện đặt chỗ."
+            }
+        ],
+        "order_index": "30",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    },
+    {
+        "content": "Who is supervising the construction project?",
+        "audio_url": "https://tydekxcecnbylruwduyv.supabase.co/storage/v1/object/public/listen/E26-T01-31.mp3",
+        "image_url": "",
+        "transcript": "Ai đang giám sát dự án xây dựng vậy?",
+        "explanation": "Câu hỏi 'Who' hỏi về người chịu trách nhiệm giám sát.\n(A) Bẫy liên tưởng. Dùng từ 'building' dễ liên tưởng đến công trình xây dựng ('construction').\n(B) Không liên quan đến câu hỏi 'Who'.\n(C) Đúng. Trả lời bằng tên người cụ thể (Ms. Gomez đang đảm nhận việc đó).",
+        "question_choices": [
+            {
+                "label": "A",
+                "content": "Across from the new building.",
+                "is_correct": false,
+                "transcript": "Đối diện với tòa nhà mới."
+            },
+            {
+                "label": "B",
+                "content": "It should be completed soon.",
+                "is_correct": false,
+                "transcript": "Nó sẽ sớm được hoàn thành thôi."
+            },
+            {
+                "label": "C",
+                "content": "Ms. Gomez is handling that.",
+                "is_correct": true,
+                "transcript": "Cô Gomez đang đảm nhận việc đó."
+            }
+        ],
+        "order_index": "31",
+        "answer_type": "ONE",
+        "skill_id": "1",
+        "exam_part_id": "2",
+        "difficulty_id": "1",
+        "test_id": "3"
+    }
+]

@@ -123,5 +123,16 @@ export function LookedUpHighlighter({
         }
     }, [])
 
-    return null
+    return (
+        <style dangerouslySetInnerHTML={{
+            __html: `
+                ::highlight(looked-up) {
+                    background-color: color-mix(in oklab, var(--brand-mint) 55%, transparent);
+                    color: var(--brand-mint-foreground);
+                    text-decoration: underline dotted;
+                    text-underline-offset: 3px;
+                }
+            `
+        }} />
+    )
 }

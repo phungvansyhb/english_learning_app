@@ -272,12 +272,15 @@ export function WordsManager() {
 
 			<WordFormModal
 				open={formOpen}
-				word={editing}
+				word={null}
 				onClose={() => {
 					setFormOpen(false);
 					setEditing(null);
 				}}
-				onSave={handleSave}
+				onSuccess={()=>{
+					setFormOpen(false);
+					setEditing(null);
+				}}
 			/>
 
 			<Modal
