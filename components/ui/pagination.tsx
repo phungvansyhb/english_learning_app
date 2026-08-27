@@ -1,13 +1,17 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Button } from './button';
+import { useTransition } from 'react';
 
 type PaginationProps = {
 	page: number;
 	totalPages: number;
-	onPageChange: (page: number) => void;
+	onPageChange?: (page: number) => void;
 	pending?: boolean;
 	className?: string;
+	isPushToUrl?: boolean;
 };
 
 export function Pagination({
@@ -16,9 +20,41 @@ export function Pagination({
 	onPageChange,
 	pending = false,
 	className,
+	isPushToUrl = false,
 }: PaginationProps) {
+	const searchParams = useSearchParams();
+	const { push } = useRouter();
+	const pathname = usePathname();
+
+	const [isPending, startTransition] = useTransition();
 	const isFirstPage = page <= 1;
 	const isLastPage = page >= totalPages;
+
+	function handleNextPage(newPage: number) {
+		if (onPageChange) {
+			onPageChange(newPage);
+		}
+		if (isPushToUrl) {
+			const params = new URLSearchParams(searchParams.toString());
+			params.set('page', newPage.toString());
+			startTransition(async () => {
+				push(`${pathname}?${params.toString()}`, { scroll: false });
+			});
+		}
+	}
+
+	function handlePrevPage(newPage: number) {
+		if (onPageChange) {
+			onPageChange(newPage);
+		}
+		if (isPushToUrl) {
+			const params = new URLSearchParams(searchParams.toString());
+			params.set('page', newPage.toString());
+			startTransition(async () => {
+				push(`${pathname}?${params.toString()}`, { scroll: false });
+			});
+		}
+	}
 
 	return (
 		<div
@@ -30,30 +66,26 @@ export function Pagination({
 				Page {page} of {totalPages}
 			</p>
 			<div className='flex items-center gap-2'>
-				<button
-					type='button'
-					onClick={() => onPageChange(Math.max(1, page - 1))}
-					disabled={isFirstPage || pending}
+				<Button
+					onClick={() => handlePrevPage(Math.max(1, page - 1))}
+					disabled={isFirstPage || pending || isPending}
 					className={cn(
-						'h-11 rounded-full border border-border px-4 text-sm transition-colors',
-						isFirstPage || pending
+						isFirstPage || pending || isPending
 							? 'cursor-not-allowed text-muted-foreground bg-secondary'
 							: 'text-foreground bg-card hover:bg-secondary',
 					)}>
 					Previous
-				</button>
-				<button
-					type='button'
-					onClick={() => onPageChange(Math.min(totalPages, page + 1))}
-					disabled={isLastPage || pending}
+				</Button>
+				<Button
+					onClick={() => handleNextPage(Math.min(totalPages, page + 1))}
+					disabled={isLastPage || pending || isPending}
 					className={cn(
-						'h-11 rounded-full border border-border px-4 text-sm transition-colors',
-						isLastPage || pending
+						isLastPage || pending || isPending
 							? 'cursor-not-allowed text-muted-foreground bg-secondary'
 							: 'text-foreground bg-card hover:bg-secondary',
 					)}>
 					Next
-				</button>
+				</Button>
 			</div>
 		</div>
 	);

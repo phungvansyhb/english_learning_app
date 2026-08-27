@@ -34,10 +34,8 @@ export default function RootLayout({
 			lang='en'
 			className={`${jakarta.variable}`}>
 			<body className='font-sans antialiased'>
-				<ToastProvider>
-					{children}
-					{process.env.NODE_ENV === 'production' && <Analytics />}
-				</ToastProvider>
+				{children}
+				{process.env.NODE_ENV === 'production' && <Analytics />}
 			</body>
 		</html>
 	);
