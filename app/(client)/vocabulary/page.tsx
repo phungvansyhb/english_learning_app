@@ -1,12 +1,6 @@
-import React, { Suspense } from 'react';
-import { vocabCategories } from '@/lib/data';
-import CategoryVocab from '@/components/dashboard/vocabulary/category-vocab';
-import { getVocabWordCategories } from '@/services/vocab-word';
-import { Pagination } from '@/components/ui/pagination';
-import { Server } from 'http';
-import { GetServerSideProps } from 'next';
+import { ListCategory, ListCategorySuspense } from '@/components/dashboard/vocabulary/listCategory';
 import { ServerPageProps } from '@/lib/types';
-import { ListCategorySuspense, ListCategory } from '@/components/dashboard/vocabulary/listCategory';
+import { Suspense } from 'react';
 
 export default async function VocabScreen({ searchParams }: ServerPageProps) {
 	return (

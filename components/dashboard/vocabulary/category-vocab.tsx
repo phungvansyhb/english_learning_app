@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 type Props = {
-	id : number;
+	id: number;
 	imageUrl: string;
 	description: string;
 	wordCount: number;
@@ -31,7 +31,7 @@ export default function CategoryVocab({
 				cardClassName,
 			)}>
 			<Link
-				href={`/vocabulary/${encodeURIComponent(name.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}?id=${id}`}
+				href={`/vocabulary/${encodeURIComponent(name.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}?id=${id}&mode=try`}
 				className='flex flex-col h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'>
 				<div className='relative w-full h-30'>
 					<Image
@@ -48,24 +48,24 @@ export default function CategoryVocab({
 					</button>
 				</div>
 				<div className='p-2 md:p-4'>
-				<h3 className='font-semibold text-base text-pretty leading-snug'>{name}</h3>
+					<h3 className='font-semibold text-base text-pretty leading-snug'>{name}</h3>
 
-				<div className='mt-4'>
-					<div className='flex justify-between items-center mb-1.5 font-medium text-xs'>
-						<span>Progress</span>
-						<span>
-							{learnedword}/{wordCount}
-						</span>
+					<div className='mt-4'>
+						<div className='flex justify-between items-center mb-1.5 font-medium text-xs'>
+							<span>Progress</span>
+							<span>
+								{learnedword}/{wordCount}
+							</span>
+						</div>
+						<div className={cn('bg-primary/15 rounded-full w-full h-1.5')}>
+							<div
+								className={cn('bg-primary rounded-full h-full')}
+								style={{
+									width: `${Math.round((learnedword * 100) / wordCount)}%`,
+								}}
+							/>
+						</div>
 					</div>
-					<div className={cn('bg-primary/15 rounded-full w-full h-1.5')}>
-						<div
-							className={cn('bg-primary rounded-full h-full')}
-							style={{
-								width: `${Math.round((learnedword * 100) / wordCount)}%`,
-							}}
-						/>
-					</div>
-				</div>
 				</div>
 			</Link>
 		</article>

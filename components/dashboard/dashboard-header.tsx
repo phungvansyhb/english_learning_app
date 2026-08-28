@@ -9,11 +9,11 @@ const Noties = [
 		userId: 1,
 		description: 'vừa hoàn thành bài test TOEIC part 5',
 	},
-	{
-		userName: 'MaiTrang08_01',
-		userId: 2,
-		description: 'vừa hoàn thành bài test TOEIC part 1',
-	},
+	// {
+	// 	userName: 'MaiTrang08_01',
+	// 	userId: 2,
+	// 	description: 'vừa hoàn thành bài test TOEIC part 1',
+	// },
 ];
 
 export function DashboardHeader() {

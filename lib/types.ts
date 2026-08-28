@@ -316,4 +316,28 @@ export type WordCard = {
   created_at: string,
   ipa_us: string,
   difficulty_label: string,
+  collocations: {
+    id: string
+    phrase: string,
+    meaning_vi: string
+  }[],
+  meanings: {
+    id: string,
+    part_of_speech: string,
+    meaning: string,
+    example?: string,
+    example_meaning?: string,
+    is_primary_use: boolean
+  }[],
+  relations: {
+    relation_type: 'SYNONYMS' | 'ANTONYMS',
+    word: string,
+    meaning: string
+  }[]
 }
+
+export const VOCAB_MODE = {
+  LEARN: 'learn',
+  PLAY: 'play',
+  TRY: 'try',
+};
