@@ -319,7 +319,7 @@ export type WordCard = {
   collocations: {
     id: string
     phrase: string,
-    meaning_vi: string
+    meaning: string
   }[],
   meanings: {
     id: string,

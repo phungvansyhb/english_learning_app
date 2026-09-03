@@ -4,7 +4,7 @@ import TryMode from '@/components/dashboard/vocabulary/learn-modes/try-mode';
 import { Button } from '@/components/ui/button';
 import { ServerPageProps, VOCAB_MODE } from '@/lib/types';
 import { getCategoryById, getWordsByTopicId } from '@/services/vocab-word';
-import { ArrowLeft, BookOpen, Gamepad2, Headphones } from 'lucide-react';
+import { ArrowLeft, BookOpen, Gamepad2, Headphones, ListCheckIcon } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -33,7 +33,7 @@ export default async function VocabularyCategoryPage({ searchParams }: ServerPag
 						<Link
 							href={`/vocabulary/${encodeURIComponent(data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}?id=${data.id}&mode=${VOCAB_MODE.TRY}`}>
 							<Button variant={mode === VOCAB_MODE.TRY ? 'default' : 'ghost'}>
-								<Headphones /> Xem thử
+								<ListCheckIcon /> Tổng quan
 							</Button>
 						</Link>
 
@@ -46,7 +46,7 @@ export default async function VocabularyCategoryPage({ searchParams }: ServerPag
 						<Link
 							href={`/vocabulary/${encodeURIComponent(data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}?id=${data.id}&mode=${VOCAB_MODE.PLAY}`}>
 							<Button variant={mode === VOCAB_MODE.PLAY ? 'default' : 'ghost'}>
-								<Gamepad2 /> Chơi
+								<Gamepad2 /> Luyện tập
 							</Button>
 						</Link>
 					</div>
