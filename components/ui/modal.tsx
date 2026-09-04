@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { Button } from './button';
 
 interface ModalProps {
 	open: boolean;
@@ -61,13 +62,15 @@ export function Modal({
 							<p className='mt-0.5 text-sm text-muted-foreground'>{description}</p>
 						)}
 					</div>
-					<button
+					<Button
+						size='icon'
+						variant='secondary'
 						type='button'
 						onClick={onClose}
 						aria-label='Close dialog'
 						className='flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground transition-colors hover:text-foreground'>
 						<X className='size-5' />
-					</button>
+					</Button>
 				</div>
 				{children}
 			</div>
