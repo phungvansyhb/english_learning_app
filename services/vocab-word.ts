@@ -1,31 +1,9 @@
 'use server';
 
-import { BasePaginationOptions, TopicRow, WordCard } from '@/lib/types';
+import { BasePaginationOptions, InsertVocabDataPayload, TopicRow, WordCard } from '@/lib/types';
 import { getSupabaseServer } from '@/utils/supabase/server';
 
-export async function createVocabWord(input: {
-	word: string;
-	ipa_uk: string;
-	ipa_us: string;
-	topic_id: string;
-	difficulty_id: string;
-	meanings: Array<{
-		part_of_speech: string;
-		meaning: string;
-		example?: string;
-		example_meaning?: string;
-		is_primary_use: boolean;
-	}>;
-	collocations: Array<{
-		phrase: string;
-		meaning_vi: string;
-	}>;
-	relations: Array<{
-		relation_type: 'SYNONYMS' | 'ANTONYMS';
-		word: string;
-		meaning: string;
-	}>;
-}) {
+export async function createVocabWord(input: InsertVocabDataPayload) {
 	const supabase = await getSupabaseServer();
 	const { data: wordId, error: wordError } = await supabase.rpc('insert_vocab_data_v2', { p_data: input })
 	if (wordError) {
@@ -93,3 +71,37 @@ export async function getWordsByTopicId(topicId: string) {
 	}
 	return data as WordCard[];
 }
+
+export async function getWordByName(word : string){
+	const supabase = await getSupabaseServer();
+	const { data, error } = await supabase.rpc('get_vocab_words_by_topic', { p_topic_id: word });
+	if (error) {
+		console.error('getWordsByTopicId error', error);
+		throw error;
+	}
+	if (!data) {
+		throw new Error(`Words for topic with name not found`);
+	}
+	return data as WordCard;
+}
+
+// will call when user login to systen
+// return số từ đang học (LEARNING), số từ đã thuộc (MASTERED), và chuỗi ngày học (Streak)
+export async function getVocabStatus() { }
+
+// will call when user want to review vocab
+// return FE lấy danh sách danh sách các từ vựng đã đến hạn ôn (next_review_at <= NOW()) kèm thông tin từ vựng, câu ví dụ để hiển thị thẻ học.
+export async function getReviewVocabQueue() { }
+
+// will call when user learn a new word
+export async function reviewSubmit() { }
+
+// will call when user use dictionary to search word
+export async function saveVocab() {
+
+}
+// get all user saved word
+export async function getMyVocabWords() { }
+
+export async function deleteMySavedWord() { }
+export async function updateMySavedWord() { }

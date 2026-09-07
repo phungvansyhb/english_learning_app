@@ -21,6 +21,7 @@ export default function DashboardPage() {
 					<PerformanceAnalysis />
 				</div>
 			</div>
+			
 		</section>
 	);
 }

@@ -2,14 +2,20 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { WordCard } from '@/lib/types';
-import { CheckCircle2, RefreshCw, Star, Volume2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { CheckCircle2, PlayIcon, Star, Volume2 } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
 type Props = {
 	words: WordCard[];
 };
 
 export default function TryMode({ words }: Props) {
+	const pathName = usePathname();
+	const searchParams = useSearchParams();
+	const id = searchParams.get('id');
+
 	const [favorites, setFavorites] = useState<string[]>([]);
 	const [learned, setLearned] = useState<string[]>([]);
 	const speak = (item: WordCard) => {
@@ -31,6 +37,13 @@ export default function TryMode({ words }: Props) {
 		<div className='mx-auto max-w-5xl px-4 pb-12 '>
 			<div className='flex flex-col gap-3 py-2 md:flex-row md:items-center md:justify-between'>
 				<h2 className='font-semibold text-muted-foreground'>{words.length} thuật ngữ</h2>
+				<Button
+					variant='default'
+					size='icon-lg'>
+					<Link href={`${pathName}?id=${id}&mode=learn`}>
+						<PlayIcon />
+					</Link>
+				</Button>
 				<div className='flex flex-wrap items-center gap-2 text-sm'>
 					<span className='text-muted-foreground'>★ {favorites.length}</span>
 					<span className='text-muted-foreground'>✓ Đã thuộc ({learned.length})</span>
@@ -65,19 +78,7 @@ export default function TryMode({ words }: Props) {
 									aria-label={`Phát âm ${item.word}`}>
 									<Volume2 className='size-4' />
 								</Button>
-								<Button
-									size='icon'
-									variant='ghost'
-									onClick={() => toggle(favorites, setFavorites, item.word)}
-									aria-label={`Yêu thích ${item.word}`}
-									className={favorites.includes(item.word) ? 'text-primary' : ''}>
-									<Star
-										className='size-4'
-										fill={
-											favorites.includes(item.word) ? 'currentColor' : 'none'
-										}
-									/>
-								</Button>
+
 								<Button
 									size='icon'
 									variant='ghost'
@@ -135,6 +136,16 @@ export default function TryMode({ words }: Props) {
 						)}
 					</article>
 				))}
+			</div>
+			<br />
+			<div className='flex justify-center'>
+				<Button
+					variant='default'
+					size='icon-lg'>
+					<Link href={`${pathName}?id=${id}&mode=learn`}>
+						<PlayIcon />
+					</Link>
+				</Button>
 			</div>
 		</div>
 	);

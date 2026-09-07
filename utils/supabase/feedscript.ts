@@ -24,6 +24,8 @@ async function bulkInsertVocab() {
     }
 }
 
+
+
 async function bulkInsertQuestion(){
     const supabase = createSupabase();
     const [inserted , ...rest] = questionData;

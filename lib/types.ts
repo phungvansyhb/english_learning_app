@@ -307,6 +307,29 @@ export type CreateQuestionInput = {
   }[];
 };
 
+export interface InsertVocabDataPayload {
+  word: string;
+  ipa_uk?: string | null;
+  ipa_us?: string | null;
+  topic_id?: string
+  difficulty_id?: number | null;
+  meanings?: Array<{
+    part_of_speech: string;
+    meaning: string;
+    example?: string | null;
+    example_meaning?: string | null;
+    is_primary_use?: boolean | null;
+  }>;
+  collocations?: Array<{
+    phrase: string;
+    meaning_vi: string;
+  }>;
+  relations?: Array<{
+    relation_type: 'SYNONYMS' | 'ANTONYMS';
+    word: string;
+    meaning?: string | null;
+  }>;
+}
 
 export type WordCard = {
   id: number,

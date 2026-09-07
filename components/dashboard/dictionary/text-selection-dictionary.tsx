@@ -7,6 +7,7 @@ import { lookupWord, type DictionaryEntry } from "@/lib/dictionary-data"
 import { useLookedUpStore } from "@/utils/zustand/looked-up-store"
 import { DictionaryPopup } from "./dictionary-popup"
 import { LookedUpHighlighter } from "./looked-up-highlighter"
+import { translate } from "@/services/aidictionary"
 
 type Position = { top: number; left: number }
 type TriggerState = { position: Position; text: string } | null
@@ -84,9 +85,10 @@ export function TextSelectionDictionary({ children }: { children: React.ReactNod
     }
   }, [popup, clearAll])
 
-  const openPopup = () => {
+  const openPopup = async () => {
     if (!trigger) return
     const entry = lookupWord(trigger.text)
+    const translateData = await translate(trigger.text)
     markLookedUp(trigger.text)
 
     const left = Math.min(
