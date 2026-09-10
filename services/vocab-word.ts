@@ -72,17 +72,17 @@ export async function getWordsByTopicId(topicId: string) {
 	return data as WordCard[];
 }
 
-export async function getWordByName(word : string){
+export async function getWordByName(word: string) {
 	const supabase = await getSupabaseServer();
-	const { data, error } = await supabase.rpc('get_vocab_words_by_topic', { p_topic_id: word });
+	const { data, error } = await supabase.rpc('get_vocab_word_by_name', { p_word: word });
 	if (error) {
 		console.error('getWordsByTopicId error', error);
 		throw error;
 	}
 	if (!data) {
-		throw new Error(`Words for topic with name not found`);
+		return null
 	}
-	return data as WordCard;
+	return data as InsertVocabDataPayload;
 }
 
 // will call when user login to systen

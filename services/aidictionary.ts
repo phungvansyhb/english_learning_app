@@ -1,10 +1,10 @@
 import { Groq } from 'groq-sdk';
 import { z } from "zod";
 import { createVocabWord, getWordByName } from './vocab-word';
-import { InsertVocabDataPayload } from '@/lib/types';
+import { InsertVocabDataPayload, WordCard } from '@/lib/types';
 
 
-const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_KEY, dangerouslyAllowBrowser: true });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY, logLevel: 'debug' });
 const WordTranslatedScheam = z.object({
     word: z.string(),
     phonetic_uk: z.string(),
@@ -75,43 +75,37 @@ function mappingData(payload: VocabularyEntry) {
     return rs
 }
 
-export async function translate(word: string) {
+export async function translate(word: string): Promise<InsertVocabDataPayload> {
     const data = await getWordByName(word)
-    if(!data){
-        try {
-            const chatCompletion = await groq.chat.completions.create({
-                messages: [
-                    {
-                        role: 'system',
-                        content: 'Bạn là một từ điển Anh-Việt. Nhiệm vụ của bạn là dịch từ tiếng Anh sang tiếng Việt và trả về định dạng JSON chính xác theo schema được cung cấp. Không giải thích thêm.',
-                    },
-                    {
-                        role: 'user',
-                        content: `Từ cần dịch: ${word}`,
-                    },
-                ],
-                model: 'openai/gpt-oss-120b',
-                temperature: 0.1,
-                stream: false,
-                reasoning_effort: 'low',
-                reasoning_format: 'hidden',
-                response_format: {
-                    type: 'json_schema', json_schema: {
-                        name: "word_translate_schema",
-                        schema: z.toJSONSchema(WordTranslatedScheam)
-                    }
-                },
-            });
-            const rawContent = chatCompletion.choices[0]?.message?.content;
-            const data = JSON.parse(rawContent as string);
-            // console.log(data, (mappingData(data)))
-            createVocabWord(mappingData(data))
-            return data;
-        } catch (e) {
-            console.error(e)
-            return null
-        }
-    }
-    
+    if (data) return data;
+    const chatCompletion = await groq.chat.completions.create({
+        messages: [
+            {
+                role: 'system',
+                content: 'Bạn là một từ điển Anh-Việt. Nhiệm vụ của bạn là dịch từ tiếng Anh sang tiếng Việt và trả về định dạng JSON chính xác theo schema được cung cấp. Không giải thích thêm.',
+            },
+            {
+                role: 'user',
+                content: `Từ cần dịch: ${word}`,
+            },
+        ],
+        model: 'openai/gpt-oss-120b',
+        temperature: 0.1,
+        stream: false,
+        reasoning_effort: 'low',
+        reasoning_format: 'hidden',
+        response_format: {
+            type: 'json_schema', json_schema: {
+                name: "word_translate_schema",
+                schema: z.toJSONSchema(WordTranslatedScheam)
+            }
+        },
+    });
+    const rawContent = chatCompletion.choices[0]?.message?.content;
+    if (!rawContent) throw new Error('Groq returned an empty response');
 
+    const translatedData = WordTranslatedScheam.parse(JSON.parse(rawContent));
+    const rs = mappingData(translatedData)
+    createVocabWord(rs);
+    return rs;
 }

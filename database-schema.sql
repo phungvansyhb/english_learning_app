@@ -92,6 +92,8 @@ CREATE TABLE public.topics (
   id integer NOT NULL DEFAULT nextval('topics_id_seq'::regclass),
   name character varying NOT NULL UNIQUE,
   is_active boolean DEFAULT false,
+  description text,
+  image_url text,
   CONSTRAINT topics_pkey PRIMARY KEY (id)
 );
 CREATE TABLE public.difficulty_levels (
@@ -169,6 +171,7 @@ CREATE TABLE public.tests (
   test_type character varying NOT NULL,
   duration_minutes smallint NOT NULL,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
+  status USER-DEFINED DEFAULT 'INACTIVE'::test_status_enum,
   CONSTRAINT tests_pkey PRIMARY KEY (id)
 );
 CREATE TABLE public.test_questions (
@@ -445,4 +448,22 @@ CREATE TABLE public.word_meaning (
   is_primary_use boolean,
   CONSTRAINT word_meaning_pkey PRIMARY KEY (id),
   CONSTRAINT word_meaning_word_id_fkey FOREIGN KEY (word_id) REFERENCES public.vocab_words(id)
+);
+CREATE TABLE public.user_custom_category_vocab (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  user_id uuid,
+  name text,
+  description text,
+  CONSTRAINT user_custom_category_vocab_pkey PRIMARY KEY (id),
+  CONSTRAINT user_custom_category_vocab_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
+);
+CREATE TABLE public.vocab_word_user_custom_category (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  word_id bigint,
+  cate_id bigint,
+  CONSTRAINT vocab_word_user_custom_category_pkey PRIMARY KEY (id),
+  CONSTRAINT vocab_word_user_custom_category_word_id_fkey FOREIGN KEY (word_id) REFERENCES public.vocab_words(id),
+  CONSTRAINT vocab_word_user_custom_category_cate_id_fkey FOREIGN KEY (cate_id) REFERENCES public.user_custom_category_vocab(id)
 );
