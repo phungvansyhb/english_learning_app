@@ -308,6 +308,7 @@ export type CreateQuestionInput = {
 };
 
 export interface InsertVocabDataPayload {
+  id?: React.Key
   word: string;
   ipa_uk?: string | null;
   ipa_us?: string | null;

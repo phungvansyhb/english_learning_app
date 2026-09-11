@@ -1,10 +1,21 @@
 'use client';
 
-import { useState } from 'react';
-import { BookOpen, Check, ChevronDown, Plus, Sparkles, Volume2, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { type DictionaryEntry, type DictionaryMeaning, posLabels } from '@/lib/dictionary-data';
 import { InsertVocabDataPayload, PartOfSpeech } from '@/lib/types';
+import { cn } from '@/lib/utils';
+import {
+	addWordToCategory,
+	checkWordSavedInCate,
+	createUserVocabCategory,
+	listUserVocabCategories,
+	type UserVocabCategoryRow,
+} from '@/services/user-vocab-category';
+import { BookmarkIcon, ChevronDown, Loader2Icon, Plus, Sparkles, Volume2, X } from 'lucide-react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
+import ModalCreateCusCate, {
+	type CustomerCategoryFormValues,
+} from '../vocabulary/customer-category/modal-create-cus-cate';
+import MeaningTab from './meaning-tab';
 
 type TabKey = 'meaning' | 'phrases' | 'examples' | 'synonyms' | 'family';
 
@@ -15,8 +26,6 @@ const tabs: { key: TabKey; label: string }[] = [
 	{ key: 'synonyms', label: 'Đồng nghĩa' },
 	{ key: 'family', label: 'Họ từ' },
 ];
-
-const studySets = ['Giới từ · Học phần riêng', 'Từ vựng TOEIC', 'Business English', 'Daily words'];
 
 function mapVocabEntry(entry: InsertVocabDataPayload): DictionaryEntry {
 	const groups = new Map<string, DictionaryMeaning[]>();
@@ -35,6 +44,7 @@ function mapVocabEntry(entry: InsertVocabDataPayload): DictionaryEntry {
 	}
 
 	return {
+		id: entry.id!,
 		word: entry.word,
 		ipaUs: entry.ipa_us ?? '',
 		ipaUk: entry.ipa_uk ?? '',
@@ -71,16 +81,69 @@ export function DictionaryPopup({
 	const displayEntry = mapVocabEntry(entry);
 	const [tab, setTab] = useState<TabKey>('meaning');
 	const [withExamples, setWithExamples] = useState(true);
-	const [addToCart, setAddToCart] = useState(false);
-	const [learnOther, setLearnOther] = useState(true);
-	const [added, setAdded] = useState<string[]>([]);
-	const [studySet, setStudySet] = useState(studySets[0]);
+	const [categories, setCategories] = useState<UserVocabCategoryRow[]>([]);
+	const [selectedCategoryId, setSelectedCategoryId] = useState<React.Key | null>(null);
+	const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
+	const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+	const [categoryError, setCategoryError] = useState<string | null>(null);
+	const [isPending, startTransition] = useTransition();
 
-	const toggleAdd = (id: string) =>
-		setAdded((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+	const isSaved = useMemo(async () => {
+		if (selectedCategoryId && entry.id) {
+			return await checkWordSavedInCate(selectedCategoryId, entry.word);
+		}
+		return false;
+	}, [selectedCategoryId]);
+
+	useEffect(() => {
+		async function loadCategories() {
+			setIsCategoriesLoading(true);
+			try {
+				const data = await listUserVocabCategories();
+				setCategories(data);
+				setSelectedCategoryId(data[0] ? String(data[0].id) : null);
+			} catch (error) {
+				setCategoryError(error instanceof Error ? error.message : 'Không thể tải danh mục');
+			} finally {
+				setIsCategoriesLoading(false);
+			}
+		}
+
+		void loadCategories();
+	}, []);
+
+	const handleSaveWord = async () => {
+		if (selectedCategoryId && entry.id) {
+			startTransition(async () => {
+				await addWordToCategory(selectedCategoryId, entry.id as number);
+			});
+		} else window.alert('Please select category to insert');
+	};
+
+	function openCategoryModal() {
+		setCategoryError(null);
+		setIsCategoryModalOpen(true);
+	}
+
+	function handleCreateCategory(values: CustomerCategoryFormValues) {
+		setCategoryError(null);
+		startTransition(async () => {
+			try {
+				const createdCategory = await createUserVocabCategory({
+					name: values.name.trim(),
+					description: values.description.trim() || null,
+				});
+				setCategories((current) => [createdCategory, ...current]);
+				setSelectedCategoryId(String(createdCategory.id));
+				setIsCategoryModalOpen(false);
+			} catch (error) {
+				setCategoryError(error instanceof Error ? error.message : 'Không thể tạo danh mục');
+			}
+		});
+	}
 
 	return (
-		<div className='flex max-h-[32rem] w-[22rem] flex-col overflow-hidden rounded-2xl bg-card text-card-foreground shadow-2xl ring-1 ring-foreground/10'>
+		<div className='flex max-h-128 w-88 flex-col overflow-hidden rounded-2xl bg-card text-card-foreground shadow-2xl ring-1 ring-foreground/10'>
 			{/* Header */}
 			<div className='flex items-start justify-between gap-2 px-4 pt-4'>
 				<div className='flex items-center gap-2'>
@@ -92,7 +155,7 @@ export function DictionaryPopup({
 				<button
 					onClick={onClose}
 					aria-label='Đóng từ điển'
-					className='rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground'>
+					className='rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground cursor-pointer'>
 					<X className='size-4' />
 				</button>
 			</div>
@@ -137,8 +200,6 @@ export function DictionaryPopup({
 						entry={displayEntry}
 						withExamples={withExamples}
 						setWithExamples={setWithExamples}
-						added={added}
-						toggleAdd={toggleAdd}
 					/>
 				)}
 
@@ -222,178 +283,57 @@ export function DictionaryPopup({
 
 			{/* Footer */}
 			<div className='border-t bg-muted/40 px-4 py-3'>
-				<div className='mb-3 flex items-center justify-between text-sm'>
-					<CheckboxRow
-						checked={addToCart}
-						onChange={setAddToCart}
-						label='Vào giỏ'
-					/>
-					<CheckboxRow
-						checked={learnOther}
-						onChange={setLearnOther}
-						label='Học phần khác'
-					/>
-				</div>
 				<div className='flex items-center gap-2'>
 					<div className='relative flex-1'>
 						<select
-							value={studySet}
-							onChange={(event) => setStudySet(event.target.value)}
+							value={selectedCategoryId as string}
+							onChange={(event) => setSelectedCategoryId(event.target.value)}
 							aria-label='Chọn học phần'
+							disabled={isCategoriesLoading || isPending}
 							className='h-9 w-full appearance-none rounded-lg border bg-card px-3 pr-8 text-sm font-medium text-foreground outline-none focus:border-ring focus:ring-3 focus:ring-ring/30'>
-							{studySets.map((set) => (
-								<option
-									key={set}
-									value={set}>
-									{set}
-								</option>
-							))}
+							{isCategoriesLoading ? (
+								<option value=''>Đang tải học phần...</option>
+							) : categories.length === 0 ? (
+								<option value=''>Chưa có học phần</option>
+							) : (
+								categories.map((category) => (
+									<option
+										key={category.id}
+										value={category.id}>
+										{category.name}
+									</option>
+								))
+							)}
 						</select>
 						<ChevronDown className='pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground' />
 					</div>
-					<button className='inline-flex h-9 items-center gap-1 rounded-lg border px-2.5 text-sm font-medium transition-colors hover:bg-muted'>
+					<button
+						type='button'
+						className='cursor-pointer inline-flex h-9 items-center gap-1 rounded-lg border px-2.5 text-sm font-medium transition-colors hover:bg-muted'
+						onClick={openCategoryModal}>
 						<Plus className='size-4' /> Mới
 					</button>
 					<button
-						aria-label='Mở học phần'
-						className='inline-flex size-9 items-center justify-center rounded-lg border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground'>
-						<BookOpen className='size-4' />
+						aria-label='Lưu lại'
+						className='inline-flex size-9 items-center justify-center rounded-lg border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground cursor-pointer'
+						onClick={handleSaveWord}>
+						{isPending ? (
+							<Loader2Icon className='size-4 animate-spin' />
+						) : (
+							<BookmarkIcon className='size-4' />
+						)}
 					</button>
 				</div>
 			</div>
-		</div>
-	);
-}
-
-function MeaningTab({
-	entry,
-	withExamples,
-	setWithExamples,
-	added,
-	toggleAdd,
-}: {
-	entry: DictionaryEntry;
-	withExamples: boolean;
-	setWithExamples: (value: boolean) => void;
-	added: string[];
-	toggleAdd: (id: string) => void;
-}) {
-	return (
-		<div className='flex flex-col gap-3'>
-			<CheckboxRow
-				checked={withExamples}
-				onChange={setWithExamples}
-				label='Kèm ví dụ khi thêm từ'
+			<ModalCreateCusCate
+				open={isCategoryModalOpen}
+				onClose={() => !isPending && setIsCategoryModalOpen(false)}
+				onSubmit={handleCreateCategory}
+				editingCategory={null}
+				isBusy={isPending}
+				error={categoryError}
 			/>
-
-			<button className='flex items-center justify-between rounded-xl border border-dashed border-primary/40 px-3 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/5'>
-				<span className='flex items-center gap-2'>
-					<Plus className='size-4' /> Thêm nghĩa riêng của bạn
-				</span>
-				<Plus className='size-4' />
-			</button>
-
-			{entry.groups.map((group) => (
-				<div
-					key={group.pos}
-					className='flex flex-col gap-2'>
-					<p className='text-xs font-bold uppercase tracking-wide text-brand-orange'>
-						{group.pos}
-					</p>
-					{group.meanings.map((meaning) => (
-						<MeaningCard
-							key={meaning.meaning}
-							id={`${group.pos}-${meaning.meaning}`}
-							meaning={meaning}
-							withExamples={withExamples}
-							added={added}
-							toggleAdd={toggleAdd}
-						/>
-					))}
-				</div>
-			))}
 		</div>
-	);
-}
-
-function MeaningCard({
-	id,
-	meaning,
-	withExamples,
-	added,
-	toggleAdd,
-}: {
-	id: string;
-	meaning: DictionaryMeaning;
-	withExamples: boolean;
-	added: string[];
-	toggleAdd: (id: string) => void;
-}) {
-	const isAdded = added.includes(id);
-	return (
-		<div className='rounded-xl bg-secondary p-3'>
-			<div className='flex items-start justify-between gap-2'>
-				<div>
-					<p className='font-semibold text-foreground'>{meaning.meaning}</p>
-					<p className='mt-0.5 text-xs leading-5 text-muted-foreground'>
-						{meaning.definition}
-					</p>
-				</div>
-				<button
-					onClick={() => toggleAdd(id)}
-					className={cn(
-						'inline-flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors',
-						isAdded
-							? 'bg-primary text-primary-foreground'
-							: 'bg-brand-purple/40 text-accent-foreground hover:bg-brand-purple/60',
-					)}>
-					{isAdded ? <Check className='size-3.5' /> : <Plus className='size-3.5' />}
-					{isAdded ? 'Added' : 'Add'}
-				</button>
-			</div>
-			{withExamples &&
-				meaning.examples.map((example, index) => (
-					<div
-						key={index}
-						className='mt-2 border-l-2 border-primary/30 pl-2.5 text-xs'>
-						<p className='leading-5 text-foreground'>
-							<span className='font-semibold text-primary'>VD: </span>
-							{example.en}
-						</p>
-						<p className='mt-0.5 italic leading-5 text-muted-foreground'>
-							{example.vi}
-						</p>
-					</div>
-				))}
-		</div>
-	);
-}
-
-function CheckboxRow({
-	checked,
-	onChange,
-	label,
-}: {
-	checked: boolean;
-	onChange: (value: boolean) => void;
-	label: string;
-}) {
-	return (
-		<button
-			type='button'
-			onClick={() => onChange(!checked)}
-			className='flex items-center gap-2 text-sm text-foreground'>
-			<span
-				className={cn(
-					'flex size-4 items-center justify-center rounded border transition-colors',
-					checked
-						? 'border-primary bg-primary text-primary-foreground'
-						: 'border-input bg-card',
-				)}>
-				{checked && <Check className='size-3' />}
-			</span>
-			{label}
-		</button>
 	);
 }
 

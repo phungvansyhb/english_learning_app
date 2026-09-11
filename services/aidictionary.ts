@@ -106,6 +106,6 @@ export async function translate(word: string): Promise<InsertVocabDataPayload> {
 
     const translatedData = WordTranslatedScheam.parse(JSON.parse(rawContent));
     const rs = mappingData(translatedData)
-    createVocabWord(rs);
-    return rs;
+    const id = await createVocabWord(rs);
+    return {...rs , id};
 }

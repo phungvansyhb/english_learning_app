@@ -28,6 +28,7 @@ export function TextSelectionDictionary({ children }: { children: React.ReactNod
 	const [trigger, setTrigger] = useState<TriggerState>(null);
 	const [popup, setPopup] = useState<PopupState>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
+	const popupRef = useRef<HTMLDivElement>(null);
 	const markLookedUp = useLookedUpStore((state) => state.markLookedUp);
 	const [isPending, startTransition] = useTransition();
 	useEffect(() => setMounted(true), []);
@@ -75,7 +76,11 @@ export function TextSelectionDictionary({ children }: { children: React.ReactNod
 
 	useEffect(() => {
 		if (!popup) return;
-		const onScroll = () => setPopup(null);
+		const onScroll = (event: Event) => {
+			const target = event.target;
+			if (target instanceof Node && popupRef.current?.contains(target)) return;
+			setPopup(null);
+		};
 		const onKey = (event: KeyboardEvent) => event.key === 'Escape' && clearAll();
 		window.addEventListener('scroll', onScroll, true);
 		window.addEventListener('keydown', onKey);
@@ -141,11 +146,12 @@ export function TextSelectionDictionary({ children }: { children: React.ReactNod
 					<>
 						<div
 							className='fixed inset-0 z-[60]'
-							onMouseDown={clearAll}
+							// onMouseDown={clearAll}
 							aria-hidden
 						/>
 						<div
 							style={{ top: popup.position.top, left: popup.position.left }}
+							ref={popupRef}
 							className='fixed z-[61] animate-in fade-in zoom-in-95'>
 							<DictionaryPopup
 								entry={popup.entry}
