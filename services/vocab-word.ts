@@ -1,7 +1,18 @@
 'use server';
 
 import { BasePaginationOptions, InsertVocabDataPayload, TopicRow, WordCard } from '@/lib/types';
+import { calculateNextSrsState, SrsProgressState, SrsRating } from '@/lib/srs';
 import { getSupabaseServer } from '@/utils/supabase/server';
+
+const REVIEW_LIMIT = 20;
+
+async function getAuthenticatedUserId() {
+	const supabase = await getSupabaseServer();
+	const { data: { user }, error } = await supabase.auth.getUser();
+	if (error) throw new Error(error.message);
+	if (!user) throw new Error('UNAUTHORIZED');
+	return { supabase, userId: user.id };
+}
 
 export async function createVocabWord(input: InsertVocabDataPayload) {
 	const supabase = await getSupabaseServer();
@@ -85,23 +96,126 @@ export async function getWordByName(word: string) {
 	return data as InsertVocabDataPayload;
 }
 
-// will call when user login to systen
-// return số từ đang học (LEARNING), số từ đã thuộc (MASTERED), và chuỗi ngày học (Streak)
-export async function getVocabStatus() { }
+export type SrsReviewCard = WordCard & {
+	progress: SrsProgressState | null;
+};
 
-// will call when user want to review vocab
-// return FE lấy danh sách danh sách các từ vựng đã đến hạn ôn (next_review_at <= NOW()) kèm thông tin từ vựng, câu ví dụ để hiển thị thẻ học.
-export async function getReviewVocabQueue() { }
+export type VocabLearningState = 'new' | 'known';
 
-// will call when user learn a new word
-export async function reviewSubmit() { }
+export async function markWordLearningState(wordId: number, state: VocabLearningState) {
+	const { supabase, userId } = await getAuthenticatedUserId();
+	const now = new Date();
+	const isKnown = state === 'known';
+	const intervalDays = isKnown ? 30 : 1;
+	const { data, error } = await supabase
+		.from('user_vocab_progress')
+		.upsert({
+			user_id: userId,
+			word_id: wordId,
+			srs_stage: isKnown ? 5 : 0,
+			ease_factor: isKnown ? 2.8 : 2.5,
+			interval_days: intervalDays,
+			next_review_at: new Date(now.getTime() + intervalDays * 24 * 60 * 60 * 1000).toISOString(),
+			last_reviewed_at: now.toISOString(),
+			correct_count: isKnown ? 1 : 0,
+			wrong_count: isKnown ? 0 : 1,
+			source: 'manual',
+			status: isKnown ? 'mastered' : 'learning',
+		}, { onConflict: 'user_id,word_id' })
+		.select('*')
+		.single();
 
-// will call when user use dictionary to search word
-export async function saveVocab() {
-
+	if (error) throw new Error(error.message);
+	return data as SrsProgressState;
 }
-// get all user saved word
-export async function getMyVocabWords() { }
 
-export async function deleteMySavedWord() { }
-export async function updateMySavedWord() { }
+export async function getDueVocabWords(limit = REVIEW_LIMIT) {
+	const { supabase, userId } = await getAuthenticatedUserId();
+	const safeLimit = Math.max(1, Math.min(limit, REVIEW_LIMIT));
+	const { data: savedWords, error: savedWordsError } = await supabase
+		.from('vocab_word_user_custom_category')
+		.select('word_id, user_custom_category_vocab!inner(user_id)')
+		.eq('user_custom_category_vocab.user_id', userId);
+	if (savedWordsError) throw new Error(savedWordsError.message);
+
+	const { data: progressRows, error: progressError } = await supabase
+		.from('user_vocab_progress')
+		.select('*')
+		.eq('user_id', userId)
+		.order('next_review_at', { ascending: true });
+	if (progressError) throw new Error(progressError.message);
+
+	const wordIds = [...new Set([
+		...(savedWords ?? []).map((item) => item.word_id),
+		...(progressRows ?? []).map((item) => item.word_id),
+	])];
+	if (wordIds.length === 0) return { cards: [], dueCount: 0 };
+
+	const progressByWord = new Map((progressRows ?? []).map((row) => [row.word_id, row]));
+	const now = new Date().toISOString();
+	const dueWordIds = wordIds.filter((wordId) => {
+		const progress = progressByWord.get(wordId);
+		return !progress || progress.next_review_at <= now;
+	});
+	const selectedWordIds = dueWordIds.slice(0, safeLimit);
+	if (selectedWordIds.length === 0) {
+		return { cards: [], dueCount: dueWordIds.length };
+	}
+
+	const { data: words, error: wordsError } = await supabase
+		.from('vocab_words')
+		.select('id, word, ipa_uk, difficulty_id, created_at, ipa_us, difficulty_levels(label), word_meaning(*), vocab_collocations(*), vocab_relations(*)')
+		.in('id', selectedWordIds);
+	if (wordsError) throw new Error(wordsError.message);
+
+	const cards = (words ?? []).map((word) => ({
+		...word,
+		difficulty_label: word.difficulty_levels?.[0]?.label ?? '',
+		meanings: word.word_meaning ?? [],
+		collocations: word.vocab_collocations ?? [],
+		relations: word.vocab_relations ?? [],
+		progress: progressByWord.get(word.id) ?? null,
+	})) as SrsReviewCard[];
+	const order = new Map(selectedWordIds.map((wordId, index) => [wordId, index]));
+	cards.sort((left, right) => (order.get(left.id) ?? 0) - (order.get(right.id) ?? 0));
+	return { cards, dueCount: dueWordIds.length };
+}
+
+export async function submitVocabReview(wordId: number, rating: SrsRating) {
+	const { supabase, userId } = await getAuthenticatedUserId();
+	const { data: savedWord, error: savedWordError } = await supabase
+		.from('vocab_word_user_custom_category')
+		.select('word_id, user_custom_category_vocab!inner(user_id)')
+		.eq('word_id', wordId)
+		.eq('user_custom_category_vocab.user_id', userId)
+		.limit(1)
+		.maybeSingle();
+	if (savedWordError) throw new Error(savedWordError.message);
+
+	const { data: current, error: currentError } = await supabase
+		.from('user_vocab_progress')
+		.select('*')
+		.eq('user_id', userId)
+		.eq('word_id', wordId)
+		.maybeSingle();
+	if (currentError) throw new Error(currentError.message);
+	if (!savedWord && !current) throw new Error('WORD_NOT_SAVED');
+
+	const nextState = calculateNextSrsState(current, rating);
+	const { error: progressError } = await supabase
+		.from('user_vocab_progress')
+		.upsert({ user_id: userId, word_id: wordId, ...nextState });
+	if (progressError) throw new Error(progressError.message);
+
+	const { error: attemptError } = await supabase.from('vocab_quiz_attempts').insert({
+		user_id: userId,
+		word_id: wordId,
+		quiz_type: 'srs_review',
+		is_correct: rating === 'correct',
+	});
+	if (attemptError) throw new Error(attemptError.message);
+	return nextState;
+}
+
+
+

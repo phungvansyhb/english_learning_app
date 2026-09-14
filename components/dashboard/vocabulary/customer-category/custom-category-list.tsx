@@ -181,7 +181,7 @@ export default function CustomCategoryList() {
 					</Button>
 				</div>
 			) : (
-				<div className='gap-3 grid grid-cols-1 sm:grid-cols-2'>
+				<div className='gap-3 grid grid-cols-1 sm:grid-cols-2 max-h-screen overflow-y-auto'>
 					{categories.map((category) => (
 						<Link
 							key={category.id}
@@ -197,7 +197,7 @@ export default function CustomCategoryList() {
 											{category.name}
 										</h3>
 									</div>
-									<p className='mt-3 text-muted-foreground text-sm line-clamp-2'>
+									<p className='mt-3 text-muted-foreground text-sm line-clamp-2 min-h-10'>
 										{category.description || 'Chưa có mô tả'}
 									</p>
 								</div>

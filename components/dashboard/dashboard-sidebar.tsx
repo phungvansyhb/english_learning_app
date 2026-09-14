@@ -3,8 +3,9 @@
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
 import { usePathname } from 'next/navigation';
 import {
-		BookMarkedIcon,
-		LanguagesIcon,
+	BookMarkedIcon,
+	BrainIcon,
+	LanguagesIcon,
 	BookOpen,
 	ChevronLeft,
 	FileHeadphoneIcon,
@@ -32,13 +33,20 @@ interface NavItem {
 
 const navItems: NavItem[] = [
 	{ id: 'vocabulary', label: 'Vocabulary', icon: WholeWordIcon, link: '/vocabulary' },
+	{ id: 'review', label: 'Ôn tập', icon: BrainIcon, link: '/vocabulary/review' },
 	{ id: 'grammar', label: 'Grammar', icon: LanguagesIcon, link: '/grammar' },
 	{ id: 'listening', label: 'Listening', icon: FileHeadphoneIcon, link: '/listening' },
 	{ id: 'speaking', label: 'Speaking', icon: MicVocalIcon, link: '/speaking' },
 	{ id: 'reading', label: 'Reading', icon: BookOpen, link: '/reading' },
 	{ id: 'writing', label: 'Writing', icon: PenToolIcon, link: '/writing' },
 	{ id: 'test', label: 'Test', icon: BookMarkedIcon, link: '/test' },
-	{ id: 'leaderboard', label: 'LeaderBoard', icon: MedalIcon, hasDot: true, link: '/leaderboard' },
+	{
+		id: 'leaderboard',
+		label: 'LeaderBoard',
+		icon: MedalIcon,
+		hasDot: true,
+		link: '/leaderboard',
+	},
 	{ id: 'settings', label: 'Settings', icon: Settings, link: '#' },
 ];
 
@@ -62,7 +70,8 @@ function BrandMark({ onClick }: { onClick: (item: string) => void }) {
 export function DashboardSidebar() {
 	const pathname = usePathname();
 	const [active, setActive] = useState('');
-	const currentActive = navItems.find((item) => item.link !== '#' && pathname.startsWith(item.link))?.id ?? active;
+	const currentActive =
+		navItems.find((item) => item.link !== '#' && pathname === item.link)?.id ?? active;
 	const [expanded, setExpanded] = useState(true);
 	const [isPending, startTransition] = useTransition();
 	const handleSignOut = () => {

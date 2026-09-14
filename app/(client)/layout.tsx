@@ -13,6 +13,7 @@ export default function RootLayout({
 				<DashboardSidebar />
 				<div className='flex-1 bg-secondary/40 md:p-6 lg:p-8 pb-24 md:pb-6 overflow-auto'>
 					<DashboardHeader />
+					<br />
 					<TextSelectionDictionary>{children}</TextSelectionDictionary>
 				</div>
 			</div>

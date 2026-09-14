@@ -199,7 +199,7 @@ export async function listCategoryWords(categoryId: number) {
         .sort((left, right) => (order.get(left.id) ?? 0) - (order.get(right.id) ?? 0))
         .map((word) => ({
             ...word,
-            difficulty_label: word.difficulty_levels?.label ?? '',
+            difficulty_label: (word.difficulty_levels as any)?.label ?? '',
             meanings: word.word_meaning ?? [],
             collocations: word.vocab_collocations ?? [],
             relations: word.vocab_relations ?? [],

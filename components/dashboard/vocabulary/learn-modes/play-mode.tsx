@@ -1,34 +1,26 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
-import Ttip from '@/components/ui/ttip';
 import { useSpeech } from '@/hooks/use-speech';
 import { WordCard } from '@/lib/types';
-import { OTPField, PreviewCard, Radio, RadioGroup } from '@base-ui/react';
+import { OTPField, Radio, RadioGroup } from '@base-ui/react';
 import clsx from 'clsx';
 import {
 	AudioLinesIcon,
-	BrainIcon,
 	DoorClosedIcon,
-	MessageCircleDashedIcon,
 	MicIcon,
-	PodiumIcon,
 	SettingsIcon,
-	SpeakerIcon,
-	Volume2,
-	Volume2Icon,
+	Volume2Icon
 } from 'lucide-react';
 import Image from 'next/image';
 import {
 	Activity,
 	Suspense,
-	useCallback,
 	useEffect,
 	useMemo,
 	useState,
-	useTransition,
+	useTransition
 } from 'react';
 
 type Props = {
@@ -103,6 +95,7 @@ export default function PlayMode({ words }: Props) {
 			}
 		});
 	};
+
 
 	useEffect(() => {
 		function handleKeyDown(e: KeyboardEvent) {
