@@ -1,14 +1,12 @@
 'use client';
 
-import { Dispatch, SetStateAction, useState, useTransition } from 'react';
-import { usePathname } from 'next/navigation';
 import {
 	BookMarkedIcon,
-	BrainIcon,
-	LanguagesIcon,
 	BookOpen,
+	BrainIcon,
 	ChevronLeft,
 	FileHeadphoneIcon,
+	LanguagesIcon,
 	LayoutGrid,
 	LogOut,
 	MedalIcon,
@@ -17,11 +15,12 @@ import {
 	Settings,
 	WholeWordIcon,
 } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { useState, useTransition } from 'react';
 
 import { cn } from '@/lib/utils';
-import { Button } from '../ui/button';
-import Link from 'next/link';
 import { signOut } from '@/services/auth';
+import Link from 'next/link';
 
 interface NavItem {
 	id: string;
@@ -84,7 +83,7 @@ export function DashboardSidebar() {
 			{/* Desktop sidebar: collapsible */}
 			<aside
 				className={cn(
-					'hidden relative md:flex flex-col gap-8 py-6 border-border border-r transition-[width] duration-300 ease-in-out shrink-0 ',
+					'hidden relative md:flex flex-col gap-8 py-6 border-border border-r transition-[width] duration-300 ease-in-out shrink-0 bg-white z-20',
 					expanded ? 'w-45 px-4' : 'w-20 items-center px-0',
 				)}>
 				<div

@@ -8,7 +8,10 @@ const REVIEW_LIMIT = 20;
 
 async function getAuthenticatedUserId() {
 	const supabase = await getSupabaseServer();
-	const { data: { user }, error } = await supabase.auth.getUser();
+	const {
+		data: { user },
+		error,
+	} = await supabase.auth.getUser();
 	if (error) throw new Error(error.message);
 	if (!user) throw new Error('UNAUTHORIZED');
 	return { supabase, userId: user.id };
@@ -16,7 +19,9 @@ async function getAuthenticatedUserId() {
 
 export async function createVocabWord(input: InsertVocabDataPayload) {
 	const supabase = await getSupabaseServer();
-	const { data: wordId, error: wordError } = await supabase.rpc('insert_vocab_data_v2', { p_data: input })
+	const { data: wordId, error: wordError } = await supabase.rpc('insert_vocab_data_v2', {
+		p_data: input,
+	});
 	if (wordError) {
 		console.error('createVocabWord (vocab_words) error', wordError);
 		throw new Error(wordError.message);
@@ -31,30 +36,47 @@ export async function createVocabWord(input: InsertVocabDataPayload) {
 export async function getVocabWordCategories(opts: BasePaginationOptions) {
 	const { page = 1, perPage = 10, search, sortBy = 'name', sortOrder } = opts;
 	const supabase = await getSupabaseServer();
-	let query = supabase.from('topics').select('id , name , description, image_url:image_url, is_active , vocab_word_topics(count)', { count: 'exact' }).eq('is_active', true);
-	const from = (page - 1) * perPage
-	const to = from + perPage - 1
+	let query = supabase
+		.from('topics')
+		.select(
+			'id , name , description, image_url:image_url, is_active , vocab_word_topics(count)',
+			{ count: 'exact' },
+		)
+		.eq('is_active', true);
+	const from = (page - 1) * perPage;
+	const to = from + perPage - 1;
 	if (search) {
-		const esc = search.replace(/%/g, '\\%')
-		query = query.or(`name.ilike.%${esc}%`)
+		const esc = search.replace(/%/g, '\\%');
+		query = query.or(`name.ilike.%${esc}%`);
 	}
-	query = query.order(sortBy, { ascending: sortOrder === 'asc' })
-	let { data, error, count } = await query.range(from, to)
+	query = query.order(sortBy, { ascending: sortOrder === 'asc' });
+	let { data, error, count } = await query.range(from, to);
 	if (error) {
-		console.error('listUsers error', error)
-		throw error
+		console.error('listUsers error', error);
+		throw error;
 	}
-	data = data?.map((item) => ({
-		...item,
-		total_word: item.vocab_word_topics?.[0].count ?? 0,
-	})) ?? []
+	data =
+		data?.map((item) => ({
+			...item,
+			total_word: item.vocab_word_topics?.[0].count ?? 0,
+		})) ?? [];
 	return {
 		data: (data ?? []) as TopicRow[],
 		total: count ?? 0,
 		page,
 		perPage,
 		totalPages: Math.ceil((count ?? 0) / perPage),
+	};
+}
+
+export async function getMasteredWordCountsByTopic() {
+	const supabase = await getSupabaseServer();
+	const { data, error } = await supabase.rpc('get_mastered_word_counts_by_topic');
+	if (error) {
+		console.error('getMasteredWordCountsByTopic error', error);
+		throw error;
 	}
+	return data as { topic_id: number, mastered_word_count: number }[];
 }
 
 export async function getCategoryById(id: string) {
@@ -68,6 +90,16 @@ export async function getCategoryById(id: string) {
 		throw new Error(`Category with id ${id} not found`);
 	}
 	return data as TopicRow;
+}
+
+export async function getNumMasteredWordInCate(cateId: number) {
+	const supabase = await getSupabaseServer();
+	const { data, error } = await supabase.rpc('get_mastered_word_count', { p_topic_id: cateId });
+	if (error) {
+		console.error('getNumMasteredWordInCate error', error);
+		throw error;
+	}
+	return data as number;
 }
 
 export async function getWordsByTopicId(topicId: string) {
@@ -91,7 +123,7 @@ export async function getWordByName(word: string) {
 		throw error;
 	}
 	if (!data) {
-		return null
+		return null;
 	}
 	return data as InsertVocabDataPayload;
 }
@@ -109,19 +141,24 @@ export async function markWordLearningState(wordId: number, state: VocabLearning
 	const intervalDays = isKnown ? 30 : 1;
 	const { data, error } = await supabase
 		.from('user_vocab_progress')
-		.upsert({
-			user_id: userId,
-			word_id: wordId,
-			srs_stage: isKnown ? 5 : 0,
-			ease_factor: isKnown ? 2.8 : 2.5,
-			interval_days: intervalDays,
-			next_review_at: new Date(now.getTime() + intervalDays * 24 * 60 * 60 * 1000).toISOString(),
-			last_reviewed_at: now.toISOString(),
-			correct_count: isKnown ? 1 : 0,
-			wrong_count: isKnown ? 0 : 1,
-			source: 'manual',
-			status: isKnown ? 'mastered' : 'learning',
-		}, { onConflict: 'user_id,word_id' })
+		.upsert(
+			{
+				user_id: userId,
+				word_id: wordId,
+				srs_stage: isKnown ? 5 : 0,
+				ease_factor: isKnown ? 2.8 : 2.5,
+				interval_days: intervalDays,
+				next_review_at: new Date(
+					now.getTime() + intervalDays * 24 * 60 * 60 * 1000,
+				).toISOString(),
+				last_reviewed_at: now.toISOString(),
+				correct_count: isKnown ? 1 : 0,
+				wrong_count: isKnown ? 0 : 1,
+				source: 'manual',
+				status: isKnown ? 'mastered' : 'learning',
+			},
+			{ onConflict: 'user_id,word_id' },
+		)
 		.select('*')
 		.single();
 
@@ -145,10 +182,12 @@ export async function getDueVocabWords(limit = REVIEW_LIMIT) {
 		.order('next_review_at', { ascending: true });
 	if (progressError) throw new Error(progressError.message);
 
-	const wordIds = [...new Set([
-		...(savedWords ?? []).map((item) => item.word_id),
-		...(progressRows ?? []).map((item) => item.word_id),
-	])];
+	const wordIds = [
+		...new Set([
+			...(savedWords ?? []).map((item) => item.word_id),
+			...(progressRows ?? []).map((item) => item.word_id),
+		]),
+	];
 	if (wordIds.length === 0) return { cards: [], dueCount: 0 };
 
 	const progressByWord = new Map((progressRows ?? []).map((row) => [row.word_id, row]));
@@ -164,7 +203,9 @@ export async function getDueVocabWords(limit = REVIEW_LIMIT) {
 
 	const { data: words, error: wordsError } = await supabase
 		.from('vocab_words')
-		.select('id, word, ipa_uk, difficulty_id, created_at, ipa_us, difficulty_levels(label), word_meaning(*), vocab_collocations(*), vocab_relations(*)')
+		.select(
+			'id, word, ipa_uk, difficulty_id, created_at, ipa_us, difficulty_levels(label), word_meaning(*), vocab_collocations(*), vocab_relations(*)',
+		)
 		.in('id', selectedWordIds);
 	if (wordsError) throw new Error(wordsError.message);
 
@@ -216,6 +257,3 @@ export async function submitVocabReview(wordId: number, rating: SrsRating) {
 	if (attemptError) throw new Error(attemptError.message);
 	return nextState;
 }
-
-
-

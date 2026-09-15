@@ -1,6 +1,6 @@
 import { ListCategory, ListCategorySuspense } from '@/components/dashboard/vocabulary/listCategory';
 import CustomCategoryList from '@/components/dashboard/vocabulary/customer-category/custom-category-list';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'; 
 import { ServerPageProps } from '@/lib/types';
 import { BrainIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -26,7 +26,7 @@ export default async function VocabScreen({ searchParams }: ServerPageProps) {
 				</Link>
 			</div>
 			<div className='gap-6 grid grid-cols-1 xl:grid-cols-[1.4fr_1fr] mt-6'>
-				<div className='bg-muted p-4 md:p-6 lg:p-8 rounded-2xl max-h-[60vh] md:max-h-none overflow-y-auto'>
+				<div className='bg-white border p-4 md:p-6 lg:p-8 rounded-2xl max-h-[60vh] md:max-h-none overflow-y-auto'>
 					<h2 className='font-bold text-foreground text-lg'>Từ vựng theo chủ đề</h2>
 					<Suspense fallback={<ListCategorySuspense />}>
 						<ListCategory searchParams={searchParams} />

@@ -1,7 +1,9 @@
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { MoreHorizontal } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Activity } from 'react';
 
 type Props = {
 	id: number;
@@ -16,8 +18,6 @@ type Props = {
 
 export default function CategoryVocab({
 	id,
-	vocabGroup,
-	description,
 	imageUrl,
 	wordCount,
 	learnedword,
@@ -31,8 +31,8 @@ export default function CategoryVocab({
 				cardClassName,
 			)}>
 			<Link
-				href={`/vocabulary/${encodeURIComponent(name.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}?id=${id}&mode=try`}
-				className='flex flex-col h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'>
+				href={`/vocabulary/${encodeURIComponent(name.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}?id=${id}`}
+				className='flex flex-col justify-between h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'>
 				<div className='relative w-full h-30'>
 					<Image
 						src={imageUrl || '/placeholder.svg'}
@@ -50,7 +50,7 @@ export default function CategoryVocab({
 				<div className='p-2 md:p-4'>
 					<h3 className='font-semibold text-base text-pretty leading-snug'>{name}</h3>
 
-					<div className='mt-4'>
+					<div className='mt-2'>
 						<div className='flex justify-between items-center mb-1.5 font-medium text-xs'>
 							<span>Progress</span>
 							<span>
@@ -67,6 +67,23 @@ export default function CategoryVocab({
 						</div>
 					</div>
 				</div>
+				{/* <div className='flex bg-secondary'>
+					<Activity mode={learnedword < wordCount ? 'visible' : 'hidden'}>
+						<Button
+							size='xs'
+							variant='secondary'
+							className='w-1/2 grow-0'>
+							Học mới
+						</Button>
+					</Activity>
+					<Activity mode={learnedword > 0 ? 'visible' : 'hidden'}>
+						<Button
+							size='xs'
+							className='w-1/2 shrink-0 bg-white rounded-none shadow-none border-none text-black'>
+							Ôn tập
+						</Button>
+					</Activity>
+				</div> */}
 			</Link>
 		</article>
 	);

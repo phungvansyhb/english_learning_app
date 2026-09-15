@@ -1,5 +1,5 @@
 import { ServerPageProps } from '@/lib/types';
-import { getVocabWordCategories } from '@/services/vocab-word';
+import { getMasteredWordCountsByTopic, getVocabWordCategories } from '@/services/vocab-word';
 import CategoryVocab from './category-vocab';
 import { Pagination } from '@/components/ui/pagination';
 
@@ -29,6 +29,7 @@ export async function ListCategory({
 		sortOrder: 'asc',
 		search: initSearch as string | undefined,
 	});
+	const masterdWordOfTopic = await getMasteredWordCountsByTopic();
 	return (
 		<>
 			<div className='gap-4 grid grid-cols-2 md:grid-cols-3 mt-4'>
@@ -38,7 +39,10 @@ export async function ListCategory({
 						imageUrl={item.image_url || '/placeholder.svg'}
 						description={item.description || ''}
 						wordCount={item.total_word || 0}
-						learnedword={0}
+						learnedword={
+							masterdWordOfTopic.find((m) => m.topic_id === item.id)
+								?.mastered_word_count ?? 0
+						}
 						id={item.id}
 						cardClassName='break-inside-avoid mb-4'
 						key={item.id}

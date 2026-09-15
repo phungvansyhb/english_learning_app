@@ -2,10 +2,11 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { WordCard } from '@/lib/types';
-import { CheckCircle2, PlayIcon, Star, Volume2 } from 'lucide-react';
+import { getNumMasteredWordInCate } from '@/services/vocab-word';
+import { CheckCircle2, Loader2Icon, LoaderIcon, PlayIcon, Star, Volume2 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 
 type Props = {
 	words: WordCard[];
@@ -15,15 +16,11 @@ export default function TryMode({ words }: Props) {
 	const pathName = usePathname();
 	const searchParams = useSearchParams();
 	const id = searchParams.get('id');
-
-	const [favorites, setFavorites] = useState<string[]>([]);
-	const [learned, setLearned] = useState<string[]>([]);
+	const [isPending, startTransition] = useTransition();
 	const speak = (item: WordCard) => {
 		if ('speechSynthesis' in window)
 			window.speechSynthesis.speak(new SpeechSynthesisUtterance(item.word));
 	};
-	const toggle = (list: string[], setList: (value: string[]) => void, word: string) =>
-		setList(list.includes(word) ? list.filter((item) => item !== word) : [...list, word]);
 
 	const getPrimaryMeaning = (item: WordCard) => {
 		if (item.meanings && item.meanings.length > 0) {
@@ -32,6 +29,15 @@ export default function TryMode({ words }: Props) {
 		}
 		return null;
 	};
+
+	const [numberOfWordLearned, setNumberOfWordLearned] = useState(0);
+	useEffect(() => {
+		async function getNum() {
+			const data = await getNumMasteredWordInCate(Number(id));
+			setNumberOfWordLearned(data || 0);
+		}
+		startTransition(() => getNum());
+	}, []);
 
 	return (
 		<div className='mx-auto max-w-5xl px-4 pb-12 '>
@@ -45,8 +51,15 @@ export default function TryMode({ words }: Props) {
 					</Link>
 				</Button>
 				<div className='flex flex-wrap items-center gap-2 text-sm'>
-					<span className='text-muted-foreground'>★ {favorites.length}</span>
-					<span className='text-muted-foreground'>✓ Đã thuộc ({learned.length})</span>
+					<span className='text-muted-foreground inline-flex items-baseline'>
+						✓ Đã thuộc (
+						{isPending ? (
+							<Loader2Icon className=' size-3 animate-spin' />
+						) : (
+							numberOfWordLearned
+						)}
+						)
+					</span>
 				</div>
 			</div>
 			<div className='flex flex-col gap-3 pt-2'>
@@ -77,15 +90,6 @@ export default function TryMode({ words }: Props) {
 									onClick={() => speak(item)}
 									aria-label={`Phát âm ${item.word}`}>
 									<Volume2 className='size-4' />
-								</Button>
-
-								<Button
-									size='icon'
-									variant='ghost'
-									onClick={() => toggle(learned, setLearned, item.word)}
-									aria-label={`Đánh dấu đã học ${item.word}`}
-									className={learned.includes(item.word) ? 'text-primary' : ''}>
-									<CheckCircle2 className='size-4' />
 								</Button>
 							</div>
 						</div>

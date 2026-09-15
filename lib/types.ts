@@ -357,7 +357,11 @@ export type WordCard = {
     relation_type: 'SYNONYMS' | 'ANTONYMS',
     word: string,
     meaning: string
-  }[]
+  }[],
+  status?: 'learning' | 'mastered'
+  srs_stage?: number
+  correct_count?: number
+  wrong_count?: number
 }
 
 export const VOCAB_MODE = {

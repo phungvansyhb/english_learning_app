@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type RefObject } from 'react';
 
 export type DragDirection = 'left' | 'right';
 export type DragOffset = { x: number; y: number };
-export const DRAG_THRESHOLD = 200;
+export const DRAG_THRESHOLD = 280;
 
 type UseDragResult = {
     direction: DragDirection | null;
