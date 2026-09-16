@@ -32,13 +32,13 @@ interface NavItem {
 
 const navItems: NavItem[] = [
 	{ id: 'vocabulary', label: 'Vocabulary', icon: WholeWordIcon, link: '/vocabulary' },
-	{ id: 'review', label: 'Ôn tập', icon: BrainIcon, link: '/vocabulary/review' },
+	// { id: 'review', label: 'Ôn tập', icon: BrainIcon, link: '/vocabulary/review' },
 	{ id: 'grammar', label: 'Grammar', icon: LanguagesIcon, link: '/grammar' },
 	{ id: 'listening', label: 'Listening', icon: FileHeadphoneIcon, link: '/listening' },
 	{ id: 'speaking', label: 'Speaking', icon: MicVocalIcon, link: '/speaking' },
 	{ id: 'reading', label: 'Reading', icon: BookOpen, link: '/reading' },
 	{ id: 'writing', label: 'Writing', icon: PenToolIcon, link: '/writing' },
-	{ id: 'test', label: 'Test', icon: BookMarkedIcon, link: '/test' },
+	// { id: 'test', label: 'Test', icon: BookMarkedIcon, link: '/test' },
 	{
 		id: 'leaderboard',
 		label: 'LeaderBoard',

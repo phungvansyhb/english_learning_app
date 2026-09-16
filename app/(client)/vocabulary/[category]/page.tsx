@@ -1,9 +1,8 @@
 import LearnMode from '@/components/dashboard/vocabulary/learn-modes/learn-mode';
 import PlayMode from '@/components/dashboard/vocabulary/learn-modes/play-mode';
-import TryMode from '@/components/dashboard/vocabulary/learn-modes/try-mode';
-import { ServerPageProps, VOCAB_MODE } from '@/lib/types';
+import { ServerPageProps } from '@/lib/types';
 import { getCategoryById, getWordsByTopicId } from '@/services/vocab-word';
-import { ArrowLeft, BookOpen, Gamepad2, Headphones, ListCheckIcon } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Activity } from 'react';

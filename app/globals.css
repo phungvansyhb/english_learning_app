@@ -251,4 +251,36 @@
     border-radius: var(--radius);
     font-style: italic;
   }
+
+  @keyframes shake {
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    15% {
+      transform: translateX(-8px) rotate(-1deg);
+    }
+
+    30% {
+      transform: translateX(8px) rotate(1deg);
+    }
+
+    45% {
+      transform: translateX(-6px) rotate(-1deg);
+    }
+
+    60% {
+      transform: translateX(6px) rotate(1deg);
+    }
+
+    75% {
+      transform: translateX(-4px) rotate(-0.5deg);
+    }
+
+    90% {
+      transform: translateX(4px) rotate(0.5deg);
+    }
+  }
 }

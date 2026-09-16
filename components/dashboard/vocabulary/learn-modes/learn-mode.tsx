@@ -6,9 +6,10 @@ import Ttip from '@/components/ui/ttip';
 import { useDrag } from '@/hooks/use-drag';
 import { WordCard } from '@/lib/types';
 import { markWordLearningState } from '@/services/vocab-word';
-import { KeyboardIcon, PodiumIcon, Volume2 } from 'lucide-react';
+import { useMessageStore } from '@/utils/zustand/message-store';
+import { PodiumIcon, Volume2 } from 'lucide-react';
 import Link from 'next/link';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Activity, useEffect, useRef, useState, useTransition } from 'react';
 import ShortcutBoard from '../shortcut-board';
 
@@ -19,19 +20,31 @@ type Props = {
 export default function LearnMode({ words }: Props) {
 	const params = useSearchParams();
 	const { category } = useParams();
+	const router = useRouter();
 	const [isPending, startTransition] = useTransition();
 	const [index, setIndex] = useState(0);
 	const [showMeaning, setShowMeaning] = useState(false);
-	const current = words[index];
 	const cardRef = useRef<HTMLDivElement>(null);
 	const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
+	const { setMessage, open } = useMessageStore();
+	const current = words[index] || {};
 
 	const { direction, offset, progress, isDragging } = useDrag(cardRef, {
 		onSwipe: (swipe) => {
 			setSwipeDirection(swipe);
 			startTransition(async () => {
 				await markWordLearningState(current.id, swipe === 'left' ? 'new' : 'known');
-				setIndex((value) => value + 1);
+				if (swipe === 'left' && words.length === 1) {
+					setMessage('Thôi nào !! còn 1 từ nữa thôi cố nhớ nốt đi mày');
+					open();
+				} else if (index + 1 === words.length) {
+					setIndex(0);
+					setMessage('Chúc mừng nha, giờ thì luyện tập xíu nha mày');
+					open();
+					router.refresh();
+				} else {
+					setIndex((value) => value + 1);
+				}
 				setShowMeaning(false);
 				setSwipeDirection(null);
 			});
@@ -81,7 +94,7 @@ export default function LearnMode({ words }: Props) {
 		return () => window.removeEventListener('keydown', handleKeyDown);
 	}, [next, words.length, flipCard]);
 
-	const DoneMessage = () => {
+	function DoneMessage() {
 		return (
 			<Activity mode={index + 1 > words.length ? 'visible' : 'hidden'}>
 				<section className='w-full flex justify-center mt-6 animate-in slide-in-from-bottom-50 duration-200'>
@@ -105,7 +118,7 @@ export default function LearnMode({ words }: Props) {
 				</section>
 			</Activity>
 		);
-	};
+	}
 
 	if (words.length === 0) return <DoneMessage />;
 	return (
@@ -144,7 +157,7 @@ export default function LearnMode({ words }: Props) {
 								<div className='col-start-1 row-start-1 flex items-center justify-center backface-hidden'>
 									<div className='mx-auto text-center'>
 										<h1 className='text-4xl font-bold tracking-tight md:text-5xl mb-4'>
-											{current.word}
+											{current?.word}
 											<span className='text-muted-foreground text-base ml-3'>
 												({getPrimaryMeaning(current)?.part_of_speech})
 											</span>
@@ -156,7 +169,7 @@ export default function LearnMode({ words }: Props) {
 												onClick={() => speak('en-GB')}>
 												<Volume2 className='size-5' />
 											</Button>
-											{current.ipa_uk}
+											{current?.ipa_uk}
 										</div>
 										<div className='flex gap-2 justify-center items-center'>
 											<Button
@@ -165,7 +178,7 @@ export default function LearnMode({ words }: Props) {
 												onClick={() => speak('en-US')}>
 												<Volume2 className='size-5' />
 											</Button>
-											{current.ipa_us}
+											{current?.ipa_us}
 										</div>
 										<Button
 											variant='secondary'
@@ -275,8 +288,6 @@ export default function LearnMode({ words }: Props) {
 					</div>
 				</>
 			</Activity>
-
-			<DoneMessage />
 
 			{/* ===== Keyboard shortcut ========= */}
 			<Activity mode={index + 1 <= words.length ? 'visible' : 'hidden'}>
