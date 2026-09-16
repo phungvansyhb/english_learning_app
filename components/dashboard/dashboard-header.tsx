@@ -1,15 +1,14 @@
-import { AlarmClockIcon, Bell, FlameIcon } from 'lucide-react';
-import Image from 'next/image';
+import { AlarmClockIcon, Bell } from 'lucide-react';
 import Link from 'next/link';
 import Ttip from '../ui/ttip';
+import Avatar from './header/Avatar';
+import Streak from './header/Streak';
 import NoticeThumb from './notice-thumb';
-import { DemoBtn } from '../ui/stickman-talk';
 
 export function DashboardHeader() {
 	return (
-		<header className='flex items-center gap-2 md:gap-4 py-4 md:py-0 px-4 md:px-0'>
+		<header className='flex items-center gap-2 md:gap-4'>
 			<NoticeThumb />
-			<DemoBtn />
 			<Ttip
 				triggerComponent={
 					<div className='flex justify-center items-center gap-2 bg-secondary hover:bg-accent p-3 rounded-xl text-foreground transition-colors'>
@@ -20,15 +19,7 @@ export function DashboardHeader() {
 				Online time
 			</Ttip>
 			<div className='ml-auto flex items-center gap-2 md:gap-4'>
-				<Ttip
-					triggerComponent={
-						<div className='flex justify-center items-center gap-2 bg-brand-orange/85 hover:bg-brand-orange p-3 rounded-xl text-foreground transition-colors'>
-							<FlameIcon className='size-5 shrink-0' />
-							<span className='font-bold'>7</span>
-						</div>
-					}>
-					Streak
-				</Ttip>
+				<Streak />
 				<button
 					type='button'
 					aria-label='Notifications'
@@ -39,13 +30,7 @@ export function DashboardHeader() {
 					href='/profile'
 					aria-label='Open profile'
 					className='rounded-full ring-2 ring-brand-orange overflow-hidden transition-transform hover:scale-105'>
-					<Image
-						src='/avatars/user.png'
-						alt='Your profile'
-						width={44}
-						height={44}
-						className='size-11 object-cover'
-					/>
+					<Avatar />
 				</Link>
 			</div>
 		</header>

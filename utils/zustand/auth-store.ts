@@ -3,6 +3,7 @@ import { create } from 'zustand'
 import { UserRow } from '@/lib/types'
 
 type AuthState = {
+    isLoading: boolean
     user: UserRow | null
     count: number
     getCurrentUser: (redirectPath?: string) => Promise<void>
@@ -18,11 +19,15 @@ const demoUser = {
 }
 export const useAuthStore = create<AuthState>()((set) => ({
     user: null,
+    isLoading: true,
     count: 0,
     getCurrentUser: async (redirectPath?: string) => {
+        set({ isLoading: true })
         const userData = await getCurrentUser(redirectPath)
         if (typeof userData !== 'string') {
             set({ user: userData })
         }
+        set({ isLoading: false })
+
     },
 }))

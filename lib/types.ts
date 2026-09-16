@@ -112,6 +112,13 @@ export type UserRow = {
   created_at: string;
   updated_at: string;
   role: string;
+  user_progress_stats?: {
+    current_streak_days: number,
+    last_active_date: string,
+    level: number,
+    longest_streak_days: number,
+    xp_total: number
+  }
 };
 
 export type CreateUserInput = {
@@ -369,3 +376,7 @@ export const VOCAB_MODE = {
   PLAY: 'play',
   TRY: 'try',
 };
+
+export const DATETIME_FORMAT = {
+  MMMM_YYYY: 'MMMM YYYY'
+}

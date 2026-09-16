@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
 import { createPortal } from 'react-dom';
 import { BookOpenText, Loader2Icon } from 'lucide-react';
-import { lookupWord } from '@/lib/dictionary-data';
 import { useLookedUpStore } from '@/utils/zustand/looked-up-store';
 import { DictionaryPopup } from './dictionary-popup';
 import { LookedUpHighlighter } from './looked-up-highlighter';

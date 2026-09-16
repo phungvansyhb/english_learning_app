@@ -1,27 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useLayoutEffect, useSyncExternalStore } from 'react';
 
 const useIsMobile = (breakpoint = 768) => {
-    const [isMobile, setIsMobile] = useState(false);
-
-    useEffect(() => {
-        // Function to evaluate the current window width
-        const handleResize = () => {
-            setIsMobile(window.innerWidth < breakpoint);
-        };
-
-        // Run the check immediately on initial mount
-        handleResize();
-
-        // Attach the event listener for window resize
-        window.addEventListener('resize', handleResize);
-
-        // Cleanup the event listener when the component unmounts
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [breakpoint]);
-
-    return isMobile;
+    return useSyncExternalStore(
+        (callback) => {
+            const mediaQuery = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+            mediaQuery.addEventListener('change', callback);
+            return () => mediaQuery.removeEventListener('change', callback);
+        },
+        () => window.innerWidth < breakpoint,
+        () => false
+    );
 };
 
 export default useIsMobile;
