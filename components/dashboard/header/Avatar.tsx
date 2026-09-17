@@ -3,9 +3,11 @@ import { useAuthStore } from '@/utils/zustand/auth-store';
 import { Loader2Icon } from 'lucide-react';
 import Image from 'next/image';
 
-type Props = {};
+type Props = {
+	isBig?: boolean;
+};
 
-export default function Avatar({}: Props) {
+export default function Avatar({ isBig }: Props) {
 	const { user, isLoading } = useAuthStore();
 	if (isLoading)
 		return (
@@ -17,9 +19,9 @@ export default function Avatar({}: Props) {
 		<Image
 			src={user?.avatar_url || '/avatars/user.png'}
 			alt='Your profile'
-			width={44}
-			height={44}
-			className='size-11 object-cover'
+			width={isBig ? 120 : 44}
+			height={isBig ? 120 : 44}
+			className='object-cover'
 		/>
 	);
 }

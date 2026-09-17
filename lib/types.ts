@@ -21,6 +21,9 @@ export type ServerPageProps = {
 
 // END COMMON TYPE
 
+export type QuestionModeType = 'listen' | 'translate'
+export type AnswerModeType = 'speak' | 'write'
+
 export interface ProgressItem {
   id: string;
   title: string;
@@ -102,6 +105,8 @@ Object.freeze(ROLE_CONSTANT);
 
 // User types
 export type UserStatus = 'active' | 'suspended' | 'deleted';
+
+
 
 export type UserRow = {
   id: string;

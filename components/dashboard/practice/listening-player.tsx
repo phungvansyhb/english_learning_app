@@ -71,7 +71,7 @@ export default function ListeningPlayer() {
 	const muted = audioRef.current?.muted ?? volume === 0;
 
 	return (
-		<section className='rounded-2xl border bg-card p-5 shadow-sm md:p-6'>
+		<section className='w-full rounded-2xl border bg-card p-5 shadow-sm md:p-6'>
 			<audio
 				ref={audioRef}
 				src={audioSample}
@@ -84,16 +84,10 @@ export default function ListeningPlayer() {
 			/>
 			<div className='flex items-center justify-between gap-4'>
 				<div>
-					<p className='text-xs font-bold uppercase tracking-[0.16em] text-primary'>
-						Audio player
-					</p>
 					<p className='mt-1 text-sm font-semibold'>
 						{playing ? 'Đang phát bài nghe' : 'Sẵn sàng nghe'}
 					</p>
 				</div>
-				<span className='rounded-full bg-secondary px-3 py-1 text-xs text-muted-foreground'>
-					Space để phát/dừng
-				</span>
 			</div>
 			<input
 				aria-label='Tiến trình audio'
@@ -162,9 +156,6 @@ export default function ListeningPlayer() {
 						}}
 						className='w-20 accent-primary'
 					/>
-					<span className='hidden text-xs md:inline'>
-						R replay · ← → seek · ↑ ↓ volume · M mute
-					</span>
 				</div>
 			</div>
 		</section>
