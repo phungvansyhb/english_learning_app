@@ -16,6 +16,7 @@ export default function QuestionMode({ questionMode, answerMode }: Props) {
 			<Link href={`/practice?ask=translate&answer=${answerMode}`}>
 				<Button
 					size='xs'
+					aria-label='Translate prompt'
 					variant={questionMode === 'translate' ? 'default' : 'secondary'}>
 					<LanguagesIcon />
 				</Button>
