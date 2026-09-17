@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { AnswerModeType, QuestionModeType } from '@/lib/types';
-import { MicVocalIcon, PencilSparklesIcon, ShapesIcon } from 'lucide-react';
+import { MicVocalIcon, PencilSparklesIcon } from 'lucide-react';
 import Link from 'next/link';
 
 type Props = {
