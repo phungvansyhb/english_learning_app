@@ -4,12 +4,13 @@ import QuestionMode from '@/components/dashboard/practice/question-mode';
 import QuestionUi from '@/components/dashboard/practice/question-ui';
 import { AnswerModeType, QuestionModeType, ServerPageProps } from '@/lib/types';
 import { CheckCircle2, ChevronRight, Sparkles } from 'lucide-react';
+import PracticeControls from '@/components/dashboard/practice/practice-controls';
 import Image from 'next/image';
 
 type Props = {};
 
 export default async function PracticeScreen({ searchParams }: ServerPageProps) {
-	const { ask = 'listen', answer = 'speak' } = await searchParams;
+	const { ask = 'listen', answer = 'speak', topic = 'all' } = await searchParams;
 	const questionMode = ask as QuestionModeType;
 	const answerMode = answer as AnswerModeType;
 
@@ -30,6 +31,8 @@ export default async function PracticeScreen({ searchParams }: ServerPageProps) 
 					<span>Question 1 of 10</span>
 				</div>
 			</header>
+
+			<PracticeControls selectedTopic={topic as string} />
 
 			<div className='h-2 overflow-hidden rounded-full bg-white/60'>
 				<div className='h-full w-[10%] rounded-full bg-primary' />
