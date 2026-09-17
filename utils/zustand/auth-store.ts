@@ -18,7 +18,7 @@ const demoUser = {
     updated_at: '2026-08-11T11:33:44'
 }
 export const useAuthStore = create<AuthState>()((set) => ({
-    user: demoUser,
+    user: null,
     isLoading: true,
     count: 0,
     getCurrentUser: async (redirectPath?: string) => {

@@ -12,8 +12,10 @@ type Props = {
 
 export default function AnswerMode({ questionMode, answerMode }: Props) {
 	return (
-		<div className='bg-secondary rounded-2xl inline-block'>
-			<Link href={`/practice?ask=${questionMode}&answer=speak`}>
+		<div className='bg-secondary rounded-2xl inline-block shrink-0'>
+			<Link
+				href={`/practice?ask=${questionMode}&answer=speak`}
+				scroll={false}>
 				<Button
 					size='xs'
 					aria-label='Speak answer'
@@ -21,7 +23,9 @@ export default function AnswerMode({ questionMode, answerMode }: Props) {
 					<MicVocalIcon />
 				</Button>
 			</Link>
-			<Link href={`/practice?ask=${questionMode}&answer=write`}>
+			<Link
+				href={`/practice?ask=${questionMode}&answer=write`}
+				scroll={false}>
 				<Button
 					size='xs'
 					variant={answerMode === 'write' ? 'default' : 'secondary'}>

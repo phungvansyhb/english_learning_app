@@ -71,7 +71,7 @@ export default function ListeningPlayer() {
 	const muted = audioRef.current?.muted ?? volume === 0;
 
 	return (
-		<section className='w-full rounded-2xl border bg-card p-5 shadow-sm md:p-6'>
+		<section className='w-full rounded-2xl bg-secondary/70 p-6'>
 			<audio
 				ref={audioRef}
 				src={audioSample}

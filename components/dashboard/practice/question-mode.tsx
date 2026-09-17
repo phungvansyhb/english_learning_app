@@ -13,7 +13,9 @@ type Props = {
 export default function QuestionMode({ questionMode, answerMode }: Props) {
 	return (
 		<div className='bg-secondary rounded-2xl inline-block'>
-			<Link href={`/practice?ask=translate&answer=${answerMode}`}>
+			<Link
+				href={`/practice?ask=translate&answer=${answerMode}`}
+				scroll={false}>
 				<Button
 					size='xs'
 					aria-label='Translate prompt'
@@ -21,7 +23,9 @@ export default function QuestionMode({ questionMode, answerMode }: Props) {
 					<LanguagesIcon />
 				</Button>
 			</Link>
-			<Link href={`/practice?ask=listen&answer=${answerMode}`}>
+			<Link
+				href={`/practice?ask=listen&answer=${answerMode}`}
+				scroll={false}>
 				<Button
 					size='xs'
 					variant={questionMode === 'listen' ? 'default' : 'secondary'}>
