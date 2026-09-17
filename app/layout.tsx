@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html
-			lang='en'
+			lang='vi'
 			className={`${jakarta.variable}`}>
 			<body className='font-sans antialiased'>
 				{children}
