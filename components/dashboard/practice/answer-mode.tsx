@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { AnswerModeType, QuestionModeType } from '@/lib/types';
-import { MicVocalIcon, PencilSparklesIcon } from 'lucide-react';
+import { MicVocalIcon, PencilIcon } from 'lucide-react';
 import Link from 'next/link';
 
 type Props = {
@@ -16,6 +16,7 @@ export default function AnswerMode({ questionMode, answerMode }: Props) {
 			<Link href={`/practice?ask=${questionMode}&answer=speak`}>
 				<Button
 					size='xs'
+					aria-label='Speak answer'
 					variant={answerMode === 'speak' ? 'default' : 'secondary'}>
 					<MicVocalIcon />
 				</Button>
@@ -24,7 +25,7 @@ export default function AnswerMode({ questionMode, answerMode }: Props) {
 				<Button
 					size='xs'
 					variant={answerMode === 'write' ? 'default' : 'secondary'}>
-					<PencilSparklesIcon />
+					<PencilIcon />
 				</Button>
 			</Link>
 		</div>
