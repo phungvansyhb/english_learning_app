@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import vocabData from './data/vocab/vocabs.json';
+import vocabData from './data/vocab/IT.json';
 import questionData from './data/EST_2026_T1/questions.json'
 
 function createSupabase() {
@@ -26,10 +26,10 @@ async function bulkInsertVocab() {
 
 
 
-async function bulkInsertQuestion(){
+async function bulkInsertQuestion() {
     const supabase = createSupabase();
-    const [inserted , ...rest] = questionData;
-    for(let i = 0 ; i < rest.length ; i++){
+    const [inserted, ...rest] = questionData;
+    for (let i = 0; i < rest.length; i++) {
         const { data, error } = await supabase.rpc("insert_question_to_test", { p_data: rest[i] })
         if (error) {
             console.error('Thêm question fail:', error.message);
@@ -37,12 +37,12 @@ async function bulkInsertQuestion(){
             console.log('Thêm question thanh công :', data);
         }
     }
-   
+
 }
 
 
-(function main(){
-    bulkInsertQuestion()
+(function main() {
+    bulkInsertVocab()
 })()
 
 

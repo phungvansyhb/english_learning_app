@@ -2,7 +2,18 @@
 
 import { useState, useTransition } from 'react';
 import { usePathname } from 'next/navigation';
-import { BookA, ChevronLeft, GraduationCap, LayoutGrid, Layers, LogOut, Settings, Users, BookCheckIcon, ClipboardListIcon } from 'lucide-react';
+import {
+	BookA,
+	ChevronLeft,
+	GraduationCap,
+	LayoutGrid,
+	Layers,
+	LogOut,
+	Settings,
+	Users,
+	BookCheckIcon,
+	ClipboardListIcon,
+} from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -22,7 +33,7 @@ const navItems: NavItem[] = [
 	{ id: 'masterData', link: '/admin/master-data', label: 'Master Data', icon: Layers },
 	{ id: 'words', link: '/admin/word', label: 'Words', icon: BookA },
 	{ id: 'grammar', link: '/admin/grammar', label: 'Grammar', icon: GraduationCap },
-	{ id: 'test', link: '/admin/test', label: 'Test', icon: ClipboardListIcon },
+	{ id: 'question', link: '/admin/question', label: 'Question', icon: ClipboardListIcon },
 	{ id: 'settings', link: '/admin/setting', label: 'Settings', icon: Settings },
 ];
 

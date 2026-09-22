@@ -1,0 +1,31 @@
+[
+    {
+        "word": "algorithm",
+        "ipa_uk": "/ˈæl.ɡə.rɪ.ðəm/",
+        "ipa_us": "/ˈæl.ɡə.rɪ.ðəm/",
+        "difficulty_level": 2,
+        "topic_id": 52,
+        "meanings": [
+            {
+                "part_of_speech": "noun",
+                "meaning": "Thuật toán",
+                "example": "The search engine uses a complex algorithm.",
+                "example_meaning": "Công cụ tìm kiếm sử dụng một thuật toán phức tạp.",
+                "is_primary_use": true
+            }
+        ],
+        "collocations": [
+            {
+                "phrase": "efficient algorithm",
+                "meaning_vi": "thuật toán hiệu quả"
+            }
+        ],
+        "relations": [
+            {
+                "relation_type": "synonym",
+                "word": "procedure",
+                "meaning": "quy trình"
+            }
+        ]
+    }
+]

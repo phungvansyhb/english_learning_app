@@ -34,19 +34,10 @@ export default function MaterDataManager({}: Props) {
 				<Tabs.List className='relative z-1 -mb-px flex flex-wrap gap-1'>
 					<Tabs.Tab
 						className={tabClassName}
-						value='skills'>
-						Skills
-					</Tabs.Tab>
-					<Tabs.Tab
-						className={tabClassName}
 						value='difficulty'>
 						Difficulty
 					</Tabs.Tab>
-					<Tabs.Tab
-						className={tabClassName}
-						value='examParts'>
-						Exam parts
-					</Tabs.Tab>
+
 					<Tabs.Tab
 						className={tabClassName}
 						value='topics'>
@@ -63,18 +54,8 @@ export default function MaterDataManager({}: Props) {
 				<div className='grid w-full h-full grid-cols-1 rounded-b-xl border border-border bg-white dark:border-white dark:bg-neutral-950'>
 					<Tabs.Panel
 						className={panelClassName}
-						value='skills'>
-						<SkillsTab />
-					</Tabs.Panel>
-					<Tabs.Panel
-						className={panelClassName}
 						value='difficulty'>
 						<DifficultyLevelsTab />
-					</Tabs.Panel>
-					<Tabs.Panel
-						className={panelClassName}
-						value='examParts'>
-						<ExamPartsTab />
 					</Tabs.Panel>
 					<Tabs.Panel
 						className={panelClassName}

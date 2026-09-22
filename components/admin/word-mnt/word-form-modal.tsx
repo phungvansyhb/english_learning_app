@@ -19,7 +19,7 @@ const schema = z.object({
 	ipa_uk: z.string().trim().min(1, 'Ipa_uk is required'),
 	ipa_us: z.string().trim().min(1, 'Ipa_us is required'),
 	topic_id: z.string().min(1, 'Topic is required'),
-	difficulty_id: z.string().min(1, 'Difficulty level is required'),
+	difficulty_id: z.number().min(1).max(3),
 	meanings: z
 		.array(
 			z.object({
@@ -60,7 +60,7 @@ const emptyWord = (): FormData => ({
 	ipa_uk: '',
 	ipa_us: '',
 	topic_id: '',
-	difficulty_id: '',
+	difficulty_id: 1,
 	meanings: [
 		{
 			part_of_speech: 'noun',
@@ -118,9 +118,7 @@ export function WordFormModal({ open, word, onClose, onSuccess }: Props) {
 			title={word ? 'Edit word' : 'Add new word'}
 			className='w-3xl max-h-[85vh] flex flex-col'
 			description={
-				word
-					? `Update the details for "${word?.word}".`
-					: 'Create a new vocabulary entry.'
+				word ? `Update the details for "${word?.word}".` : 'Create a new vocabulary entry.'
 			}>
 			<form
 				onSubmit={handleSubmit(submit)}
@@ -163,7 +161,9 @@ export function WordFormModal({ open, word, onClose, onSuccess }: Props) {
 										value={field.value}
 										onValueChange={(value) =>
 											field.onChange(
-												Array.isArray(value) ? (value[0] ?? '') : (value ?? ''),
+												Array.isArray(value)
+													? (value[0] ?? '')
+													: (value ?? ''),
 											)
 										}
 									/>
@@ -181,10 +181,12 @@ export function WordFormModal({ open, word, onClose, onSuccess }: Props) {
 									<DifficultySelect
 										placeholder='Select difficulty level'
 										label=''
-										value={field.value}
+										value={field.value.toString()}
 										onValueChange={(value) =>
 											field.onChange(
-												Array.isArray(value) ? (value[0] ?? '') : (value ?? ''),
+												Array.isArray(value)
+													? (value[0] ?? '')
+													: (value ?? ''),
 											)
 										}
 									/>
@@ -226,7 +228,9 @@ export function WordFormModal({ open, word, onClose, onSuccess }: Props) {
 									<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
 										<Field
 											label='Part of speech'
-											{...register(`meanings.${index}.part_of_speech` as const)}>
+											{...register(
+												`meanings.${index}.part_of_speech` as const,
+											)}>
 											<select>
 												{PART_OF_SPEECH_OPTIONS.map((pos) => (
 													<option
@@ -243,9 +247,13 @@ export function WordFormModal({ open, word, onClose, onSuccess }: Props) {
 												<input
 													type='checkbox'
 													className='rounded border-border text-primary focus:ring-primary size-4 bg-card'
-													{...register(`meanings.${index}.is_primary_use` as const)}
+													{...register(
+														`meanings.${index}.is_primary_use` as const,
+													)}
 												/>
-												<span className='text-sm font-medium text-foreground'>Is primary use?</span>
+												<span className='text-sm font-medium text-foreground'>
+													Is primary use?
+												</span>
 											</label>
 										</div>
 
@@ -269,7 +277,9 @@ export function WordFormModal({ open, word, onClose, onSuccess }: Props) {
 											label='Example Meaning (VI)'
 											placeholder='e.g. Người dùng được ủy quyền có thể truy cập cơ sở dữ liệu.'
 											error={errors.meanings?.[index]?.example_meaning}
-											{...register(`meanings.${index}.example_meaning` as const)}
+											{...register(
+												`meanings.${index}.example_meaning` as const,
+											)}
 										/>
 
 										<Button
@@ -321,7 +331,9 @@ export function WordFormModal({ open, word, onClose, onSuccess }: Props) {
 											label='Meaning (VI)'
 											placeholder='e.g. truy cập hệ thống'
 											error={errors.collocations?.[index]?.meaning_vi}
-											{...register(`collocations.${index}.meaning_vi` as const)}
+											{...register(
+												`collocations.${index}.meaning_vi` as const,
+											)}
 										/>
 
 										<Button
@@ -366,7 +378,9 @@ export function WordFormModal({ open, word, onClose, onSuccess }: Props) {
 									<div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
 										<Field
 											label='Relation Type'
-											{...register(`relations.${index}.relation_type` as const)}>
+											{...register(
+												`relations.${index}.relation_type` as const,
+											)}>
 											<select>
 												<option value='SYNONYMS'>Synonym</option>
 												<option value='ANTONYMS'>Antonym</option>
@@ -404,22 +418,22 @@ export function WordFormModal({ open, word, onClose, onSuccess }: Props) {
 				</div>
 
 				{errors.root?.apiError && (
-					<p className='my-2 px-2 error-text text-center text-sm'>{errors.root.apiError.message}</p>
+					<p className='my-2 px-2 error-text text-center text-sm'>
+						{errors.root.apiError.message}
+					</p>
 				)}
 
 				<div className='flex justify-end gap-3 border-t border-border px-6 py-4 bg-card shrink-0'>
 					<Button
 						type='button'
 						variant='secondary'
-						onClick={onClose}
-						>
+						onClick={onClose}>
 						Cancel
 					</Button>
 					<Button
 						type='submit'
 						variant='default'
-						loading={isPending}
-						>
+						loading={isPending}>
 						Create word
 					</Button>
 				</div>
