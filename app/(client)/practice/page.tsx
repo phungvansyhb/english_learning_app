@@ -3,10 +3,10 @@ import AnswerUi from '@/components/dashboard/practice/answer-ui';
 import QuestionMode from '@/components/dashboard/practice/question-mode';
 import QuestionUi from '@/components/dashboard/practice/question-ui';
 import { AnswerModeType, QuestionModeType, ServerPageProps } from '@/lib/types';
-import { CheckCircle2, ChevronRight, Repeat, Sparkles } from 'lucide-react';
+import { Repeat, Sparkles } from 'lucide-react';
 import PracticeControls from '@/components/dashboard/practice/practice-controls';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { getListQuestionByTopic } from '@/services/question';
 
 type Props = {};
 
@@ -14,7 +14,8 @@ export default async function PracticeScreen({ searchParams }: ServerPageProps) 
 	const { ask = 'listen', answer = 'speak', topic = 'all' } = await searchParams;
 	const questionMode = ask as QuestionModeType;
 	const answerMode = answer as AnswerModeType;
-
+	const questionList = await getListQuestionByTopic(topic as string , 1 )
+	
 	return (
 		<main className='mx-auto flex w-full max-w-6xl flex-col gap-6 p-4 md:gap-8 md:p-8'>
 			<header className='flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
@@ -31,7 +32,7 @@ export default async function PracticeScreen({ searchParams }: ServerPageProps) 
 				</div>
 			</header>
 
-			<PracticeControls selectedTopic={topic as string} />
+			<PracticeControls />
 
 			<section className='grid gap-5 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]'>
 				<article className='flex lg:min-h-100 flex-col rounded-3xl bg-white p-5 md:p-7'>
@@ -52,7 +53,7 @@ export default async function PracticeScreen({ searchParams }: ServerPageProps) 
 						/>
 					</div>
 					<div className='mt-4 lg:mt-8'>
-						<QuestionUi mode={questionMode} />
+						<QuestionUi mode={questionMode} questitons={questionList}/>
 					</div>
 				</article>
 

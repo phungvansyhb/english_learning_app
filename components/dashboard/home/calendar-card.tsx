@@ -3,10 +3,11 @@
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { ChevronLeft, ChevronRight, FlameIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { cn, getCalendarDays } from '@/lib/utils';
 import { DATETIME_FORMAT } from '@/lib/types';
+import { getUserActivities } from '@/services/auth';
 import { useAuthStore } from '@/utils/zustand/auth-store';
 
 dayjs.extend(isoWeek);
@@ -15,9 +16,31 @@ export function CalendarCard() {
 	const today = dayjs();
 	const [selectedMonth, setSelectedMonth] = useState(today.startOf('month'));
 	const calendarDays = getCalendarDays(selectedMonth, today);
-	const {user , isLoading} = useAuthStore()
+	const [activityDates, setActivityDates] = useState<Set<string>>(new Set());
+	const { user, isLoading } = useAuthStore();
+
+	useEffect(() => {
+		if (!user || isLoading) return;
+
+		let isCurrent = true;
+		void getUserActivities().then((activities) => {
+			if (!isCurrent) return;
+			setActivityDates(
+				new Set(
+					activities.map(({ activity_date }) =>
+						dayjs(activity_date).format(DATETIME_FORMAT.YYYY_MM_DD),
+					),
+				),
+			);
+		});
+
+		return () => {
+			isCurrent = false;
+		};
+	}, [isLoading, user]);
+
 	return (
-		<section className='bg-card p-5 border border-border rounded-3xl'>
+		<section className='bg-card p-5 border border-border rounded-3xl min-h-44'>
 			<div className='flex justify-between items-center'>
 				<button
 					type='button'
@@ -39,15 +62,19 @@ export function CalendarCard() {
 			</div>
 
 			<div className='gap-1 grid grid-cols-7 mt-5'>
-				{calendarDays.map((day) => (
+				{calendarDays.map((day) => {
+					const studied = activityDates.has(day.dateKey);
+
+					return (
 					<button
-						key={day.label}
+						key={day.dateKey}
 						type='button'
 						aria-label={`${day.label} ${day.date}`}
-						aria-pressed={day.active}
+						aria-pressed={studied}
 						className={cn(
 							'flex flex-col items-center gap-2 hover:bg-secondary py-2 rounded-2xl transition-colors',
-							day.active && 'bg-accent hover:bg-accent',
+							studied && 'bg-accent hover:bg-accent',
+							day.active && !studied && 'ring-1 ring-accent',
 						)}>
 						<span className='font-medium text-muted-foreground text-xs'>
 							{day.label}
@@ -55,16 +82,14 @@ export function CalendarCard() {
 						<span
 							className={cn(
 								'font-semibold text-foreground text-sm',
-								day.active && 'text-accent-foreground',
+								studied && 'text-accent-foreground',
 							)}>
 							{day.date}
-							<FlameIcon
-								size={12}
-								color='oklch(0.78 0.13 55)'
-							/>
+							{studied && <FlameIcon size={12} color='oklch(0.78 0.13 55)' />}
 						</span>
 					</button>
-				))}
+					);
+				})}
 			</div>
 		</section>
 	);

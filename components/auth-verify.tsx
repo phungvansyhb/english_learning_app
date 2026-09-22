@@ -13,7 +13,6 @@ export default function AuthVerify({}: Props) {
 			void getCurrentUser();
 			return;
 		}
-
 		const isActiveToday = document.cookie
 			.split('; ')
 			.some((cookie) => cookie.startsWith('today_checkin='));

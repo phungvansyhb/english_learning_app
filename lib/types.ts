@@ -60,6 +60,7 @@ export interface UpcomingCourse {
 export interface CalendarDay {
   label: string;
   date: number;
+  dateKey: string;
   active?: boolean;
 }
 export const PARTS_OF_SPEECH = [
@@ -383,5 +384,6 @@ export const VOCAB_MODE = {
 };
 
 export const DATETIME_FORMAT = {
-  MMMM_YYYY: 'MMMM YYYY'
+  MMMM_YYYY: 'MMMM YYYY',
+  YYYY_MM_DD: 'YYYY-MM-DD'
 }

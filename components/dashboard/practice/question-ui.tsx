@@ -2,10 +2,11 @@ import React from 'react';
 import ListeningPlayer from './listening-player';
 import { QuestionModeType } from '@/lib/types';
 
-type Props = { mode: QuestionModeType };
+type Props = { mode: QuestionModeType , questitons : any };
 
-export default function QuestionUi({ mode }: Props) {
+export default function QuestionUi({ mode , questitons }: Props) {
 	if (mode === 'listen') return <ListeningPlayer />;
+	console.log(questitons)
 	return (
 		<div className='rounded-2xl bg-secondary/70  text-lg font-medium leading-relaxed p-4 md:p-5 min-h-40'>
 			<p>

@@ -17,6 +17,7 @@ export function getCalendarDays(month: Dayjs, today: Dayjs) {
     return {
       label: day.format('ddd'),
       date: day.date(),
+      dateKey: day.format('YYYY-MM-DD'),
       active: day.isSame(today, 'day'),
     };
   });
