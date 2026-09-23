@@ -1,8 +1,32 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-const SpeechRecognitionAPI =
-    typeof window !== 'undefined' &&
-    ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+type SpeechRecognitionResultEvent = {
+    results: ArrayLike<{ 0: { transcript: string } }>;
+};
+
+type SpeechRecognitionErrorEvent = {
+    error?: string;
+};
+
+type SpeechRecognitionInstance = {
+    lang: string;
+    continuous: boolean;
+    interimResults: boolean;
+    maxAlternatives: number;
+    onstart: (() => void) | null;
+    onresult: ((event: SpeechRecognitionResultEvent) => void) | null;
+    onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+    onend: (() => void) | null;
+    start: () => void;
+    stop: () => void;
+};
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+
+type SpeechRecognitionWindow = Window & {
+    SpeechRecognition?: SpeechRecognitionConstructor;
+    webkitSpeechRecognition?: SpeechRecognitionConstructor;
+};
 
 interface UseSpeechOptions {
     lang?: string;
@@ -14,17 +38,21 @@ export function useSpeech(options: UseSpeechOptions = { lang: 'en-US', continuou
     const [isRecording, setIsRecording] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const recognitionRef = useRef<any>(null);
+    const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
     useEffect(() => {
+        const browserWindow = window as SpeechRecognitionWindow;
+        const SpeechRecognitionAPI =
+            browserWindow.SpeechRecognition || browserWindow.webkitSpeechRecognition;
+
         if (!SpeechRecognitionAPI) {
             setError('Browser_not_supported');
             return;
         }
 
         const recognition = new SpeechRecognitionAPI();
-        recognition.lang = options.lang;
-        recognition.continuous = options.continuous;
+        recognition.lang = options.lang ?? 'en-US';
+        recognition.continuous = options.continuous ?? false;
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
 
@@ -33,14 +61,14 @@ export function useSpeech(options: UseSpeechOptions = { lang: 'en-US', continuou
             setError(null);
         };
 
-        recognition.onresult = (event: any) => {
+        recognition.onresult = (event) => {
             // Lấy kết quả text cuối cùng
             const text = event.results[event.results.length - 1][0].transcript;
             setTranscript(text);
         };
 
-        recognition.onerror = (event: any) => {
-            setError(event.error);
+        recognition.onerror = (event) => {
+            setError(event.error ?? 'Speech_recognition_failed');
             setIsRecording(false);
         };
 
@@ -53,6 +81,7 @@ export function useSpeech(options: UseSpeechOptions = { lang: 'en-US', continuou
         // Cleanup khi component unmount
         return () => {
             recognition.stop();
+            recognitionRef.current = null;
         };
     }, [options.lang, options.continuous]);
 
@@ -81,7 +110,7 @@ export function useSpeech(options: UseSpeechOptions = { lang: 'en-US', continuou
         transcript,
         isRecording,
         error,
-        isSupported: !!SpeechRecognitionAPI,
+        isSupported: error !== 'Browser_not_supported',
         startListening,
         stopListening,
         resetTranscript

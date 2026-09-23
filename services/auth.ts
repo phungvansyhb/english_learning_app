@@ -1,5 +1,6 @@
 'use server';
 import { ROLE_CONSTANT, UserRow } from '@/lib/types';
+import { createClient } from '@/utils/supabase/client';
 import { getSupabaseServer } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 
@@ -175,13 +176,13 @@ export async function saveActivity() {
             return
         }
         if (progressData) {
-            const {data: updateData , error : updateError } = await supabase.from('user_progress_stats').update({
+            const { data: updateData, error: updateError } = await supabase.from('user_progress_stats').update({
                 current_streak_days: progressData.current_streak_days + 1,
                 longest_streak_days: Math.max(progressData.current_streak_days + 1, progressData.longest_streak_days),
                 last_active_date: data.activity_date
-            }).eq('user_id',data.user_id);
-            if(updateError){
-                console.error('update error' , updateError.message)
+            }).eq('user_id', data.user_id);
+            if (updateError) {
+                console.error('update error', updateError.message)
             }
         }
     }

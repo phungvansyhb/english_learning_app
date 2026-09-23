@@ -3,22 +3,31 @@
 import { BookOpen } from 'lucide-react';
 import TopicSelect from '@/components/admin/topic-select';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
-
-
+import { useEffect, useMemo } from 'react';
+import { usePracticeStore } from '@/utils/zustand/practice-store';
 
 export default function PracticeControls() {
-	const router = useRouter()
-	const searchParams = useSearchParams()
-	const pathName = usePathname()
-	const handleChangeTopic=(t : string)=>{
-		const url = pathName 
-		+ '?ask=' + searchParams.get('ask')
-		+ '&answer=' + searchParams.get('answer')
-		+ '&topic=' + t
-		router.push(url)
-	}
-	const defaultValue = useMemo(()=>searchParams.get('topic'),[searchParams])
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const pathName = usePathname();
+	const practiceControl = usePracticeStore();
+	const handleChangeTopic = (t: string) => {
+		const url =
+			pathName +
+			'?ask=' +
+			searchParams.get('ask') +
+			'&answer=' +
+			searchParams.get('answer') +
+			'&topic=' +
+			t;
+		router.push(url);
+	};
+	const defaultValue = useMemo(() => searchParams.get('topic'), [searchParams]);
+
+	useEffect(() => {
+		practiceControl.getQuestion(searchParams.get('topic') as string, 1);
+	}, []);
+
 	return (
 		<div className='flex flex-col gap-4'>
 			<div className='flex flex-col gap-3 rounded-3xl bg-white p-4 sm:flex-row sm:items-center sm:justify-between'>
@@ -33,9 +42,13 @@ export default function PracticeControls() {
 					</div>
 				</div>
 				<div className='w-60'>
-					<TopicSelect value={defaultValue?.toString()} label='' placeholder='All' onValueChange={(v) => handleChangeTopic(v as string)}  />
+					<TopicSelect
+						value={defaultValue?.toString()}
+						label=''
+						placeholder='All'
+						onValueChange={(v) => handleChangeTopic(v as string)}
+					/>
 				</div>
-				
 			</div>
 		</div>
 	);
