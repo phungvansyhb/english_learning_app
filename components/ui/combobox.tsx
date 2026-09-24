@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox';
-import { CheckIcon, XIcon } from 'lucide-react';
+import { CheckIcon, Loader2, XIcon } from 'lucide-react';
 import { Option } from '@/lib/types';
 import clsx from 'clsx';
 
@@ -17,6 +17,7 @@ type Props = {
 	isMultiple?: boolean;
 	defaultValue?: string | string[] | null;
 	value?: string | string[] | null;
+	isLoadingValue?: boolean;
 	onValueChange?: (value: string | string[] | null) => void;
 	creatable?: boolean;
 	onCreate?: (value: string) => string | void;
@@ -50,6 +51,11 @@ export default function Combobox(props: Props) {
 	const [internalValue, setInternalValue] = React.useState<string | string[] | null>(
 		props.defaultValue ?? (props.isMultiple ? [] : null),
 	);
+	React.useEffect(() => {
+		if (!isControlled) {
+			setInternalValue(props.defaultValue ?? (props.isMultiple ? [] : null));
+		}
+	}, [isControlled, props.defaultValue, props.isMultiple]);
 	const value = isControlled ? props.value : internalValue;
 	const selectedValue = React.useMemo(() => {
 		if (props.isMultiple) {
@@ -177,29 +183,45 @@ export default function Combobox(props: Props) {
 	const ComboBoxInput = React.useCallback(() => {
 		if (props.isMultiple) {
 			return (
-				<BaseCombobox.Chips className='flex w-full h-full flex-wrap items-center gap-1'>
+				<BaseCombobox.Chips className='relative flex w-full h-full flex-wrap items-center gap-1'>
 					<BaseCombobox.Value>
 						{(value: Option[]) => (
 							<React.Fragment>
-								{value.map((language) => (
-									<BaseCombobox.Chip
-										key={language.value}
-										className='inline-flex items-center gap-1.5 rounded-lg bg-secondary px-2.5 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-accent'
-										aria-label={language.label}>
-										{language.label}
-										<BaseCombobox.ChipRemove
-											className='flex size-4 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-inherit hover:bg-accent group-focus-within:hover:bg-neutral-700'
-											aria-label={`Remove ${language.label}`}>
-											<XIcon />
-										</BaseCombobox.ChipRemove>
-									</BaseCombobox.Chip>
-								))}
+								{!props.isLoadingValue &&
+									value.map((language) => (
+										<BaseCombobox.Chip
+											key={language.value}
+											className='inline-flex items-center gap-1.5 rounded-lg bg-secondary px-2.5 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-accent'
+											aria-label={language.label}>
+											{language.label}
+											<BaseCombobox.ChipRemove
+												className='flex size-4 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-inherit hover:bg-accent group-focus-within:hover:bg-neutral-700'
+												aria-label={`Remove ${language.label}`}>
+												<XIcon />
+											</BaseCombobox.ChipRemove>
+										</BaseCombobox.Chip>
+									))}
 								<BaseCombobox.Input
 									id={id}
-									placeholder={props.placeholder || 'Placeholder'}
+									disabled={props.isLoadingValue}
+									placeholder={
+										props.isLoadingValue
+											? ''
+											: props.placeholder || 'Placeholder'
+									}
 									onKeyDown={handleInputKeyDown}
-									className='min-h-11 h-full w-full border-0 bg-white pl-2 dark:bg-neutral-950 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:text-white'
+									className={clsx(
+										'min-h-11 h-full w-full border-0 bg-white pl-2 dark:bg-neutral-950 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:text-white',
+										props.isLoadingValue &&
+											'text-transparent placeholder:text-transparent',
+									)}
 								/>
+								{props.isLoadingValue && (
+									<Loader2
+										className='pointer-events-none absolute right-2 size-4 animate-spin text-muted-foreground'
+										aria-label='Loading value'
+									/>
+								)}
 							</React.Fragment>
 						)}
 					</BaseCombobox.Value>
@@ -209,10 +231,14 @@ export default function Combobox(props: Props) {
 			return (
 				<>
 					<BaseCombobox.Input
-						placeholder={props.placeholder || 'placeholder'}
+						disabled={props.isLoadingValue}
+						placeholder={props.isLoadingValue ? '' : props.placeholder || 'placeholder'}
 						id={id}
 						onKeyDown={handleInputKeyDown}
-						className='min-h-11 h-full w-full border-0 bg-white pl-2 dark:bg-neutral-950 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:text-white '
+						className={clsx(
+							'min-h-11 h-full w-full border-0 bg-white pl-2 dark:bg-neutral-950 text-sm any-pointer-coarse:text-base font-normal text-neutral-950 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:text-white',
+							props.isLoadingValue && 'text-transparent placeholder:text-transparent',
+						)}
 					/>
 					<div className='absolute right-0 bottom-0 flex h-full items-center justify-center text-neutral-500 dark:text-neutral-400'>
 						<React.Activity mode={value ? 'visible' : 'hidden'}>
@@ -223,16 +249,23 @@ export default function Combobox(props: Props) {
 							</BaseCombobox.Clear>
 						</React.Activity>
 
-						<BaseCombobox.Trigger
-							className='flex h-6 w-6 items-center justify-center border-0 bg-transparent p-0 dark:text-white'
-							aria-label='Open popup'>
-							<CaretDownIcon />
-						</BaseCombobox.Trigger>
+						{props.isLoadingValue ? (
+							<Loader2
+								className='size-4 animate-spin'
+								aria-label='Loading value'
+							/>
+						) : (
+							<BaseCombobox.Trigger
+								className='flex h-6 w-6 items-center justify-center border-0 bg-transparent p-0 dark:text-white'
+								aria-label='Open popup'>
+								<CaretDownIcon />
+							</BaseCombobox.Trigger>
+						)}
 					</div>
 				</>
 			);
 		}
-	}, [props.isMultiple, id, props.placeholder, handleInputKeyDown, inputValue]);
+	}, [props.isMultiple, props.isLoadingValue, id, props.placeholder, handleInputKeyDown]);
 
 	return (
 		<BaseCombobox.Root
@@ -240,7 +273,6 @@ export default function Combobox(props: Props) {
 			multiple={props.isMultiple}
 			value={selectedValue as any}
 			onValueChange={handleValueChange as any}
-			inputValue={inputValue}
 			onInputValueChange={(nextValue) => setInputValue(String(nextValue))}
 			itemToStringLabel={(item: Option) => item.label}
 			itemToStringValue={(item: Option) => String(item.value)}>
@@ -253,7 +285,9 @@ export default function Combobox(props: Props) {
 					)}>
 					{props.label}
 				</label>
-				<BaseCombobox.InputGroup className='min-h-11 h-max w-full rounded-xl border border-border bg-card px-3.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground has-focus:border-ring has-focus:ring-3 has-focus:ring-ring/30 relative'>
+				<BaseCombobox.InputGroup
+					aria-busy={props.isLoadingValue}
+					className='min-h-11 h-max w-full rounded-xl border border-border bg-card px-3.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground has-focus:border-ring has-focus:ring-3 has-focus:ring-ring/30 relative'>
 					{ComboBoxInput()}
 				</BaseCombobox.InputGroup>
 			</div>

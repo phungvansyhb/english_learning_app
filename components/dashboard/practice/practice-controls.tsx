@@ -1,32 +1,29 @@
 'use client';
 
-import { BookOpen } from 'lucide-react';
 import TopicSelect from '@/components/admin/topic-select';
+import { usePracticeStore } from '@/utils/zustand/practice-store';
+import { BookOpen } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
-import { usePracticeStore } from '@/utils/zustand/practice-store';
 
 export default function PracticeControls() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const pathName = usePathname();
-	const practiceControl = usePracticeStore();
 	const handleChangeTopic = (t: string) => {
-		const url =
-			pathName +
-			'?ask=' +
-			searchParams.get('ask') +
-			'&answer=' +
-			searchParams.get('answer') +
-			'&topic=' +
-			t;
-		router.push(url);
+		const params = new URLSearchParams(searchParams.toString());
+		if (t) {
+			params.set('topic', t);
+		} else {
+			params.delete('topic');
+		}
+		const query = params.toString();
+		router.push(query ? `${pathName}?${query}` : pathName);
 	};
-	const defaultValue = useMemo(() => searchParams.get('topic'), [searchParams]);
-
+	const { getQuestion } = usePracticeStore();
 	useEffect(() => {
-		practiceControl.getQuestion(searchParams.get('topic') as string, 1);
-	}, []);
+		getQuestion(searchParams.get('topic') as string, 1);
+	}, [searchParams.get('topic')]);
 
 	return (
 		<div className='flex flex-col gap-4'>
@@ -43,7 +40,7 @@ export default function PracticeControls() {
 				</div>
 				<div className='w-60'>
 					<TopicSelect
-						value={defaultValue?.toString()}
+						defaultValue={searchParams.get('topic')}
 						label=''
 						placeholder='All'
 						onValueChange={(v) => handleChangeTopic(v as string)}

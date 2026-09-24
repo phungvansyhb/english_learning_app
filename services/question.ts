@@ -24,10 +24,9 @@ export async function getListQuestionByTopic(topicId: string, page: number): Pro
     .range(from, to)
 
   const parsedTopicId = Number(topicId)
-  if (topicId !== 'all' && Number.isInteger(parsedTopicId)) {
+  if (topicId && Number.isInteger(parsedTopicId)) {
     query = query.eq('topic_id', parsedTopicId)
   }
-
   const { data, error } = await query
   if (error) {
     console.error('Get list question error', error)

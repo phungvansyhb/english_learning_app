@@ -35,7 +35,7 @@ const navItems: NavItem[] = [
 	{ id: 'vocabulary', label: 'Vocabulary', icon: WholeWordIcon, link: '/vocabulary' },
 	// { id: 'review', label: 'Ôn tập', icon: BrainIcon, link: '/vocabulary/review' },
 	{ id: 'grammar', label: 'Grammar', icon: LanguagesIcon, link: '/grammar' },
-	{ id: 'practice', label: 'Practice', icon: DumbbellIcon, link: '/practice?mode=listen&answer=speak' },
+	{ id: 'practice', label: 'Practice', icon: DumbbellIcon, link: '/practice?mode=listen&answer=speak&topic=all' },
 	// { id: 'speaking', label: 'Speaking', icon: MicVocalIcon, link: '/speaking' },
 	// { id: 'reading', label: 'Reading', icon: BookOpen, link: '/reading' },
 	// { id: 'writing', label: 'Writing', icon: PenToolIcon, link: '/writing' },
