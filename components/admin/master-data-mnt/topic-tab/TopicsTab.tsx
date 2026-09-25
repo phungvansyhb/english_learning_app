@@ -104,6 +104,16 @@ export default function TopicsTab() {
 				columns={[
 					{ key: 'name', header: 'Name' },
 					{
+						key: 'word_count',
+						header: 'Words',
+						render: (item) => item.word_count ?? 0,
+					},
+					{
+						key: 'question_count',
+						header: 'Questions',
+						render: (item) => item.question_count ?? 0,
+					},
+					{
 						key: 'actions',
 						header: 'Actions',
 						className: 'text-right',
@@ -136,6 +146,24 @@ export default function TopicsTab() {
 								Name
 							</p>
 							<p className='mt-1 text-sm text-foreground'>{item.name}</p>
+						</div>
+						<div className='grid grid-cols-2 gap-3'>
+							<div>
+								<p className='text-xs uppercase tracking-wide text-muted-foreground'>
+									Words
+								</p>
+								<p className='mt-1 text-sm text-foreground'>
+									{item.word_count ?? 0}
+								</p>
+							</div>
+							<div>
+								<p className='text-xs uppercase tracking-wide text-muted-foreground'>
+									Questions
+								</p>
+								<p className='mt-1 text-sm text-foreground'>
+									{item.question_count ?? 0}
+								</p>
+							</div>
 						</div>
 						<div className='flex gap-2 pt-1'>
 							<button
@@ -254,12 +282,12 @@ function TopicFormModal({
 				onSubmit={handleSubmit(submit)}
 				className='flex min-h-0 flex-1 flex-col'>
 				<div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
-						<Field
-							label='Name'
-							placeholder='Enter topic name'
-							error={errors.name}
-							{...register('name', { required: 'Name is required.' })}
-						/>
+					<Field
+						label='Name'
+						placeholder='Enter topic name'
+						error={errors.name}
+						{...register('name', { required: 'Name is required.' })}
+					/>
 				</div>
 
 				{error && <StatusError message={error} />}

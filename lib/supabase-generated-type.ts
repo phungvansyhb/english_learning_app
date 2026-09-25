@@ -42,33 +42,30 @@ export type Database = {
       attempt_answers: {
         Row: {
           answered_at: string
-          attempt_id: string
-          attempt_started_at: string
+          content: string | null
+          dislike: number | null
           id: number
-          is_correct: boolean
+          like: number | null
           question_id: number
-          selected_choice_id: number | null
-          time_spent_seconds: number | null
+          user_id: string | null
         }
         Insert: {
           answered_at?: string
-          attempt_id: string
-          attempt_started_at: string
+          content?: string | null
+          dislike?: number | null
           id?: number
-          is_correct: boolean
+          like?: number | null
           question_id: number
-          selected_choice_id?: number | null
-          time_spent_seconds?: number | null
+          user_id?: string | null
         }
         Update: {
           answered_at?: string
-          attempt_id?: string
-          attempt_started_at?: string
+          content?: string | null
+          dislike?: number | null
           id?: number
-          is_correct?: boolean
+          like?: number | null
           question_id?: number
-          selected_choice_id?: number | null
-          time_spent_seconds?: number | null
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -76,13 +73,6 @@ export type Database = {
             columns: ["question_id"]
             isOneToOne: false
             referencedRelation: "questions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "attempt_answers_selected_choice_id_fkey"
-            columns: ["selected_choice_id"]
-            isOneToOne: false
-            referencedRelation: "question_choices"
             referencedColumns: ["id"]
           },
         ]
@@ -981,48 +971,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "vocab_collocations_word_id_fkey"
-            columns: ["word_id"]
-            isOneToOne: false
-            referencedRelation: "vocab_words"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      vocab_quiz_attempts: {
-        Row: {
-          answered_at: string
-          id: number
-          is_correct: boolean
-          quiz_type: string
-          user_id: string
-          word_id: number
-        }
-        Insert: {
-          answered_at?: string
-          id?: number
-          is_correct: boolean
-          quiz_type: string
-          user_id: string
-          word_id: number
-        }
-        Update: {
-          answered_at?: string
-          id?: number
-          is_correct?: boolean
-          quiz_type?: string
-          user_id?: string
-          word_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "vocab_quiz_attempts_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "vocab_quiz_attempts_word_id_fkey"
             columns: ["word_id"]
             isOneToOne: false
             referencedRelation: "vocab_words"

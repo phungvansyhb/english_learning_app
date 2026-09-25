@@ -1,15 +1,26 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import { Pencil, Plus, Search, Trash2, Volume2 } from 'lucide-react';
+import { useState } from 'react';
+import {
+	ArrowDown,
+	ArrowUp,
+	Pencil,
+	Plus,
+	Search,
+	Trash2,
+	Volume2,
+	WandSparkles,
+} from 'lucide-react';
 
 import { DataTable } from '@/components/ui/data-table';
 import { Pagination } from '@/components/ui/pagination';
 import { usePagination } from '@/hooks/use-pagination';
 import type { Word } from '@/lib/types';
-import { seedWords } from '@/lib/words-data';
+import { listWords } from '@/services/vocab-word';
+
 import { Modal } from '@/components/ui/modal';
 import { WordFormModal } from '@/components/admin/word-mnt/word-form-modal';
+import { GenerateWordModal } from '@/components/admin/word-mnt/generate-word-modal';
 
 const difficultyTone: Record<number, string> = {
 	1: 'bg-brand-mint text-brand-mint-foreground',
@@ -20,46 +31,18 @@ const difficultyTone: Record<number, string> = {
 };
 
 export function WordsManager() {
-	const [words, setWords] = useState<Word[]>(seedWords);
+	const [words, setWords] = useState<Word[]>([]);
 	const [query, setQuery] = useState('');
+	const [topicSortOrder, setTopicSortOrder] = useState<'asc' | 'desc'>('asc');
 	const [formOpen, setFormOpen] = useState(false);
+	const [generateOpen, setGenerateOpen] = useState(false);
 	const [editing, setEditing] = useState<Word | null>(null);
 	const [deleteTarget, setDeleteTarget] = useState<Word | null>(null);
-
-	const listWords = useCallback(
-		async ({ page, perPage, search }: { page: number; perPage: number; search?: string }) => {
-			const q = search?.trim().toLowerCase();
-			const filtered = q
-				? words.filter(
-						(word) =>
-							word.word.toLowerCase().includes(q) ||
-							word.meanings.some((meaning) =>
-								meaning.meaning.toLowerCase().includes(q),
-							),
-					)
-				: words;
-
-			const sorted = [...filtered].sort((a, b) => a.order_index - b.order_index);
-			const total = sorted.length;
-			const totalPages = Math.max(1, Math.ceil(total / perPage));
-			const safePage = Math.min(Math.max(page, 1), totalPages);
-			const start = (safePage - 1) * perPage;
-			const data = sorted.slice(start, start + perPage);
-
-			return {
-				data,
-				total,
-				page: safePage,
-				perPage,
-				totalPages,
-			};
-		},
-		[words],
-	);
 
 	const {
 		data: wordsPage,
 		page,
+		total,
 		totalPages,
 		pending,
 		setPage,
@@ -67,8 +50,17 @@ export function WordsManager() {
 	} = usePagination({
 		apiFunction: listWords,
 		perPage: 10,
-		params: { search: query || undefined },
+		params: {
+			search: query || undefined,
+			sortBy: 'topic',
+			sortOrder: topicSortOrder,
+		},
 	});
+
+	function toggleTopicSort() {
+		setTopicSortOrder((currentOrder) => (currentOrder === 'asc' ? 'desc' : 'asc'));
+		setPage(1);
+	}
 
 	function openCreate() {
 		setEditing(null);
@@ -104,8 +96,7 @@ export function WordsManager() {
 				<div>
 					<h1 className='text-xl font-bold text-foreground'>Words</h1>
 					<p className='mt-0.5 text-sm text-muted-foreground'>
-						{words.length} {words.length === 1 ? 'entry' : 'entries'} in the vocabulary
-						library
+						{total} {total === 1 ? 'entry' : 'entries'} in the vocabulary library
 					</p>
 				</div>
 				<div className='flex items-center gap-3'>
@@ -129,6 +120,13 @@ export function WordsManager() {
 						className='inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90'>
 						<Plus className='size-4' />
 						<span className='hidden sm:inline'>Add word</span>
+					</button>
+					<button
+						type='button'
+						onClick={() => setGenerateOpen(true)}
+						className='inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-semibold text-foreground transition-colors hover:bg-secondary'>
+						<WandSparkles className='size-4' />
+						<span className='hidden sm:inline'>Generate words</span>
 					</button>
 				</div>
 			</div>
@@ -185,7 +183,34 @@ export function WordsManager() {
 							</span>
 						),
 					},
-					{ key: 'order_index', header: 'Order', cellClassName: 'text-muted-foreground' },
+					{
+						key: 'topic',
+						header: (
+							<button
+								type='button'
+								onClick={toggleTopicSort}
+								aria-label={`Sort by topic ${topicSortOrder === 'asc' ? 'descending' : 'ascending'}`}
+								className='inline-flex items-center gap-1.5 font-semibold hover:text-foreground'>
+								<span>Topic</span>
+								{topicSortOrder === 'asc' ? (
+									<ArrowUp
+										className='size-3.5'
+										aria-hidden='true'
+									/>
+								) : (
+									<ArrowDown
+										className='size-3.5'
+										aria-hidden='true'
+									/>
+								)}
+							</button>
+						),
+						render: (word) => (
+							<span className='text-sm text-muted-foreground'>
+								{word.topic.topic_name || 'No topic'}
+							</span>
+						),
+					},
 					{
 						key: 'actions',
 						header: 'Actions',
@@ -277,9 +302,18 @@ export function WordsManager() {
 					setFormOpen(false);
 					setEditing(null);
 				}}
-				onSuccess={()=>{
+				onSuccess={() => {
 					setFormOpen(false);
 					setEditing(null);
+				}}
+			/>
+
+			<GenerateWordModal
+				open={generateOpen}
+				onClose={() => setGenerateOpen(false)}
+				onSuccess={() => {
+					setGenerateOpen(false);
+					reload();
 				}}
 			/>
 

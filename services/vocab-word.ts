@@ -1,10 +1,163 @@
 'use server';
 
-import { BasePaginationOptions, InsertVocabDataPayload, TopicRow, WordCard } from '@/lib/types';
+import {
+	BasePaginationOptions,
+	InsertVocabDataPayload,
+	ListVocabWordsOptions,
+	TopicRow,
+	UpdateVocabWordInput,
+	Word,
+	WordCard,
+} from '@/lib/types';
 import { calculateNextSrsState, SrsProgressState, SrsRating } from '@/lib/srs';
 import { getSupabaseServer } from '@/utils/supabase/server';
 
 const REVIEW_LIMIT = 20;
+
+type VocabWordQueryRow = {
+	id: number;
+	word: string | null;
+	ipa_uk: string | null;
+	ipa_us: string | null;
+	difficulty_id: number;
+	created_at: string;
+	word_meaning: Array<{
+		part_of_speech: string | null;
+		meaning: string | null;
+		example: string | null;
+	}>;
+	vocab_collocations: Array<{ phrase: string; meaning_vi: string | null }>;
+	vocab_relations: Array<{ relation_type: string; word: string | null }>;
+	vocab_word_topics: Array<{ topic_id: number; topics: { name: string } | null }>;
+};
+
+function mapVocabWord(row: VocabWordQueryRow): Word {
+	const topic = row.vocab_word_topics[0];
+	return {
+		id: String(row.id),
+		part_id: '',
+		word: row.word ?? '',
+		ipa: row.ipa_us ?? row.ipa_uk ?? '',
+		audio_us: null,
+		audio_uk: null,
+		image_url: null,
+		meanings: row.word_meaning.map((meaning) => ({
+			pos: (meaning.part_of_speech ?? 'noun').toLowerCase() as Word['meanings'][number]['pos'],
+			meaning: meaning.meaning ?? '',
+			example: meaning.example ?? '',
+		})),
+		phrases: row.vocab_collocations.map((collocation) => collocation.phrase),
+		synonyms: row.vocab_relations
+			.filter((relation) => relation.relation_type === 'SYNONYMS')
+			.map((relation) => relation.word ?? ''),
+		order_index: 0,
+		difficulty_level: row.difficulty_id,
+		topic: {
+			topic_id: topic ? String(topic.topic_id) : '',
+			topic_name: topic?.topics?.name ?? '',
+		},
+	};
+}
+
+const vocabWordSelect =
+	'id, word, ipa_uk, ipa_us, difficulty_id, created_at, word_meaning(part_of_speech, meaning, example), vocab_collocations(phrase, meaning_vi), vocab_relations(relation_type, word), vocab_word_topics!inner(topic_id, topics(name))';
+
+export async function listWords(opts: ListVocabWordsOptions = {}) {
+	const { page = 1, perPage = 10, search, sortBy = 'word', sortOrder = 'asc' } = opts;
+	const supabase = await getSupabaseServer();
+	let wordIds: number[] | undefined;
+
+	if (search) {
+		const escapedSearch = search.replace(/%/g, '\\%');
+		const [{ data: matchingWords, error: wordError }, { data: matchingTopics, error: topicError }] =
+			await Promise.all([
+				supabase.from('vocab_words').select('id').ilike('word', `%${escapedSearch}%`),
+				supabase.from('topics').select('id').ilike('name', `%${escapedSearch}%`),
+			]);
+		if (wordError) throw new Error(wordError.message);
+		if (topicError) throw new Error(topicError.message);
+
+		const topicIds = (matchingTopics ?? []).map((topic) => topic.id);
+		const { data: topicLinks, error: topicLinkError } = topicIds.length
+			? await supabase.from('vocab_word_topics').select('word_id').in('topic_id', topicIds)
+			: { data: [], error: null };
+		if (topicLinkError) throw new Error(topicLinkError.message);
+		wordIds = [
+			...new Set([
+				...(matchingWords ?? []).map((word) => word.id),
+				...(topicLinks ?? []).map((link) => link.word_id),
+			]),
+		];
+		if (wordIds.length === 0) {
+			return { data: [], total: 0, page, perPage, totalPages: 0 };
+		}
+	}
+
+	let query = supabase.from('vocab_words').select(vocabWordSelect, { count: 'exact' });
+	if (wordIds) query = query.in('id', wordIds);
+	if (sortBy === 'word') query = query.order('word', { ascending: sortOrder === 'asc' });
+	if (sortBy === 'created_at') query = query.order('created_at', { ascending: sortOrder === 'asc' });
+
+	const { data, error, count } = await query;
+	if (error) {
+		console.error('listWords error', error);
+		throw error;
+	}
+
+	const rows = ((data ?? []) as unknown as VocabWordQueryRow[]).map(mapVocabWord);
+	if (sortBy === 'topic') {
+		rows.sort((left, right) => {
+			const comparison = left.topic.topic_name.localeCompare(right.topic.topic_name);
+			return sortOrder === 'asc' ? comparison : -comparison;
+		});
+	}
+	const from = (page - 1) * perPage;
+	return {
+		data: rows.slice(from, from + perPage),
+		total: count ?? rows.length,
+		page,
+		perPage,
+		totalPages: Math.ceil((count ?? rows.length) / perPage),
+	};
+}
+
+export async function getVocabWordById(id: number) {
+	const supabase = await getSupabaseServer();
+	const { data, error } = await supabase
+		.from('vocab_words')
+		.select(vocabWordSelect)
+		.eq('id', id)
+		.maybeSingle();
+	if (error) throw new Error(error.message);
+	return data ? mapVocabWord(data as unknown as VocabWordQueryRow) : null;
+}
+
+export async function updateVocabWord(id: number, input: UpdateVocabWordInput) {
+	const supabase = await getSupabaseServer();
+	const { topic_id, meanings: _meanings, collocations: _collocations, relations: _relations, ...wordUpdates } = input;
+	const { data, error } = await supabase
+		.from('vocab_words')
+		.update(wordUpdates)
+		.eq('id', id)
+		.select('id')
+		.single();
+	if (error) throw new Error(error.message);
+
+	if (topic_id !== undefined) {
+		const { error: deleteTopicError } = await supabase
+			.from('vocab_word_topics')
+			.delete()
+			.eq('word_id', id);
+		if (deleteTopicError) throw new Error(deleteTopicError.message);
+		const { error: insertTopicError } = await supabase.from('vocab_word_topics').insert({
+			word_id: id,
+			topic_id: Number(topic_id),
+		});
+		if (insertTopicError) throw new Error(insertTopicError.message);
+	}
+
+	return getVocabWordById(data.id);
+}
 
 async function getAuthenticatedUserId() {
 	const supabase = await getSupabaseServer();

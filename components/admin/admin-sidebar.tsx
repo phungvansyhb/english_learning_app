@@ -33,7 +33,7 @@ const navItems: NavItem[] = [
 	{ id: 'masterData', link: '/admin/master-data', label: 'Master Data', icon: Layers },
 	{ id: 'words', link: '/admin/word', label: 'Words', icon: BookA },
 	{ id: 'grammar', link: '/admin/grammar', label: 'Grammar', icon: GraduationCap },
-	{ id: 'question', link: '/admin/question', label: 'Question', icon: ClipboardListIcon },
+	{ id: 'topics', link: '/admin/topic', label: 'Topic', icon: ClipboardListIcon },
 	{ id: 'settings', link: '/admin/setting', label: 'Settings', icon: Settings },
 ];
 

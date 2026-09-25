@@ -1,4 +1,4 @@
-import { listTopics } from '@/services/master-data';
+import { createTopic, listTopics } from '@/services/master-data';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -15,5 +15,17 @@ export async function GET(request: Request) {
         return NextResponse.json(topics);
     } catch {
         return NextResponse.json({ error: 'Unable to load topics' }, { status: 500 });
+    }
+}
+
+export async function POST(request: Request) {
+    try {
+        const body = (await request.json()) as { name?: string };
+        const name = body.name?.trim();
+        if (!name) return NextResponse.json({ error: 'Topic name is required' }, { status: 400 });
+        const topic = await createTopic({ name });
+        return NextResponse.json(topic, { status: 201 });
+    } catch {
+        return NextResponse.json({ error: 'Unable to create topic' }, { status: 500 });
     }
 }

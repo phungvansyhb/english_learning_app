@@ -20,7 +20,7 @@ type Props = {
 	isLoadingValue?: boolean;
 	onValueChange?: (value: string | string[] | null) => void;
 	creatable?: boolean;
-	onCreate?: (value: string) => string | void;
+	onCreate?: (value: string) => string | void | Promise<string | void>;
 	createLabel?: (value: string) => string;
 };
 
@@ -33,7 +33,12 @@ function toSelectedOption(items: Option[], value: string | null | undefined): Op
 		return null;
 	}
 
-	return { label: getItemLabel(items, value), value };
+	return (
+		items.find((item) => String(item.value) === value) ?? {
+			label: getItemLabel(items, value),
+			value,
+		}
+	);
 }
 
 function toSelectedOptions(items: Option[], value: string[] | null | undefined): Option[] {
@@ -41,7 +46,13 @@ function toSelectedOptions(items: Option[], value: string[] | null | undefined):
 		return [];
 	}
 
-	return value.map((item) => ({ label: getItemLabel(items, item), value: item }));
+	return value.map(
+		(item) =>
+			items.find((option) => String(option.value) === item) ?? {
+				label: getItemLabel(items, item),
+				value: item,
+			},
+	);
 }
 
 export default function Combobox(props: Props) {
@@ -119,11 +130,11 @@ export default function Combobox(props: Props) {
 	);
 
 	const handleValueChange = React.useCallback(
-		(nextValue: Option | Option[] | null) => {
+		async (nextValue: Option | Option[] | null) => {
 			if (props.isMultiple && Array.isArray(nextValue)) {
 				const createOption = nextValue.find(isCreateOption);
 				if (createOption) {
-					const resolved = resolveCreatedOption(createOption.label);
+					const resolved = await resolveCreatedOption(createOption.label);
 					updateValue([
 						...nextValue
 							.filter((item) => !isCreateOption(item))
@@ -141,7 +152,8 @@ export default function Combobox(props: Props) {
 				!Array.isArray(nextValue) &&
 				isCreateOption(nextValue)
 			) {
-				updateValue(String(resolveCreatedOption(nextValue.label)));
+				const resolved = await resolveCreatedOption(nextValue.label);
+				updateValue(String(resolved));
 				setInputValue('');
 				return;
 			}
@@ -151,7 +163,7 @@ export default function Combobox(props: Props) {
 	);
 
 	const handleInputKeyDown = React.useCallback(
-		(event: React.KeyboardEvent<HTMLInputElement>) => {
+		async (event: React.KeyboardEvent<HTMLInputElement>) => {
 			if (
 				event.key !== 'Enter' ||
 				!props.creatable ||
@@ -162,7 +174,7 @@ export default function Combobox(props: Props) {
 			}
 
 			event.preventDefault();
-			const created = String(resolveCreatedOption(trimmedInput));
+			const created = String(await resolveCreatedOption(trimmedInput));
 			const nextValue = props.isMultiple
 				? [...(Array.isArray(value) ? value : []), created]
 				: created;

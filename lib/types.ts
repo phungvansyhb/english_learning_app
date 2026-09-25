@@ -4,7 +4,7 @@ export type BasePaginationOptions = {
   page?: number;
   perPage?: number;
   search?: string;
-  sortBy?: 'created_at';
+  sortBy?: 'created_at' | 'word' | 'topic';
   sortOrder?: 'asc' | 'desc';
 };
 export interface Option {
@@ -95,6 +95,10 @@ export interface Word {
   synonyms: string[];
   order_index: number;
   difficulty_level: number;
+  topic: {
+    topic_id: string,
+    topic_name: string
+  }
 }
 
 export const ROLE_CONSTANT = {
@@ -212,6 +216,8 @@ export type TopicRow = {
   description?: string | null;
   image_url?: string | null;
   total_word?: number;
+  word_count?: number;
+  question_count?: number;
   is_active: boolean;
   created_at?: string;
   updated_at?: string;
@@ -387,3 +393,14 @@ export const DATETIME_FORMAT = {
   MMMM_YYYY: 'MMMM YYYY',
   YYYY_MM_DD: 'YYYY-MM-DD'
 }
+
+export type ListVocabWordsOptions = Omit<BasePaginationOptions, 'sortBy'> & {
+  sortBy?: 'word' | 'topic' | 'created_at';
+};
+
+export type UpdateVocabWordInput = Pick<
+  InsertVocabDataPayload,
+  'word' | 'ipa_uk' | 'ipa_us' | 'difficulty_id' | 'meanings' | 'collocations' | 'relations'
+> & {
+  topic_id?: string;
+};

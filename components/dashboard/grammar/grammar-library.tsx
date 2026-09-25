@@ -21,29 +21,6 @@ export function GrammarLibrary() {
 
 	return (
 		<main className='flex flex-col gap-6 mx-auto max-w-6xl'>
-			<section className='relative bg-primary p-6 md:p-8 rounded-[1.75rem] overflow-hidden text-primary-foreground'>
-				<div className='z-10 relative max-w-2xl'>
-					<p className='font-semibold text-brand-pink text-xs uppercase tracking-[0.2em]'>
-						Grammar library
-					</p>
-					<h1 className='mt-3 font-bold text-3xl md:text-4xl tracking-tight text-balance'>
-						Build the rules behind your English.
-					</h1>
-					<p className='opacity-85 mt-3 max-w-xl leading-6'>
-						Short, practical lessons that turn confusing grammar into patterns you can
-						actually use.
-					</p>
-					<div className='flex flex-wrap gap-3 mt-6'>
-						<span className='bg-primary-foreground/10 px-3 py-2 rounded-xl text-sm'>
-							<strong>{completed}</strong> completed
-						</span>
-						<span className='bg-primary-foreground/10 px-3 py-2 rounded-xl text-sm'>
-							<strong>{grammarLessons.length}</strong> lessons
-						</span>
-					</div>
-				</div>
-				<Sparkles className='right-8 bottom-8 absolute opacity-20 size-28' />
-			</section>
 			<section className='flex sm:flex-row flex-col gap-3'>
 				<label className='relative flex-1'>
 					<Search className='top-1/2 left-3 absolute size-4 text-muted-foreground -translate-y-1/2' />

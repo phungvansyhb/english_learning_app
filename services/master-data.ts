@@ -265,7 +265,9 @@ export async function listTopics(opts: ListMasterDataOptions = {}) {
     const from = (page - 1) * perPage;
     const to = from + perPage - 1;
 
-    let query = supabase.from('topics').select('*', { count: 'exact' });
+    let query = supabase
+        .from('topics')
+        .select('*, vocab_word_topics(count), questions(count)', { count: 'exact' });
     if (search) {
         const esc = search.replace(/%/g, '\\%');
         query = query.ilike('name', `%${esc}%`);
@@ -278,7 +280,11 @@ export async function listTopics(opts: ListMasterDataOptions = {}) {
     }
 
     return {
-        data: (data ?? []) as TopicRow[],
+        data: (data ?? []).map((topic) => ({
+            ...topic,
+            word_count: topic.vocab_word_topics?.[0]?.count ?? 0,
+            question_count: topic.questions?.[0]?.count ?? 0,
+        })) as TopicRow[],
         total: count ?? 0,
         page,
         perPage,

@@ -1,7 +1,11 @@
+'use server';
+
 import { Groq } from 'groq-sdk';
 import { z } from "zod";
 import { createVocabWord, getWordByName } from './vocab-word';
-import { InsertVocabDataPayload, WordCard } from '@/lib/types';
+import { InsertVocabDataPayload } from '@/lib/types';
+import { getTopicById } from './master-data';
+import { getSupabaseServer } from '@/utils/supabase/server';
 
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY, logLevel: 'debug' });
@@ -47,6 +51,9 @@ const WordTranslatedScheam = z.object({
             ),
         })
     ),
+});
+const GeneratedWordsSchema = z.object({
+    words: z.array(z.string().trim().min(1)).min(1).max(24),
 });
 export type VocabularyEntry = z.infer<typeof WordTranslatedScheam>;
 
@@ -107,5 +114,58 @@ export async function translate(word: string): Promise<InsertVocabDataPayload> {
     const translatedData = WordTranslatedScheam.parse(JSON.parse(rawContent));
     const rs = mappingData(translatedData)
     const id = await createVocabWord(rs);
-    return {...rs , id};
+    return { ...rs, id };
+}
+
+export async function generateWord(topicId: number, wordNumber: number) {
+    if (!Number.isInteger(wordNumber) || wordNumber < 1 || wordNumber > 24) {
+        throw new Error('Word quantity must be between 1 and 24');
+    }
+    const topic = await getTopicById(topicId);
+    if (!topic) throw new Error('Topic not found');
+
+    const chatCompletion = await groq.chat.completions.create({
+        messages: [
+            {
+                role: 'system',
+                content: 'Bạn là giáo viên tiếng Anh. Hãy trả về JSON chính xác theo schema, chỉ gồm các từ vựng tiếng Anh phù hợp với chủ đề, không trùng nhau và không thêm giải thích.',
+            },
+            {
+                role: 'user',
+                content: `Chủ đề: ${topic.name}. Hãy đề xuất đúng ${wordNumber} từ vựng tiếng Anh thông dụng cho chủ đề này.`,
+            },
+        ],
+        model: 'openai/gpt-oss-120b',
+        temperature: 0.2,
+        stream: false,
+        reasoning_effort: 'low',
+        reasoning_format: 'hidden',
+        response_format: {
+            type: 'json_schema',
+            json_schema: {
+                name: 'generated_words_schema',
+                schema: z.toJSONSchema(GeneratedWordsSchema),
+            },
+        },
+    });
+    const rawContent = chatCompletion.choices[0]?.message?.content;
+    if (!rawContent) throw new Error('Groq returned an empty response');
+    // replace later
+    const generated = GeneratedWordsSchema.parse(JSON.parse(rawContent));
+    const uniqueWords = [...new Set(generated.words.map((word) => word.toLowerCase()))].slice(0, wordNumber);
+    const createdWords = [];
+    for (const word of uniqueWords) {
+        const existing = await getWordByName(word);
+        const created = existing ?? await translate(word);
+        if (created.id) {
+            const supabase = await getSupabaseServer();
+            const { error } = await supabase.from('vocab_word_topics').upsert(
+                { word_id: Number(created.id), topic_id: topicId },
+                { onConflict: 'word_id,topic_id' },
+            );
+            if (error) throw new Error(error.message);
+        }
+        createdWords.push(created);
+    }
+    return createdWords;
 }

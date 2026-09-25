@@ -5,7 +5,6 @@ import { Tabs } from '@base-ui/react/tabs';
 import SkillsTab from './skill-tab/SkillTab';
 import DifficultyLevelsTab from './difficulty-tab/DifficultyLevelsTab';
 import ExamPartsTab from './examination-part-tab/ExamPartsTab';
-import TopicsTab from './topic-tab/TopicsTab';
 import BadgesTab from './badge-tab/BadgesTab';
 
 type Props = {};
@@ -40,11 +39,6 @@ export default function MaterDataManager({}: Props) {
 
 					<Tabs.Tab
 						className={tabClassName}
-						value='topics'>
-						Topics
-					</Tabs.Tab>
-					<Tabs.Tab
-						className={tabClassName}
 						value='badges'>
 						Badges
 					</Tabs.Tab>
@@ -56,11 +50,6 @@ export default function MaterDataManager({}: Props) {
 						className={panelClassName}
 						value='difficulty'>
 						<DifficultyLevelsTab />
-					</Tabs.Panel>
-					<Tabs.Panel
-						className={panelClassName}
-						value='topics'>
-						<TopicsTab />
 					</Tabs.Panel>
 					<Tabs.Panel
 						className={panelClassName}
