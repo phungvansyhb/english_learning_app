@@ -14,8 +14,8 @@ dayjs.extend(isoWeek);
 
 export function CalendarCard() {
 	const today = dayjs();
-	const [selectedMonth, setSelectedMonth] = useState(today.startOf('month'));
-	const calendarDays = getCalendarDays(selectedMonth, today);
+	const [selectedWeek, setSelectedWeek] = useState(today.startOf('isoWeek'));
+	const calendarDays = getCalendarDays(selectedWeek, today);
 	const [activityDates, setActivityDates] = useState<Set<string>>(new Set());
 	const { user, isLoading } = useAuthStore();
 
@@ -24,6 +24,7 @@ export function CalendarCard() {
 
 		let isCurrent = true;
 		void getUserActivities().then((activities) => {
+			console.log(activities);
 			if (!isCurrent) return;
 			setActivityDates(
 				new Set(
@@ -44,18 +45,18 @@ export function CalendarCard() {
 			<div className='flex justify-between items-center'>
 				<button
 					type='button'
-					aria-label='Previous month'
-					onClick={() => setSelectedMonth((month) => month.subtract(1, 'month'))}
+					aria-label='Previous week'
+					onClick={() => setSelectedWeek((week) => week.subtract(1, 'week'))}
 					className='flex justify-center items-center hover:bg-secondary border border-border rounded-full size-9 text-foreground transition-colors'>
 					<ChevronLeft className='size-4' />
 				</button>
 				<h2 className='font-bold text-foreground text-lg'>
-					{selectedMonth.format(DATETIME_FORMAT.MMMM_YYYY)}
+					{selectedWeek.format(DATETIME_FORMAT.MMMM_YYYY)}
 				</h2>
 				<button
 					type='button'
-					aria-label='Next month'
-					onClick={() => setSelectedMonth((month) => month.add(1, 'month'))}
+					aria-label='Next week'
+					onClick={() => setSelectedWeek((week) => week.add(1, 'week'))}
 					className='flex justify-center items-center hover:bg-secondary border border-border rounded-full size-9 text-foreground transition-colors'>
 					<ChevronRight className='size-4' />
 				</button>
@@ -66,32 +67,36 @@ export function CalendarCard() {
 					const studied = activityDates.has(day.dateKey);
 
 					return (
-					<button
-						key={day.dateKey}
-						type='button'
-						aria-label={`${day.label} ${day.date}`}
-						aria-pressed={studied}
-						className={cn(
-							'flex flex-col items-center gap-2 hover:bg-secondary py-2 rounded-2xl transition-colors',
-							studied && 'bg-accent hover:bg-accent',
-							day.active && !studied && 'ring-1 ring-accent',
-						)}>
-						<span className='font-medium text-muted-foreground text-xs'>
-							{day.label}
-						</span>
-						<span
+						<button
+							key={day.dateKey}
+							type='button'
+							aria-label={`${day.label} ${day.date}`}
+							aria-pressed={studied}
 							className={cn(
-								'font-semibold text-foreground text-sm',
-								studied && 'text-accent-foreground',
+								'flex flex-col items-center gap-2 hover:bg-secondary py-2 rounded-2xl transition-colors',
+								studied && 'bg-accent hover:bg-accent',
+								day.active && !studied && 'ring-1 ring-accent',
 							)}>
-							{day.date}
-							{studied && <FlameIcon size={12} color='oklch(0.78 0.13 55)' />}
-						</span>
-					</button>
+							<span className='font-medium text-muted-foreground text-xs'>
+								{day.label}
+							</span>
+							<span
+								className={cn(
+									'font-semibold text-foreground text-sm',
+									studied && 'text-accent-foreground',
+								)}>
+								{day.date}
+								{studied && (
+									<FlameIcon
+										size={12}
+										color='oklch(0.78 0.13 55)'
+									/>
+								)}
+							</span>
+						</button>
 					);
 				})}
 			</div>
 		</section>
 	);
 }
-

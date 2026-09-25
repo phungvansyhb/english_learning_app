@@ -3,9 +3,9 @@ import AnswerUi from '@/components/dashboard/practice/answer-ui';
 import QuestionMode from '@/components/dashboard/practice/question-mode';
 import QuestionUi from '@/components/dashboard/practice/question-ui';
 import { AnswerModeType, QuestionModeType, ServerPageProps } from '@/lib/types';
-import { Repeat, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import PracticeControls from '@/components/dashboard/practice/practice-controls';
-import { Button } from '@/components/ui/button';
+import PracticeQuestionSwitcher from '@/components/dashboard/practice/practice-question-switcher';
 
 export default async function PracticeScreen({ searchParams }: ServerPageProps) {
 	const { ask = 'listen', answer = 'speak', topic = 'all' } = await searchParams;
@@ -37,11 +37,7 @@ export default async function PracticeScreen({ searchParams }: ServerPageProps) 
 							<p className='text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground'>
 								Question
 							</p>
-							<Button
-								variant='secondary'
-								size='icon'>
-								<Repeat className='size-4' />
-							</Button>
+							<PracticeQuestionSwitcher />
 						</div>
 						<QuestionMode
 							questionMode={questionMode}

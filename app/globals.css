@@ -2,6 +2,22 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+@keyframes listening-wave {
+
+  0%,
+  100% {
+    transform: scaleY(0.55);
+  }
+
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@utility animate-listening-wave {
+  animation: listening-wave 900ms ease-in-out infinite;
+}
+
 .content-reading {
   color: var(--foreground);
   font-size: 1rem;

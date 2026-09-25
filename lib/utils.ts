@@ -6,11 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getCalendarDays(month: Dayjs, today: Dayjs) {
-  const referenceDay = month.isSame(today, 'month')
-    ? today
-    : month.date(Math.min(today.date(), month.daysInMonth()));
-
+export function getCalendarDays(referenceDay: Dayjs, today: Dayjs) {
   return Array.from({ length: 7 }, (_, index) => {
     const day = referenceDay.startOf('isoWeek').add(index, 'day');
 
