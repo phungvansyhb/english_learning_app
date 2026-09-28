@@ -1,14 +1,35 @@
-import { notFound } from 'next/navigation'
-import { GrammarDetail } from '@/components/dashboard/grammar/grammar-detail'
-import { grammarLessons, getGrammarLesson } from '@/lib/grammar-data'
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { GrammarDetail } from '@/components/dashboard/grammar/grammar-detail';
+import { createGrammarSlug, getGrammarIdFromSlug } from '@/lib/grammar-utils';
+import { getGrammarNeighbors, getGrammarPointForPage } from '@/services/grammar';
 
-export function generateStaticParams() {
-  return grammarLessons.map((lesson) => ({ slug: lesson.slug }))
+type GrammarLessonPageProps = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: GrammarLessonPageProps): Promise<Metadata> {
+	const { slug } = await params;
+	const id = getGrammarIdFromSlug(slug);
+	const grammar = id ? await getGrammarPointForPage(id) : null;
+	if (!grammar) return { title: 'Grammar lesson not found' };
+
+	return {
+		title: grammar.name,
+		description: grammar.description || `Study the English grammar point ${grammar.name}.`,
+		alternates: { canonical: `/grammar/${createGrammarSlug(grammar.id, grammar.name)}` },
+	};
 }
 
-export default async function GrammarLessonPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const lesson = getGrammarLesson(slug)
-  if (!lesson) notFound()
-  return <GrammarDetail lesson={lesson} />
+export default async function GrammarLessonPage({ params }: GrammarLessonPageProps) {
+	const { slug } = await params;
+	const id = getGrammarIdFromSlug(slug);
+	const grammar = id ? await getGrammarPointForPage(id) : null;
+	if (!grammar) notFound();
+
+	const neighbors = await getGrammarNeighbors(grammar.id);
+	return (
+		<GrammarDetail
+			grammar={grammar}
+			neighbors={neighbors}
+		/>
+	);
 }

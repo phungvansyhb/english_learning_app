@@ -2,7 +2,7 @@
 
 import { Groq } from 'groq-sdk';
 import { z } from "zod";
-import { createVocabWord, getWordByName } from './vocab-word';
+import { createVocabWord, getWordByName, getWordsByTopicId } from './vocab-word';
 import { InsertVocabDataPayload } from '@/lib/types';
 import { getTopicById } from './master-data';
 import { getSupabaseServer } from '@/utils/supabase/server';
@@ -168,4 +168,50 @@ export async function generateWord(topicId: number, wordNumber: number) {
         createdWords.push(created);
     }
     return createdWords;
+}
+
+const QuestionGeneratedSchema = z.array(z.object({
+    difficulty_id: z.number().int().min(1).max(3),
+    transcript: z.string().trim().min(1).max(1000),
+    sentence_en: z.string().nullable(),
+    topic_id: z.number().int().nullable(),
+}))
+
+export async function generateQuestion(topicId: number, numberQuestion: number) {
+    if (!Number.isInteger(numberQuestion) || numberQuestion < 1 || numberQuestion > 24) {
+        throw new Error('Question quantity must be between 1 and 24');
+    }
+    const topic = await getTopicById(topicId);
+    if (!topic) throw new Error('Topic not found');
+    const wordsInTopic = await getWordsByTopicId(topicId.toString());
+    if (wordsInTopic.length > 0) {
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [
+                {
+                    role: 'system',
+                    content: 'Bạn là giáo viên tiếng Anh. Hãy trả về JSON chính xác theo schema, chỉ gồm các từ vựng tiếng Anh phù hợp với chủ đề, không trùng nhau và không thêm giải thích.',
+                },
+                {
+                    role: 'user',
+                    content: ` Hãy đề xuất đúng ${numberQuestion} câu nói tiếng Anh thông dụng, đảm bảo xuất hiện các từ vựng có trong chủ đề ${topic.name}: ${wordsInTopic.map(w => w.word).join(', ')}.`,
+                },
+            ],
+            model: 'openai/gpt-oss-120b',
+            temperature: 0.2,
+            stream: false,
+            reasoning_effort: 'low',
+            reasoning_format: 'hidden',
+            response_format: {
+                type: 'json_schema',
+                json_schema: {
+                    name: 'generated_question_schema',
+                    schema: z.toJSONSchema(QuestionGeneratedSchema),
+                },
+            },
+        });
+        const rawContent = chatCompletion.choices[0]?.message?.content;
+        if (!rawContent) throw new Error('Groq returned an empty response');
+    }
+
+
 }

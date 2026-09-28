@@ -208,6 +208,7 @@ export type ListGrammarPointsOptions = {
   perPage?: number;
   search?: string;
   difficulty_id?: string;
+  difficulty_code?: string;
 };
 
 export type TopicRow = {
@@ -226,6 +227,9 @@ export type TopicRow = {
 export type CreateTopicInput = {
   id?: number;
   name: string;
+  image_url?: string | null;
+  description?: string | null;
+  is_active?: boolean;
 };
 
 export type BadgeRow = {

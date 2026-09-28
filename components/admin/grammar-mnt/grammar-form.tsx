@@ -115,7 +115,12 @@ export default function GrammarForm(props: Props) {
 						label='Short description'
 						{...register('description')}
 						error={errors.description}
-						placeholder='Enter short description in 256 words'></Field>
+						placeholder='Enter short description in 256 words'>
+						<textarea
+							{...register('description', { required: 'Description is required.' })}
+							className='input-wrapper resize-none min-h-[120px] py-2'
+						/>
+					</Field>
 					<Controller
 						name='difficulty_id'
 						control={control}

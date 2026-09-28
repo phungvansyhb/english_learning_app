@@ -47,6 +47,38 @@ export async function getGrammarPointById(id: number) {
     return data as GrammarPointRow | null;
 }
 
+export async function getGrammarPointForPage(id: number) {
+    const supabase = await getSupabaseServer();
+    const { data, error } = await supabase
+        .from('grammar_points')
+        .select('*, difficulty_label:difficulty_levels(label)')
+        .eq('id', id)
+        .maybeSingle();
+
+    if (error) {
+        console.error('getGrammarPointForPage error', error);
+        throw error;
+    }
+
+    if (!data) return null;
+
+    const row = data as GrammarPointQueryRow;
+    return {
+        ...row,
+        difficulty_label: row.difficulty_label?.label ?? '',
+    } satisfies GrammarPointWithDifficultyLabel;
+}
+
+export async function getGrammarNeighbors(id: number) {
+    const supabase = await getSupabaseServer();
+    const [{ data: previous }, { data: next }] = await Promise.all([
+        supabase.from('grammar_points').select('id, name').lt('id', id).order('id', { ascending: false }).limit(1).maybeSingle(),
+        supabase.from('grammar_points').select('id, name').gt('id', id).order('id', { ascending: true }).limit(1).maybeSingle(),
+    ]);
+
+    return { previous, next };
+}
+
 export async function updateGrammarPoint(id: number, updates: Partial<CreateGrammarPointInput>) {
     const supabase = await getSupabaseServer();
     const { data, error } = await supabase
@@ -82,17 +114,21 @@ export async function deleteGrammarPoint(id: number) {
 }
 
 export async function listGrammarPoints(opts: ListGrammarPointsOptions = {}) {
-    const { page = 1, perPage = 10, search, difficulty_id } = opts;
+    const { page = 1, perPage = 10, search, difficulty_id, difficulty_code } = opts;
     const supabase = await getSupabaseServer();
     const from = (page - 1) * perPage;
     const to = from + perPage - 1;
 
     let query = supabase
         .from('grammar_points')
-        .select('*, difficulty_label:difficulty_levels(label)', { count: 'exact' });
+        .select('*, difficulty_label:difficulty_levels!inner(label, code)', { count: 'exact' });
 
     if (difficulty_id !== undefined) {
         query = query.eq('difficulty_id', difficulty_id);
+    }
+
+    if (difficulty_code) {
+        query = query.eq('difficulty_label.code', difficulty_code);
     }
 
     if (search) {

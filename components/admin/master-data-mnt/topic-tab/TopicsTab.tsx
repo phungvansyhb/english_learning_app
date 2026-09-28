@@ -12,6 +12,7 @@ import type { CreateTopicInput, TopicRow } from '@/lib/types';
 import { createTopic, deleteTopic, listTopics, updateTopic } from '@/services/master-data';
 import { Modal } from '../../../ui/modal';
 import { fieldClass, labelClass, StatusError } from '../shared';
+import { FileUpload } from '@/components/ui/dropzone';
 
 export default function TopicsTab() {
 	const [query, setQuery] = useState('');
@@ -29,7 +30,7 @@ export default function TopicsTab() {
 		reload,
 	} = usePagination({
 		apiFunction: listTopics,
-		perPage: 10,
+		perPage: 15,
 		params: { search: query || undefined },
 	});
 
@@ -103,6 +104,20 @@ export default function TopicsTab() {
 				emptyState='No topics found.'
 				columns={[
 					{ key: 'name', header: 'Name' },
+					{
+						key: 'image_url',
+						header: 'Cover picture',
+						render: (item) =>
+							item.image_url ? (
+								<img
+									src={item.image_url}
+									alt={item.name}
+									className='h-10 w-10 border rounded object-cover'
+								/>
+							) : (
+								<span className='text-muted-foreground'>No image</span>
+							),
+					},
 					{
 						key: 'word_count',
 						header: 'Words',
@@ -248,26 +263,29 @@ function TopicFormModal({
 		register,
 		handleSubmit,
 		reset,
+		setValue,
 		formState: { errors },
 	} = useForm<CreateTopicInput>({ defaultValues: { name: '' } });
-	const [draft, setDraft] = useState<CreateTopicInput>({ name: '' });
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (!open) return;
 		if (topic) {
-			setDraft({ id: topic.id, name: topic.name });
 			setError(null);
 		} else {
-			setDraft({ name: '' });
 			setError(null);
 		}
-		reset(topic ? { id: topic.id, name: topic.name } : { name: '' });
+		reset(
+			topic
+				? {
+						id: topic.id,
+						name: topic.name,
+						description: topic.description,
+						image_url: topic.image_url,
+					}
+				: { name: '' },
+		);
 	}, [open, topic, reset]);
-
-	function handleChange<K extends keyof CreateTopicInput>(key: K, value: CreateTopicInput[K]) {
-		setDraft((prev) => ({ ...prev, [key]: value }));
-	}
 
 	const submit = (values: CreateTopicInput) =>
 		onSave({ ...(topic ? { id: topic.id } : {}), ...values, name: values.name.trim() });
@@ -287,6 +305,18 @@ function TopicFormModal({
 						placeholder='Enter topic name'
 						error={errors.name}
 						{...register('name', { required: 'Name is required.' })}
+					/>
+					<Field
+						label='Description'
+						placeholder='Enter topic description'
+						error={errors.description}
+						{...register('description')}
+					/>
+					<label className='label-text mb-1'>Ảnh bìa</label>
+					<FileUpload
+						bucketName='vocab'
+						path='topics/'
+						onUploaded={(url) => setValue('image_url', url, { shouldDirty: true })}
 					/>
 				</div>
 

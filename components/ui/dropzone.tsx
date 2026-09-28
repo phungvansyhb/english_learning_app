@@ -153,6 +153,7 @@ const DropzoneContent = ({ className }: { className?: string }) => {
 
 						{!loading && !isSuccessfullyUploaded && (
 							<Button
+								type='button'
 								size='icon'
 								variant='link'
 								className='shrink-0 justify-self-end text-muted-foreground hover:text-foreground'
@@ -173,6 +174,7 @@ const DropzoneContent = ({ className }: { className?: string }) => {
 			{files.length > 0 && !exceedMaxFiles && (
 				<div className='mt-2'>
 					<Button
+						type='button'
 						variant='default'
 						size='lg'
 						onClick={onUpload}
@@ -242,9 +244,10 @@ const useDropzoneContext = () => {
 type UploadConfig = {
 	bucketName: string;
 	path: string;
-	allowedMimeTypes: string[];
-	maxFiles: number;
-	maxFileSize: number;
+	allowedMimeTypes?: string[];
+	maxFiles?: number;
+	maxFileSize?: number;
+	onUploaded?: (url: string) => void;
 };
 
 const FileUpload = (props: UploadConfig) => {
@@ -256,8 +259,17 @@ const FileUpload = (props: UploadConfig) => {
 		maxFileSize: props.maxFileSize || 1000 * 1000 * 10, // 10MB,
 	});
 
+	const handleUpload = async () => {
+		const responses = await config.onUpload();
+		const uploadedFile = responses.find((response) => response.url);
+		if (uploadedFile?.url) props.onUploaded?.(uploadedFile.url);
+		return responses;
+	};
+
 	return (
-		<Dropzone {...config}>
+		<Dropzone
+			{...config}
+			onUpload={handleUpload}>
 			<DropzoneEmptyState />
 			<DropzoneContent />
 		</Dropzone>
