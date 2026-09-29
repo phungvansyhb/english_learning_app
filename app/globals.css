@@ -45,6 +45,17 @@
   animation: landing-drift 7s ease-in-out infinite;
 }
 
+@keyframes scroll-reveal {
+  from { opacity: 0; transform: translateY(36px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.scroll-reveal {
+  animation: scroll-reveal linear both;
+  animation-timeline: view();
+  animation-range: entry 8% cover 32%;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-landing-rise,
   .animate-landing-float,
@@ -132,8 +143,8 @@
 
 :root {
   color-scheme: light;
-  /* Page background: lavender */
-  --background: oklch(0.78 0.11 300);
+  /* Page background: soft lavender canvas */
+  --background: oklch(0.985 0.012 295);
   --foreground: oklch(0.24 0.06 295);
   /* Cards / surfaces: white */
   --card: oklch(1 0 0);
