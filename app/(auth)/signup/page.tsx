@@ -32,6 +32,7 @@ export default function SignupPage() {
 	const {
 		register,
 		handleSubmit,
+		setError,
 		formState: { errors },
 	} = useForm<FormData>({ resolver: zodResolver(schema) });
 
@@ -40,6 +41,10 @@ export default function SignupPage() {
 			try {
 				await signUp(data);
 			} catch (e) {
+				setError('root.apiError', {
+					type: 'server',
+					message: e instanceof Error ? e.message : 'An error occurred',
+				});
 				console.log(e);
 			}
 		});
@@ -121,7 +126,6 @@ export default function SignupPage() {
 									onClick={() => setShowPassword(!showPassword)}>
 									{showPassword ? (
 										<EyeClosedIcon size={14} />
-										
 									) : (
 										<EyeIcon size={14} />
 									)}
@@ -154,7 +158,9 @@ export default function SignupPage() {
 								Already have an account?
 							</Link>
 						</div>
-
+						{errors.root?.apiError?.message && (
+							<div className='mt-1 error-text'>{errors.root?.apiError?.message}</div>
+						)}
 						<button
 							type='submit'
 							disabled={isPending}
