@@ -41,7 +41,7 @@ export default function ReadingLibrary() {
 					<div className='flex flex-col gap-5 md:flex-row md:items-end md:justify-between'>
 						<div className='flex max-w-2xl flex-col gap-3'>
 							<span className='flex w-fit items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary'>
-								<BookOpen className='size-3.5' /> Reading practice
+								<BookOpen className='size-3.5' /> Luyện đọc
 							</span>
 							<h1 className='text-balance text-3xl font-bold tracking-tight md:text-4xl'>
 								Luyện đọc theo format TOEIC

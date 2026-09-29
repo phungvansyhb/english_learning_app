@@ -114,7 +114,7 @@ export default function WritingEditor({
 					<section className='rounded-2xl border bg-card p-5 shadow-sm md:p-6'>
 						<div className='flex items-center justify-between'>
 							<div>
-								<h2 className='text-lg font-bold'>Your draft</h2>
+								<h2 className='text-lg font-bold'>Bản nháp của bạn</h2>
 								<p className='mt-1 text-xs text-muted-foreground'>
 									Bản nháp được giữ trong phiên hiện tại
 								</p>
@@ -127,7 +127,7 @@ export default function WritingEditor({
 							aria-label='Your writing draft'
 							value={text}
 							onChange={(e) => setText(e.target.value)}
-							placeholder='Start writing here...'
+							placeholder='Bắt đầu viết tại đây...'
 							className='mt-5 min-h-[360px] w-full resize-y rounded-xl border bg-background p-4 text-sm leading-7 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20'
 						/>
 						<div className='mt-3 flex items-center justify-between text-xs text-muted-foreground'>

@@ -20,9 +20,11 @@ export default async function PracticeScreen({ searchParams }: ServerPageProps) 
 						<Sparkles aria-hidden='true' />
 					</div>
 					<div>
-						<p className='text-sm font-medium text-muted-foreground'>Daily practice</p>
+						<p className='text-sm font-medium text-muted-foreground'>
+							Luyện tập hằng ngày
+						</p>
 						<h1 className='text-2xl font-bold tracking-tight md:text-3xl'>
-							Practice your way
+							Luyện tập theo cách của bạn
 						</h1>
 					</div>
 				</div>
@@ -35,7 +37,7 @@ export default async function PracticeScreen({ searchParams }: ServerPageProps) 
 					<div className='h-12 flex items-start justify-between gap-4'>
 						<div className='grow-0 shrink-0 flex gap-2 items-center'>
 							<p className='text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground'>
-								Question
+								Câu hỏi
 							</p>
 							<PracticeQuestionSwitcher />
 						</div>
@@ -53,7 +55,7 @@ export default async function PracticeScreen({ searchParams }: ServerPageProps) 
 					<div className='flex items-start justify-between gap-4'>
 						<div className='h-8 md:h-12'>
 							<p className='text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground'>
-								Your answer
+								Câu trả lời của bạn
 							</p>
 						</div>
 						<AnswerMode

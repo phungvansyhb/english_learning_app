@@ -5,10 +5,10 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FormEvent, useState, useTransition } from 'react';
 
 const filters = [
-	{ label: 'All', value: '' },
-	{ label: 'Basic', value: 'basic' },
-	{ label: 'Intermediate', value: 'intermediate' },
-	{ label: 'Advanced', value: 'advanced' },
+	{ label: 'Tất cả', value: '' },
+	{ label: 'Cơ bản', value: 'basic' },
+	{ label: 'Trung cấp', value: 'intermediate' },
+	{ label: 'Nâng cao', value: 'advanced' },
 ];
 
 export function GrammarFilters({
@@ -48,13 +48,13 @@ export function GrammarFilters({
 
 	return (
 		<section
-			aria-label='Filter grammar lessons'
+			aria-label='Lọc bài học ngữ pháp'
 			className='flex flex-col gap-3'>
 			<form
 				onSubmit={handleSearch}
 				className='flex gap-2'>
 				<label className='relative flex-1'>
-					<span className='sr-only'>Search grammar lessons</span>
+					<span className='sr-only'>Tìm bài học ngữ pháp</span>
 					<Search
 						className='pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground'
 						aria-hidden='true'
@@ -62,7 +62,7 @@ export function GrammarFilters({
 					<input
 						value={searchValue}
 						onChange={(event) => setSearchValue(event.target.value)}
-						placeholder='Search grammar lessons...'
+						placeholder='Tìm bài học ngữ pháp...'
 						className='input-wrapper pl-10'
 					/>
 				</label>
@@ -74,13 +74,13 @@ export function GrammarFilters({
 						className='size-4'
 						aria-hidden='true'
 					/>
-					<span>Search</span>
+					<span>Tìm kiếm</span>
 				</button>
 			</form>
 			<div
 				className='flex gap-2 overflow-x-auto'
 				role='group'
-				aria-label='Filter by difficulty'>
+				aria-label='Lọc theo độ khó'>
 				{filters.map((filter) => {
 					const active = difficulty === filter.value;
 					return (

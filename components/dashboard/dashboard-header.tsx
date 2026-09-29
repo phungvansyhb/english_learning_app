@@ -13,13 +13,13 @@ export function DashboardHeader() {
 				<Streak />
 				<button
 					type='button'
-					aria-label='Notifications'
+					aria-label='Thông báo'
 					className='flex justify-center items-center bg-secondary hover:bg-accent rounded-full size-11 text-foreground transition-colors'>
 					<Bell className='size-5' />
 				</button>
 				<Link
 					href='/profile'
-					aria-label='Open profile'
+					aria-label='Mở hồ sơ'
 					className='rounded-full ring-2 ring-brand-orange overflow-hidden transition-transform hover:scale-105'>
 					<Avatar />
 				</Link>

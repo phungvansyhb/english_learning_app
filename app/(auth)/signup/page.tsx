@@ -14,12 +14,12 @@ import { Field } from '@/components/ui/field';
 
 const schema = z
 	.object({
-		email: z.string().trim().min(1, 'Email is required').email('Invalid email'),
-		password: z.string().trim().min(8, 'Password must be at least 8 characters'),
-		repassword: z.string().trim().min(1, 'Please re-enter password'),
+		email: z.string().trim().min(1, 'Email là bắt buộc').email('Email không hợp lệ'),
+		password: z.string().trim().min(8, 'Mật khẩu phải có ít nhất 8 ký tự'),
+		repassword: z.string().trim().min(1, 'Vui lòng nhập lại mật khẩu'),
 	})
 	.refine((data) => data.password === data.repassword, {
-		message: 'Passwords do not match',
+		message: 'Mật khẩu không khớp',
 		path: ['repassword'],
 	});
 
@@ -43,7 +43,7 @@ export default function SignupPage() {
 			} catch (e) {
 				setError('root.apiError', {
 					type: 'server',
-					message: e instanceof Error ? e.message : 'An error occurred',
+					message: e instanceof Error ? e.message : 'Đã xảy ra lỗi',
 				});
 				console.log(e);
 			}
@@ -63,10 +63,10 @@ export default function SignupPage() {
 
 					<div className='z-10 relative'>
 						<h1 className='mb-6 font-bold text-5xl leading-tight'>
-							Get started with your account.
+							Bắt đầu hành trình học tập của bạn.
 						</h1>
 						<p className='opacity-90 text-lg'>
-							Create an account to track your language progress.
+							Tạo tài khoản để theo dõi tiến độ học ngôn ngữ.
 						</p>
 					</div>
 
@@ -99,9 +99,9 @@ export default function SignupPage() {
 					</div>
 
 					<div className='mb-8'>
-						<h2 className='mb-3 font-bold text-foreground text-4xl'>Create account</h2>
+						<h2 className='mb-3 font-bold text-foreground text-4xl'>Tạo tài khoản</h2>
 						<p className='text-muted-foreground text-lg'>
-							Fill the form to create a new account
+							Điền biểu mẫu để tạo tài khoản mới
 						</p>
 					</div>
 
@@ -109,15 +109,15 @@ export default function SignupPage() {
 						onSubmit={handleSubmit(onSubmit)}
 						className='space-y-5'>
 						<Field
-							label='Email address'
+							label='Địa chỉ email'
 							error={errors.email}
-							placeholder='Enter your email'
+							placeholder='Nhập email của bạn'
 							{...register('email')}
 						/>
 						<Field
-							label='Password'
+							label='Mật khẩu'
 							error={errors.password}
-							placeholder='Enter your password'
+							placeholder='Nhập mật khẩu của bạn'
 							{...register('password')}
 							type={showPassword ? 'text' : 'password'}
 							suffixIcon={
@@ -133,9 +133,9 @@ export default function SignupPage() {
 							}
 						/>
 						<Field
-							label='Re-enter Password'
+							label='Nhập lại mật khẩu'
 							error={errors.repassword}
-							placeholder='Re-enter your password'
+							placeholder='Nhập lại mật khẩu của bạn'
 							type={showRePassword ? 'text' : 'password'}
 							{...register('repassword')}
 							suffixIcon={
@@ -155,7 +155,7 @@ export default function SignupPage() {
 							<Link
 								href='/login'
 								className='font-medium text-primary hover:text-primary/80 text-sm transition'>
-								Already have an account?
+								Đã có tài khoản?
 							</Link>
 						</div>
 						{errors.root?.apiError?.message && (
@@ -165,13 +165,13 @@ export default function SignupPage() {
 							type='submit'
 							disabled={isPending}
 							className='bg-primary hover:bg-primary/80 disabled:opacity-50 mt-6 px-4 py-3 rounded-lg w-full font-semibold text-primary-foreground transition disabled:cursor-not-allowed'>
-							{isPending ? 'Creating account...' : 'Sign up'}
+							{isPending ? 'Đang tạo tài khoản...' : 'Đăng ký'}
 						</button>
 					</form>
 
 					<div className='flex items-center gap-4 my-6'>
 						<div className='flex-1 bg-border h-px'></div>
-						<span className='text-muted-foreground text-sm'>Or sign up with</span>
+						<span className='text-muted-foreground text-sm'>Hoặc đăng ký bằng</span>
 						<div className='flex-1 bg-border h-px'></div>
 					</div>
 

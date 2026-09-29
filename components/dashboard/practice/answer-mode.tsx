@@ -18,7 +18,7 @@ export default function AnswerMode({ questionMode, answerMode }: Props) {
 				scroll={false}>
 				<Button
 					size='xs'
-					aria-label='Speak answer'
+					aria-label='Nói câu trả lời'
 					variant={answerMode === 'speak' ? 'default' : 'secondary'}>
 					<MicVocalIcon />
 				</Button>

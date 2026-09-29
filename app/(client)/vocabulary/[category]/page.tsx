@@ -6,10 +6,16 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Activity } from 'react';
+import type { Metadata } from 'next';
 
-export async function generateMetadata({ params }: ServerPageProps) {
+export async function generateMetadata({ params }: ServerPageProps): Promise<Metadata> {
 	const { category } = await params;
-	return { title: category ? `${category.toUpperCase()} | Vocabulary` : 'Vocabulary' };
+	return {
+		title: category ? `${category.toUpperCase()} | Từ vựng` : 'Từ vựng',
+		description: category
+			? `Luyện tập từ vựng tiếng Anh theo chủ đề ${category}.`
+			: 'Luyện tập từ vựng tiếng Anh theo chủ đề.',
+	};
 }
 
 export default async function VocabularyCategoryPage({ searchParams, params }: ServerPageProps) {

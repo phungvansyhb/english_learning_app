@@ -13,26 +13,26 @@ export default function ShortcutBoard({}: Props) {
 			<Activity mode={isMobile ? 'hidden' : 'visible'}>
 				<div className='space-y-2 text-sm'>
 					<div className='flex gap-2 items-center'>
-						<Badge>Space</Badge> to toggle meaning
+						<Badge>Phím cách</Badge> để xem/ẩn nghĩa
 					</div>
 					<div className='flex gap-2 items-center'>
-						<Badge>Drag right</Badge> to mark as learned
+						<Badge>Kéo phải</Badge> để đánh dấu đã học
 					</div>
 					<div className='flex gap-2 items-center'>
-						<Badge>Drag left</Badge> to mark as new
+						<Badge>Kéo trái</Badge> để đánh dấu chưa học
 					</div>
 				</div>
 			</Activity>
 			<Activity mode={!isMobile ? 'hidden' : 'visible'}>
 				<div className='space-y-2 text-sm'>
 					<div className='flex gap-2 items-center'>
-						<Badge>Double touch</Badge> to toggle meaning
+						<Badge>Chạm hai lần</Badge> để xem/ẩn nghĩa
 					</div>
 					<div className='flex gap-2 items-center'>
-						<Badge>Swipe right</Badge> to mark as learned
+						<Badge>Vuốt phải</Badge> để đánh dấu đã học
 					</div>
 					<div className='flex gap-2 items-center'>
-						<Badge>Swipe left</Badge> to mark as new
+						<Badge>Vuốt trái</Badge> để đánh dấu chưa học
 					</div>
 				</div>
 			</Activity>

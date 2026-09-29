@@ -91,7 +91,7 @@ export default function SpeakingPractice({ lesson }: { lesson: SpeakingLesson })
 				<section className='rounded-2xl border bg-card p-6 shadow-sm md:p-8'>
 					<div className='flex items-center justify-between'>
 						<span className='flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-primary'>
-							<Mic className='size-4' /> Speaking prompt
+							<Mic className='size-4' /> Đề bài nói
 						</span>
 						{prep > 0 && (
 							<span className='flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-xs font-semibold'>

@@ -18,7 +18,7 @@ export default function QuestionMode({ questionMode, answerMode }: Props) {
 				scroll={false}>
 				<Button
 					size='xs'
-					aria-label='Translate prompt'
+					aria-label='Dịch đề bài'
 					variant={questionMode === 'translate' ? 'default' : 'secondary'}>
 					<LanguagesIcon />
 				</Button>

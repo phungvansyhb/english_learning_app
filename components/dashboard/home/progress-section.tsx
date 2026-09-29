@@ -54,7 +54,7 @@ function ProgressCard({ progress }: { progress: ProgressItem }) {
 				</span>
 				<button
 					type='button'
-					aria-label='progress options'
+					aria-label='Tùy chọn tiến độ'
 					className='text-current/60 hover:text-current transition-opacity'>
 					<MoreHorizontal className='size-5' />
 				</button>
@@ -66,7 +66,7 @@ function ProgressCard({ progress }: { progress: ProgressItem }) {
 
 			<div className='mt-4'>
 				<div className='flex justify-between items-center mb-1.5 font-medium text-xs'>
-					<span>Progress</span>
+					<span>Tiến độ</span>
 					<span>
 						{progress.learned}/{progress.target}
 					</span>
@@ -87,7 +87,7 @@ function ProgressCard({ progress }: { progress: ProgressItem }) {
 export function ProgressSection() {
 	return (
 		<section>
-			<h2 className='font-bold text-foreground text-lg'>Your progress today</h2>
+			<h2 className='font-bold text-foreground text-lg'>Tiến độ hôm nay</h2>
 			<div className='gap-4 grid grid-cols-1 sm:grid-cols-4 mt-4'>
 				{progresses.map((progress) => (
 					<ProgressCard

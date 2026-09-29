@@ -31,7 +31,7 @@ export default function TestLibrary() {
 					<div className='flex flex-col gap-5 md:flex-row md:items-end md:justify-between'>
 						<div className='flex max-w-2xl flex-col gap-3'>
 							<span className='flex w-fit items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary'>
-								<BookMarked className='size-3.5' /> Test center
+								<BookMarked className='size-3.5' /> Trung tâm bài thi
 							</span>
 							<h1 className='text-balance text-3xl font-bold tracking-tight md:text-4xl'>
 								Chọn cách bạn muốn kiểm tra hôm nay
@@ -153,8 +153,7 @@ export default function TestLibrary() {
 								</div>
 								<Button
 									variant='outline'
-									className='mt-4 w-full'
-									>
+									className='mt-4 w-full'>
 									<Link href='/test/toeic-reading-focus'>
 										<RotateCcw data-icon='inline-start' /> Tiếp tục
 									</Link>

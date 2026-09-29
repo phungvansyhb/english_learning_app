@@ -13,11 +13,10 @@ export default function NotFound() {
 				</div>
 				<p className='text-5xl font-bold tracking-tight text-primary'>404</p>
 				<h1 className='mt-3 text-balance text-xl font-semibold text-foreground'>
-					Trang này đi cà phê rồi
+					Trang không tôn tại
 				</h1>
 				<p className='mt-2 text-pretty text-sm leading-relaxed text-muted-foreground'>
-					Trang bạn tìm kiếm đã chạy trốn rồi! 👻 Có thể nó quyết định đi du lịch hoặc
-					quên đường về.
+					Trang bạn tìm kiếm không tồn tại hoặc đã bị xóa. Hãy kiểm tra lại đường dẫn hoặc quay về trang chủ.
 				</p>
 				<div className='mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row'>
 					<Link
@@ -27,7 +26,7 @@ export default function NotFound() {
 							className='h-4 w-4'
 							aria-hidden='true'
 						/>
-						Về nhà
+						Trang chủ
 					</Link>
 				</div>
 			</div>

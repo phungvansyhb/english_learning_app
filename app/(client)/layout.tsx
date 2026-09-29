@@ -3,6 +3,19 @@ import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
 import { TextSelectionDictionary } from '@/components/dashboard/dictionary/text-selection-dictionary';
 import StickmanTalk from '@/components/ui/stickman-talk';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+	title: 'Khu vực học tập',
+	robots: {
+		index: false,
+		follow: false,
+		googleBot: {
+			index: false,
+			follow: false,
+		},
+	},
+};
 
 export default function RootLayout({
 	children,

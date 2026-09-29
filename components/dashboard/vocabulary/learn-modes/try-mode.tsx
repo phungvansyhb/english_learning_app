@@ -63,7 +63,7 @@ export default function TryMode({ words }: Props) {
 						</div>
 						{item.collocations && item.collocations.length > 0 && (
 							<section className='mt-2'>
-								<h3>Example:</h3>
+								<h3>Ví dụ:</h3>
 								<div className='text-sm leading-6 text-muted-foreground '>
 									{item.collocations &&
 										item.collocations.length > 0 &&
@@ -79,11 +79,11 @@ export default function TryMode({ words }: Props) {
 						)}
 						{item.relations && item.relations.length > 0 && (
 							<section className='mt-2'>
-								<h3>Related words:</h3>
+								<h3>Từ liên quan:</h3>
 								{item.relations.filter((r) => r.relation_type === 'SYNONYMS')
 									.length > 0 && (
 									<div className='flex gap-1.5 items-baseline mt-2'>
-										<Badge className='lowercase '>SYNONYMS</Badge>
+										<Badge className='lowercase '>ĐỒNG NGHĨA</Badge>
 										<p className='text-sm text-muted-foreground'>
 											{item.relations
 												.filter((r) => r.relation_type === 'SYNONYMS')
@@ -95,7 +95,7 @@ export default function TryMode({ words }: Props) {
 								{item.relations.filter((r) => r.relation_type === 'ANTONYMS')
 									.length > 0 && (
 									<div className='flex gap-1.5 items-baseline mt-2'>
-										<Badge className='lowercase '>ANTONYMS</Badge>
+										<Badge className='lowercase '>TRÁI NGHĨA</Badge>
 										<p className='text-sm text-muted-foreground'>
 											{item.relations
 												.filter((r) => r.relation_type === 'ANTONYMS')

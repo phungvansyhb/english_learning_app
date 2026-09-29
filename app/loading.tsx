@@ -7,9 +7,9 @@ export default function Loading() {
 					<span className='relative inline-flex h-12 w-12 animate-spin rounded-full border-4 border-primary/20 border-t-primary' />
 				</div>
 				<div className='flex flex-col items-center gap-1 text-center'>
-					<p className='text-lg font-semibold text-foreground'>Loading Lingua</p>
+					<p className='text-lg font-semibold text-foreground'>Đang tải Lingua</p>
 					<p className='text-sm text-muted-foreground'>
-						Getting your learning space ready…
+						Hệ thống đang tải nội dung
 					</p>
 				</div>
 			</div>

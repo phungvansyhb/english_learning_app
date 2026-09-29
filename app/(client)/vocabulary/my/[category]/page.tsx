@@ -4,14 +4,25 @@ import TryMode from '@/components/dashboard/vocabulary/learn-modes/try-mode';
 import { Button } from '@/components/ui/button';
 import { ServerPageProps, VOCAB_MODE } from '@/lib/types';
 import { getUserVocabCategory, listCategoryWords } from '@/services/user-vocab-category';
-import { ArrowLeft, BookOpen, FolderUpIcon, Gamepad2, ListCheckIcon, Share2Icon } from 'lucide-react';
+import {
+	ArrowLeft,
+	BookOpen,
+	FolderUpIcon,
+	Gamepad2,
+	ListCheckIcon,
+	Share2Icon,
+} from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 
-export async function generateMetadata({ params }: ServerPageProps) {
+export async function generateMetadata({ params }: ServerPageProps): Promise<Metadata> {
 	const { category } = await params;
 	const data = await getUserVocabCategory(Number(category));
-	return { title: data ? `${data.name} | Sổ tay từ vựng` : 'Sổ tay từ vựng' };
+	return {
+		title: data ? `${data.name} | Sổ tay từ vựng` : 'Sổ tay từ vựng',
+		description: 'Sổ tay từ vựng cá nhân trong Lingua.',
+	};
 }
 
 export default async function UserVocabularyCategoryPage({

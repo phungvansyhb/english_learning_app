@@ -10,7 +10,7 @@ import { DATETIME_FORMAT } from '@/lib/types';
 import { getUserActivities } from '@/services/auth';
 import { useAuthStore } from '@/utils/zustand/auth-store';
 
-dayjs.extend(isoWeek);
+dayjs.extend(isoWeek).locale('vi');
 
 export function CalendarCard() {
 	const today = dayjs();
@@ -45,7 +45,7 @@ export function CalendarCard() {
 			<div className='flex justify-between items-center'>
 				<button
 					type='button'
-					aria-label='Previous week'
+					aria-label='Tuần trước'
 					onClick={() => setSelectedWeek((week) => week.subtract(1, 'week'))}
 					className='flex justify-center items-center hover:bg-secondary border border-border rounded-full size-9 text-foreground transition-colors'>
 					<ChevronLeft className='size-4' />
@@ -55,7 +55,7 @@ export function CalendarCard() {
 				</h2>
 				<button
 					type='button'
-					aria-label='Next week'
+					aria-label='Tuần sau'
 					onClick={() => setSelectedWeek((week) => week.add(1, 'week'))}
 					className='flex justify-center items-center hover:bg-secondary border border-border rounded-full size-9 text-foreground transition-colors'>
 					<ChevronRight className='size-4' />

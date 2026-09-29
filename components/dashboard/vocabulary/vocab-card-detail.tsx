@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-type Props = {}
+type Props = {};
 
 export default function VocabularyPlayer({}: Props) {
-  return (
-    <div>Vocabulary Player</div>
-  )
+	return <div>Trình học từ vựng</div>;
 }

@@ -23,12 +23,12 @@ export function GrammarDetail({ grammar, neighbors }: GrammarDetailProps) {
 	return (
 		<main className='mx-auto max-w-6xl'>
 			<nav
-				aria-label='Breadcrumb'
+				aria-label='Đường dẫn'
 				className='mb-8 flex items-center gap-2 text-sm text-muted-foreground'>
 				<Link
 					href='/grammar'
 					className='hover:text-foreground'>
-					Grammar
+					Ngữ pháp
 				</Link>
 				<ChevronRight
 					className='size-4'
@@ -41,7 +41,7 @@ export function GrammarDetail({ grammar, neighbors }: GrammarDetailProps) {
 				<header className='border-b border-border pb-8'>
 					<span
 						className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${getDifficultyTone(grammar.difficulty_label)}`}>
-						{grammar.difficulty_label || 'All levels'}
+						{grammar.difficulty_label || 'Mọi trình độ'}
 					</span>
 					<h1 className='mt-4 text-balance text-2xl font-bold tracking-tight text-foreground md:text-3xl'>
 						{grammar.name}
@@ -57,8 +57,7 @@ export function GrammarDetail({ grammar, neighbors }: GrammarDetailProps) {
 					className='content-reading pt-8'
 					dangerouslySetInnerHTML={{
 						__html:
-							grammar.content ||
-							'<p>Content for this lesson has not been added yet.</p>',
+							grammar.content || '<p>Nội dung cho bài học này chưa được thêm.</p>',
 					}}
 				/>
 
@@ -70,7 +69,7 @@ export function GrammarDetail({ grammar, neighbors }: GrammarDetailProps) {
 							<ArrowLeft className='size-4' />
 							<span>
 								<small className='block text-xs text-muted-foreground'>
-									Previous
+									Bài trước
 								</small>
 								<strong>{neighbors.previous?.name}</strong>
 							</span>
@@ -83,7 +82,9 @@ export function GrammarDetail({ grammar, neighbors }: GrammarDetailProps) {
 							href={nextHref}
 							className='flex flex-1 items-center justify-end gap-3 rounded-xl border border-border p-4 text-right hover:bg-card'>
 							<span>
-								<small className='block text-xs text-muted-foreground'>Next</small>
+								<small className='block text-xs text-muted-foreground'>
+									Bài sau
+								</small>
 								<strong>{neighbors.next?.name}</strong>
 							</span>
 							<ArrowRight className='size-4' />

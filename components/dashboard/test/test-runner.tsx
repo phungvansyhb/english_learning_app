@@ -37,7 +37,7 @@ export default function TestRunner({
 				<div className='mx-auto flex max-w-3xl flex-col gap-5'>
 					<Card>
 						<CardHeader>
-							<Badge variant='secondary'>Test complete</Badge>
+							<Badge variant='secondary'>Đã hoàn thành bài thi</Badge>
 							<CardTitle className='text-2xl'>Bạn đã hoàn thành {title}</CardTitle>
 						</CardHeader>
 						<CardContent className='flex flex-col gap-5'>

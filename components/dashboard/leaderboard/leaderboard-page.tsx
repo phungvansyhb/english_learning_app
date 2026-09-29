@@ -298,7 +298,7 @@ export function LeaderboardPage() {
 			<div className='relative overflow-hidden bg-accent/50 p-6 sm:p-8 border border-brand-purple/30 rounded-3xl'>
 				<div className='relative z-10 max-w-2xl'>
 					<span className='inline-flex items-center gap-2 bg-brand-mint px-3 py-1 rounded-full font-semibold text-brand-mint-foreground text-xs'>
-						<Trophy className='size-3.5' /> Hall of fame
+						<Trophy className='size-3.5' /> Bảng vinh danh
 					</span>
 					<h1 className='mt-4 font-bold text-3xl sm:text-4xl tracking-tight'>
 						Bảng xếp hạng

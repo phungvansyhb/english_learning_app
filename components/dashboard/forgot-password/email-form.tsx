@@ -12,7 +12,7 @@ export default function EmailForm({}: Props) {
 	const [isPending, startTransition] = useTransition();
 
 	const schema = z.object({
-		email: z.string().trim().min(1, 'Email is required').email('Invalid email'),
+		email: z.string().trim().min(1, 'Email là bắt buộc').email('Email không hợp lệ'),
 	});
 
 	type FormData = z.infer<typeof schema>;
@@ -37,10 +37,10 @@ export default function EmailForm({}: Props) {
 			onSubmit={handleSubmit(onSubmit)}
 			className='space-y-5'>
 			<Field
-				label='Email adress'
+				label='Địa chỉ email'
 				{...register('email')}
 				error={errors.email}
-				placeholder='Enter your email'
+				placeholder='Nhập email của bạn'
 			/>
 			{/* Login Button */}
 			<Button
@@ -48,7 +48,7 @@ export default function EmailForm({}: Props) {
 				size='lg'
 				disabled={isPending}
 				className='bg-primary hover:bg-primary/80 disabled:opacity-50 mt-6 px-4 py-3 rounded-lg w-full font-semibold text-primary-foreground transition disabled:cursor-not-allowed'>
-				{isPending ? 'Claiming...' : 'Claim password'}
+				{isPending ? 'Đang xử lý...' : 'Lấy lại mật khẩu'}
 			</Button>
 		</form>
 	);

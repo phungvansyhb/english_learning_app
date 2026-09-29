@@ -15,8 +15,8 @@ export default function LoginPage() {
 	const [isPending, startTransition] = useTransition();
 
 	const schema = z.object({
-		email: z.string().trim().min(1, 'Email is required').email('Invalid email'),
-		password: z.string().trim().min(8, 'Password must be at least 8 characters'),
+		email: z.string().trim().min(1, 'Email là bắt buộc').email('Email không hợp lệ'),
+		password: z.string().trim().min(8, 'Mật khẩu phải có ít nhất 8 ký tự'),
 	});
 
 	type FormData = z.infer<typeof schema>;
@@ -52,11 +52,10 @@ export default function LoginPage() {
 
 					<div className='z-10 relative'>
 						<h1 className='mb-6 font-bold text-5xl leading-tight'>
-							Simplify management with our dashboard.
+							Quản lý hệ thống dễ dàng hơn với Lingua.
 						</h1>
 						<p className='opacity-90 text-lg'>
-							Simplify your e-commerce management with our user-friendly admin
-							dashboard.
+							Điều hành nội dung học tập với bảng quản trị thân thiện.
 						</p>
 					</div>
 
@@ -95,9 +94,11 @@ export default function LoginPage() {
 
 					{/* Welcome Text */}
 					<div className='mb-8'>
-						<h2 className='mb-3 font-bold text-foreground text-4xl'>Welcome Back</h2>
+						<h2 className='mb-3 font-bold text-foreground text-4xl'>
+							Chào mừng trở lại
+						</h2>
 						<p className='text-muted-foreground text-lg'>
-							Please login to your account
+							Vui lòng đăng nhập vào tài khoản quản trị
 						</p>
 					</div>
 
@@ -107,15 +108,15 @@ export default function LoginPage() {
 						className='space-y-5'>
 						{/* Email Input */}
 						<Field
-							label='Email address'
+							label='Địa chỉ email'
 							error={errors.email}
-							placeholder='Enter your email'
+							placeholder='Nhập email của bạn'
 							{...register('email')}
 						/>
 						<Field
-							label='Password'
+							label='Mật khẩu'
 							error={errors.password}
-							placeholder='Enter your password'
+							placeholder='Nhập mật khẩu của bạn'
 							{...register('password')}
 							type={showPassword ? 'text' : 'password'}
 							suffixIcon={
@@ -136,7 +137,7 @@ export default function LoginPage() {
 							<Link
 								href='/forgot-password'
 								className='font-medium text-primary hover:text-primary/80 text-sm transition'>
-								Forgot password?
+								Quên mật khẩu?
 							</Link>
 						</div>
 						{errors.root?.apiError && (
@@ -148,7 +149,7 @@ export default function LoginPage() {
 							size='lg'
 							disabled={isPending}
 							className='bg-primary hover:bg-primary/80 disabled:opacity-50 mt-6 px-4 py-3 rounded-lg w-full font-semibold text-primary-foreground transition disabled:cursor-not-allowed'>
-							{isPending ? 'Logging in...' : 'Login'}
+							{isPending ? 'Đang đăng nhập...' : 'Đăng nhập'}
 						</Button>
 					</form>
 				</div>

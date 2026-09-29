@@ -15,7 +15,7 @@ export default function PracticeQuestionSwitcher() {
 			size='icon'
 			disabled={disabled}
 			onClick={next}
-			aria-label='Show another question'
+			aria-label='Hiển thị câu hỏi khác'
 			className='shrink-0'>
 			<Repeat className='size-4' />
 		</Button>

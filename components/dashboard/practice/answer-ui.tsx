@@ -110,28 +110,28 @@ export default function AnswerUi({ mode }: Props) {
 						aria-hidden='true'
 					/>
 					<div className='w-full'>
-						<p className='font-semibold'>Match: {matchPercentage ?? 0}%</p>
+						<p className='font-semibold'>Mức độ khớp: {matchPercentage ?? 0}%</p>
 						<p className='mt-1 text-sm text-muted-foreground'>
-							Your answer: {submittedAnswer || 'No answer detected.'}
+							Câu trả lời: {submittedAnswer || 'Chưa phát hiện câu trả lời.'}
 						</p>
 					</div>
 				</div>
 
 				<div className='rounded-2xl border border-border/60 bg-background/60 p-3'>
 					<p className='text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground'>
-						System answer
+						Đáp án hệ thống
 					</p>
 					<p className='mt-2 text-sm leading-6 text-foreground'>
-						{expectedAnswer ?? 'No system answer available yet.'}
+						{expectedAnswer ?? 'Chưa có đáp án hệ thống.'}
 					</p>
 				</div>
 
 				<div className='space-y-2'>
 					<div className='flex items-center justify-between'>
 						<p className='text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground'>
-							Other learners
+							Người học khác
 						</p>
-						<span className='text-xs text-muted-foreground'>Mockup</span>
+						<span className='text-xs text-muted-foreground'>Bản minh họa</span>
 					</div>
 					<ul className='space-y-2'>
 						{peerAnswers.map((item) => (
@@ -150,7 +150,7 @@ export default function AnswerUi({ mode }: Props) {
 										<button
 											type='button'
 											key={key}
-											aria-label={`React ${emoji} to ${item.name}'s answer`}
+											aria-label={`Bày tỏ cảm xúc ${emoji} với câu trả lời của ${item.name}`}
 											onClick={() => handleReact(item.name, key)}
 											className='inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-1 text-xs text-muted-foreground transition hover:border-primary/40 hover:text-foreground'>
 											<span aria-hidden='true'>{emoji}</span>
@@ -168,12 +168,12 @@ export default function AnswerUi({ mode }: Props) {
 						variant='outline'
 						size='sm'
 						onClick={handleTryAgain}>
-						<RotateCcw data-icon='inline-start' /> Try again
+						<RotateCcw data-icon='inline-start' /> Thử lại
 					</Button>
 					<Button
 						size='sm'
 						onClick={handleNextQuestion}>
-						Next question <Send data-icon='inline-end' />
+						Câu hỏi tiếp theo <Send data-icon='inline-end' />
 					</Button>
 				</div>
 			</div>
@@ -183,8 +183,8 @@ export default function AnswerUi({ mode }: Props) {
 		return (
 			<div className='flex flex-col gap-4'>
 				<textarea
-					aria-label='Write your answer'
-					placeholder='Write your answer here...'
+					aria-label='Viết câu trả lời của bạn'
+					placeholder='Viết câu trả lời tại đây...'
 					value={typedAnswer}
 					onChange={(event) => setTypedAnswer(event.target.value)}
 					className='min-h-40 w-full resize-none rounded-2xl bg-secondary/70 p-4 text-sm outline-none focus:ring-2 focus:ring-ring/30'
@@ -193,7 +193,7 @@ export default function AnswerUi({ mode }: Props) {
 				<Button
 					className='self-end'
 					onClick={handleSubmitTextAnswer}>
-					Submit answer <Send data-icon='inline-end' />
+					Gửi câu trả lời <Send data-icon='inline-end' />
 				</Button>
 			</div>
 		);
@@ -202,7 +202,7 @@ export default function AnswerUi({ mode }: Props) {
 		<div className='flex flex-col items-center gap-5'>
 			<button
 				type='button'
-				aria-label='Start speaking answer'
+				aria-label='Bắt đầu nói câu trả lời'
 				disabled={isRecording}
 				onClick={startRecognition}
 				className='group flex size-24 items-center justify-center rounded-full bg-secondary text-foreground transition-transform hover:scale-105 disabled:cursor-wait disabled:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4'>
@@ -215,7 +215,7 @@ export default function AnswerUi({ mode }: Props) {
 					className='size-4'
 					aria-hidden='true'
 				/>
-				<span>{isRecording ? 'Đang nghe...' : 'Tap to speak your answer'}</span>
+				<span>{isRecording ? 'Đang nghe...' : 'Chạm để nói câu trả lời'}</span>
 			</div>
 			{error && (
 				<p className='text-center text-sm text-destructive'>

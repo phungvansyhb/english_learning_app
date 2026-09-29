@@ -191,7 +191,7 @@ export default function LearnMode({ words }: Props) {
 								<div className='col-start-1 row-start-1 flex rotate-y-180 items-center backface-hidden'>
 									<div className='w-full px-10'>
 										<div className='text-left'>
-											<h2 className='mb-4 text-2xl font-bold'>Meanings</h2>
+											<h2 className='mb-4 text-2xl font-bold'>Nghĩa</h2>
 											<div className='space-y-3 text-sm leading-6 text-muted-foreground'>
 												{current.meanings?.map((meaning) => (
 													<div key={meaning.id}>
@@ -210,7 +210,9 @@ export default function LearnMode({ words }: Props) {
 											</div>
 											{current.collocations?.length ? (
 												<section className='mt-4'>
-													<h3 className='font-semibold'>Collocations:</h3>
+													<h3 className='font-semibold'>
+														Cụm từ thường gặp:
+													</h3>
 													{current.collocations.map((collocation) => (
 														<div
 															key={collocation.id}
@@ -223,9 +225,7 @@ export default function LearnMode({ words }: Props) {
 											) : null}
 											{current.relations && current.relations.length > 0 && (
 												<section className='mt-2'>
-													<h3 className='font-semibold'>
-														Related words:
-													</h3>
+													<h3 className='font-semibold'>Từ liên quan:</h3>
 													{current.relations.filter(
 														(r) => r.relation_type === 'SYNONYMS',
 													).length > 0 && (

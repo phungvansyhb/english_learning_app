@@ -12,19 +12,19 @@ export function DailyWordBanner() {
 				</h2>
 				<div
 					className='flex gap-2 text-muted-foreground text-sm'
-					aria-label='synonym'>
+					aria-label='Phiên âm'>
 					/əˈkɑːmədeɪt/
 					<Volume1Icon className='cursor-pointer' />
 				</div>
 				<div
 					className='mt-2 text-foreground text-sm'
-					aria-label='synonym'>
-					Def: To provide enough space for someone/something.
+					aria-label='Định nghĩa'>
+					Nghĩa: Cung cấp đủ không gian cho ai đó hoặc vật gì đó.
 				</div>
 				<div
 					className='text-foreground text-sm'
-					aria-label='synonym'>
-					Eg: "The new conference room can accommodate 50."
+					aria-label='Ví dụ'>
+					Ví dụ: "Phòng họp mới có thể chứa 50 người."
 				</div>
 
 				<Button className='mt-5 px-6 rounded-full h-11 text-sm'>Học thôi</Button>
@@ -32,7 +32,7 @@ export function DailyWordBanner() {
 
 			<Image
 				src='/illustrations/banner-reading.png'
-				alt='Illustration of a person reading on a stack of books'
+				alt='Minh họa một người đang đọc sách trên chồng sách'
 				width={360}
 				height={260}
 				priority

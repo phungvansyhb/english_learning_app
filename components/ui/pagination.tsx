@@ -74,7 +74,7 @@ export function Pagination({
 							? 'cursor-not-allowed text-muted-foreground bg-secondary'
 							: 'text-foreground bg-card hover:bg-secondary',
 					)}>
-					Previous
+					Trang trước
 				</Button>
 				<Button
 					onClick={() => handleNextPage(Math.min(totalPages, page + 1))}
@@ -84,7 +84,7 @@ export function Pagination({
 							? 'cursor-not-allowed text-muted-foreground bg-secondary'
 							: 'text-foreground bg-card hover:bg-secondary',
 					)}>
-					Next
+					Trang sau
 				</Button>
 			</div>
 		</div>

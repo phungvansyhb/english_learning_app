@@ -23,7 +23,7 @@ export function GrammarCard({ grammar }: { grammar: GrammarPointWithDifficultyLa
 					</h2>
 					<span
 						className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${getDifficultyTone(grammar.difficulty_label)}`}>
-						{grammar.difficulty_label || 'All levels'}
+						{grammar.difficulty_label || 'Mọi trình độ'}
 					</span>
 				</div>
 				<p className='mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground'>

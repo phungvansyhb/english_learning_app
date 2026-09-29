@@ -11,10 +11,10 @@ import {
 import { Radar } from 'react-chartjs-2';
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 const data = {
-	labels: ['Vocabulary', 'Reading', 'Listening', 'Writing', 'Speaking'],
+	labels: ['Từ vựng', 'Đọc', 'Nghe', 'Viết', 'Nói'],
 	datasets: [
 		{
-			label: 'Current Accuracy',
+			label: 'Độ chính xác hiện tại',
 			data: [69, 80, 50, 75, 90], // Values matching the labels order
 			backgroundColor: 'oklch(77.926% 0.10977 300.171 / 0.35)', // Light Tailwind blue fill
 			borderColor: 'oklch(0.78 0.11 300)', // Tailwind blue border
@@ -26,7 +26,7 @@ const data = {
 			pointHoverBorderColor: 'oklch(0.78 0.11 300)',
 		},
 		{
-			label: 'Target Goal',
+			label: 'Mục tiêu',
 			data: [95, 85, 85, 85, 85], // Second dataset for comparison
 			backgroundColor: 'oklch(85.925% 0.10044 164.716 / 0.247)', // Light Tailwind yellow fill
 			borderColor: 'oklch(0.86 0.1 165)', // Tailwind yellow border
@@ -87,7 +87,7 @@ const options = {
 export function PerformanceAnalysis() {
 	return (
 		<section>
-			<h2 className='font-bold text-foreground text-lg'>Performance analysis</h2>
+			<h2 className='font-bold text-foreground text-lg'>Phân tích năng lực</h2>
 			<div className='mt-4'>
 				<Radar
 					data={data}

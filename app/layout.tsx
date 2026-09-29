@@ -10,10 +10,33 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-	title: 'Lingua — English Learning Dashboard',
-	description:
-		'Track your progress, discover new courses and grow your English skills with Lingua.',
-	generator: 'v0.app',
+	metadataBase: process.env.NEXT_PUBLIC_SITE_URL
+		? new URL(process.env.NEXT_PUBLIC_SITE_URL)
+		: undefined,
+	title: {
+		default: 'Lingua - Học tiếng Anh mỗi ngày',
+		template: '%s | Lingua',
+	},
+	description: 'Nền tảng học tiếng Anh giúp bạn luyện từ vựng, ngữ pháp và bốn kỹ năng mỗi ngày.',
+	keywords: ['học tiếng Anh', 'luyện tiếng Anh', 'từ vựng tiếng Anh', 'ngữ pháp tiếng Anh'],
+	applicationName: 'Lingua',
+	creator: 'Lingua',
+	openGraph: {
+		type: 'website',
+		locale: 'vi_VN',
+		siteName: 'Lingua',
+		title: 'Lingua - Học tiếng Anh mỗi ngày',
+		description:
+			'Nền tảng học tiếng Anh giúp bạn luyện từ vựng, ngữ pháp và bốn kỹ năng mỗi ngày.',
+		images: [{ url: '/icon.png', width: 512, height: 512, alt: 'Lingua' }],
+	},
+	twitter: {
+		card: 'summary',
+		title: 'Lingua - Học tiếng Anh mỗi ngày',
+		description:
+			'Nền tảng học tiếng Anh giúp bạn luyện từ vựng, ngữ pháp và bốn kỹ năng mỗi ngày.',
+		images: ['/icon.png'],
+	},
 };
 
 export const viewport: Viewport = {

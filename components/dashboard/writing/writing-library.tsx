@@ -25,7 +25,7 @@ const icons = {
 	response: MessageSquareText,
 	description: FileText,
 	chart: BarChart3,
-	opinion: PenLine
+	opinion: PenLine,
 };
 export default function WritingLibrary() {
 	const [type, setType] = useState<WritingType | 'all'>('all');
@@ -46,7 +46,7 @@ export default function WritingLibrary() {
 					<div className='flex flex-col gap-5 md:flex-row md:items-end md:justify-between'>
 						<div className='max-w-2xl'>
 							<span className='flex w-fit items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary'>
-								<PenLine className='size-3.5' /> Writing studio
+								<PenLine className='size-3.5' /> Phòng luyện viết
 							</span>
 							<h1 className='mt-4 text-balance text-3xl font-bold tracking-tight md:text-4xl'>
 								Viết rõ ý, đúng ngữ cảnh

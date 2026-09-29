@@ -13,7 +13,7 @@ export default function NewPassForm({}: Props) {
 	const [isPending, startTransition] = useTransition();
 	const [showPassword, setShowPassword] = useState(false);
 	const schema = z.object({
-		password: z.string().trim().min(8, 'New Password must be at least 8 characters'),
+		password: z.string().trim().min(8, 'Mật khẩu mới phải có ít nhất 8 ký tự'),
 	});
 
 	type FormData = z.infer<typeof schema>;
@@ -38,10 +38,10 @@ export default function NewPassForm({}: Props) {
 			onSubmit={handleSubmit(onSubmit)}
 			className='space-y-5'>
 			<Field
-				label='Email adress'
+				label='Mật khẩu mới'
 				{...register('password')}
 				error={errors.password}
-				placeholder='Enter your new password'
+				placeholder='Nhập mật khẩu mới của bạn'
 				type={showPassword ? 'text' : 'password'}
 				suffixIcon={
 					<div
@@ -57,7 +57,7 @@ export default function NewPassForm({}: Props) {
 				size='lg'
 				disabled={isPending}
 				className='bg-primary hover:bg-primary/80 disabled:opacity-50 mt-6 px-4 py-3 rounded-lg w-full font-semibold text-primary-foreground transition disabled:cursor-not-allowed'>
-				{isPending ? 'Creating...' : 'Create new password'}
+				{isPending ? 'Đang tạo...' : 'Tạo mật khẩu mới'}
 			</Button>
 		</form>
 	);

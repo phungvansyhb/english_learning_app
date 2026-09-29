@@ -10,11 +10,11 @@ export async function generateMetadata({ params }: GrammarLessonPageProps): Prom
 	const { slug } = await params;
 	const id = getGrammarIdFromSlug(slug);
 	const grammar = id ? await getGrammarPointForPage(id) : null;
-	if (!grammar) return { title: 'Grammar lesson not found' };
+	if (!grammar) return { title: 'Không tìm thấy bài học ngữ pháp' };
 
 	return {
 		title: grammar.name,
-		description: grammar.description || `Study the English grammar point ${grammar.name}.`,
+		description: grammar.description || `Học điểm ngữ pháp tiếng Anh: ${grammar.name}.`,
 		alternates: { canonical: `/grammar/${createGrammarSlug(grammar.id, grammar.name)}` },
 	};
 }

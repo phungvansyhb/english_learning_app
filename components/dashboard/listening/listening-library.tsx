@@ -45,7 +45,7 @@ export default function ListeningLibrary() {
 					<div className='flex flex-col gap-5 md:flex-row md:items-end md:justify-between'>
 						<div className='max-w-2xl'>
 							<span className='flex w-fit items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary'>
-								<FileAudio className='size-3.5' /> Listening lab
+								<FileAudio className='size-3.5' /> Phòng luyện nghe
 							</span>
 							<h1 className='mt-4 text-balance text-3xl font-bold tracking-tight md:text-4xl'>
 								Luyện nghe theo format TOEIC

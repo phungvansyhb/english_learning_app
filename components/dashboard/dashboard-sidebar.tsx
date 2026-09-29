@@ -1,20 +1,13 @@
 'use client';
 
 import {
-	BookMarkedIcon,
-	BookOpen,
-	BrainIcon,
 	ChevronLeft,
 	DumbbellIcon,
-	FileHeadphoneIcon,
 	LanguagesIcon,
 	LayoutGrid,
 	LogOut,
 	MedalIcon,
-	MicVocalIcon,
-	PenToolIcon,
-	Settings,
-	WholeWordIcon,
+	WholeWordIcon
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState, useTransition } from 'react';
@@ -32,17 +25,17 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-	{ id: 'vocabulary', label: 'Vocabulary', icon: WholeWordIcon, link: '/vocabulary' },
-	{ id: 'grammar', label: 'Grammar', icon: LanguagesIcon, link: '/grammar' },
+	{ id: 'vocabulary', label: 'Từ vựng', icon: WholeWordIcon, link: '/vocabulary' },
+	{ id: 'grammar', label: 'Ngữ pháp', icon: LanguagesIcon, link: '/grammar' },
 	{
 		id: 'practice',
-		label: 'Practice',
+		label: 'Luyện tập',
 		icon: DumbbellIcon,
 		link: '/practice?mode=listen&answer=speak',
 	},
 	{
 		id: 'leaderboard',
-		label: 'LeaderBoard',
+		label: 'Xếp hạng',
 		icon: MedalIcon,
 		hasDot: true,
 		link: '/leaderboard',
@@ -99,7 +92,7 @@ export function DashboardSidebar() {
 				{/* Collapse / expand toggle */}
 				<button
 					onClick={() => setExpanded((v) => !v)}
-					aria-label={expanded ? 'Collapse sidebar' : 'Expand sidebar'}
+					aria-label={expanded ? 'Thu gọn thanh bên' : 'Mở rộng thanh bên'}
 					aria-expanded={expanded}
 					className='z-100 top-9 -right-3 absolute flex justify-center items-center bg-card shadow-sm border border-border rounded-full size-6 text-muted-foreground hover:text-foreground transition-colors'>
 					<ChevronLeft
@@ -151,20 +144,20 @@ export function DashboardSidebar() {
 
 				<button
 					type='button'
-					aria-label='Log out'
+					aria-label='Đăng xuất'
 					onClick={() => handleSignOut()}
 					className={cn(
 						'cursor-pointer flex items-center hover:bg-secondary rounded-xl h-11 text-muted-foreground hover:text-foreground transition-colors',
 						expanded ? 'w-full gap-3 px-3' : 'w-11 justify-center self-center',
 					)}>
 					<LogOut className='size-5 shrink-0' />
-					{expanded && <span className='font-medium text-sm'>Log out</span>}
+					{expanded && <span className='font-medium text-sm'>Đăng xuất</span>}
 				</button>
 			</aside>
 
 			{/* Mobile bottom bar */}
 			<nav
-				aria-label='Primary'
+				aria-label='Điều hướng chính'
 				className='md:hidden bottom-0 z-50 fixed inset-x-0 flex justify-around items-center bg-card px-2 py-2 border-border border-t'>
 				{navItems.map((item) => {
 					const Icon = item.icon;
