@@ -45,7 +45,7 @@ const navItems: NavItem[] = [
 function BrandMark({ onClick }: { onClick: (item: string) => void }) {
 	return (
 		<Link
-			href='/'
+			href='/home'
 			onClick={() => onClick('')}>
 			<div className='flex justify-center items-center bg-primary rounded-xl size-10 shrink-0'>
 				<div className='gap-0.5 grid grid-cols-2 size-5'>

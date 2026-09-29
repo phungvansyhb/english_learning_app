@@ -56,7 +56,7 @@ export async function signInWithPassword({ email, password }: { email: string; p
             console.error('Sign in error', error);
             return error.message;
         } else {
-            redirect('/');
+            redirect('/home');
         }
     }
 }
@@ -70,7 +70,7 @@ export async function signInOAuth(provider: 'google' | 'facebook' | 'github') {
         console.error('Sign in with ', provider, ' error: ', error);
     } else {
         console.log(data);
-        redirect('/');
+        redirect('/home');
     }
 }
 

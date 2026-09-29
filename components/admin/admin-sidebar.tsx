@@ -39,7 +39,7 @@ const navItems: NavItem[] = [
 
 function BrandMark() {
 	return (
-		<Link href='/'>
+		<Link href='/admin'>
 			<div className='flex justify-center items-center bg-primary rounded-xl size-10 shrink-0'>
 				<div className='gap-0.5 grid grid-cols-2 size-5'>
 					<span className='bg-brand-pink rounded-xs' />
