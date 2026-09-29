@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import PwaRegister from '@/components/pwa-register';
 import './globals.css';
 
 const jakarta = Plus_Jakarta_Sans({
@@ -21,6 +22,11 @@ export const metadata: Metadata = {
 	keywords: ['học tiếng Anh', 'luyện tiếng Anh', 'từ vựng tiếng Anh', 'ngữ pháp tiếng Anh'],
 	applicationName: 'Lingua',
 	creator: 'Lingua',
+	manifest: '/manifest.webmanifest',
+	icons: {
+		icon: '/icon.png',
+		apple: '/apple-icon.png',
+	},
 	openGraph: {
 		type: 'website',
 		locale: 'vi_VN',
@@ -42,8 +48,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
 	colorScheme: 'light dark',
 	themeColor: [
-		{ media: '(prefers-color-scheme: light)', color: 'white' },
-		{ media: '(prefers-color-scheme: dark)', color: 'black' },
+		{ media: '(prefers-color-scheme: light)', color: '#f7f5fb' },
+		{ media: '(prefers-color-scheme: dark)', color: '#25202f' },
 	],
 };
 
@@ -58,6 +64,7 @@ export default function RootLayout({
 			className={`${jakarta.variable}`}>
 			<body className='font-sans antialiased'>
 				{children}
+					<PwaRegister />
 				{process.env.NODE_ENV === 'production' && <Analytics />}
 				{process.env.NODE_ENV === 'production' && <SpeedInsights />}
 			</body>
