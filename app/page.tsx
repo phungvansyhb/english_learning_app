@@ -5,6 +5,6 @@ export default function HomePage() {
 }
 
 export const metadata = {
-  title: 'Lingua — Học tiếng Anh theo cách của bạn',
+  title: 'SentenceUp — Học tiếng Anh theo cách của bạn',
   description: 'Luyện từ vựng, ngữ pháp và bốn kỹ năng tiếng Anh bằng những phiên học ngắn, rõ ràng và phù hợp với bạn.',
 };

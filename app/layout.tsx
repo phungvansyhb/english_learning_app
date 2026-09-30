@@ -15,13 +15,13 @@ export const metadata: Metadata = {
 		? new URL(process.env.NEXT_PUBLIC_SITE_URL)
 		: undefined,
 	title: {
-		default: 'Lingua - Học tiếng Anh mỗi ngày',
-		template: '%s | Lingua',
+		default: 'SentenceUp - Học tiếng Anh mỗi ngày',
+		template: '%s | SentenceUp',
 	},
 	description: 'Nền tảng học tiếng Anh giúp bạn luyện từ vựng, ngữ pháp và bốn kỹ năng mỗi ngày.',
 	keywords: ['học tiếng Anh', 'luyện tiếng Anh', 'từ vựng tiếng Anh', 'ngữ pháp tiếng Anh'],
-	applicationName: 'Lingua',
-	creator: 'Lingua',
+	applicationName: 'SentenceUp',
+	creator: 'SentenceUp Team',
 	manifest: '/manifest.webmanifest',
 	icons: {
 		icon: '/icon.png',
@@ -30,15 +30,15 @@ export const metadata: Metadata = {
 	openGraph: {
 		type: 'website',
 		locale: 'vi_VN',
-		siteName: 'Lingua',
-		title: 'Lingua - Học tiếng Anh mỗi ngày',
+		siteName: 'SentenceUp',
+		title: 'SentenceUp - Học tiếng Anh mỗi ngày',
 		description:
 			'Nền tảng học tiếng Anh giúp bạn luyện từ vựng, ngữ pháp và bốn kỹ năng mỗi ngày.',
-		images: [{ url: '/icon.png', width: 512, height: 512, alt: 'Lingua' }],
+		images: [{ url: '/icon.png', width: 512, height: 512, alt: 'SentenceUp' }],
 	},
 	twitter: {
 		card: 'summary',
-		title: 'Lingua - Học tiếng Anh mỗi ngày',
+		title: 'SentenceUp - Học tiếng Anh mỗi ngày',
 		description:
 			'Nền tảng học tiếng Anh giúp bạn luyện từ vựng, ngữ pháp và bốn kỹ năng mỗi ngày.',
 		images: ['/icon.png'],
@@ -64,7 +64,7 @@ export default function RootLayout({
 			className={`${jakarta.variable}`}>
 			<body className='font-sans antialiased'>
 				{children}
-					<PwaRegister />
+				<PwaRegister />
 				{process.env.NODE_ENV === 'production' && <Analytics />}
 				{process.env.NODE_ENV === 'production' && <SpeedInsights />}
 			</body>

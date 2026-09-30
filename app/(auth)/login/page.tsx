@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { Activity, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { signInWithPassword, signInOAuth } from '@/services/auth';
 import GitHubIcon from '@/components/ui/githubIcon';
 import { Field } from '@/components/ui/field';
+import Logo from '@/components/ui/logo';
 
 export default function LoginPage() {
 	const [showPassword, setShowPassword] = useState(false);
@@ -55,8 +56,8 @@ export default function LoginPage() {
 	};
 
 	return (
-		<div className='flex justify-center items-center p-4 min-h-screen'>
-			<div className='flex bg-card shadow-lg rounded-3xl w-full max-w-6xl overflow-hidden'>
+		<div className='flex justify-center items-center p-0 lg:p-4 min-h-screen'>
+			<div className='flex bg-card lg:shadow-lg rounded-3xl w-full max-w-6xl overflow-hidden'>
 				{/* Left Section - Branding */}
 				<div className='hidden relative lg:flex flex-col justify-between bg-linear-to-br from-primary via-primary to-primary/90 p-12 lg:w-1/2 overflow-hidden text-white'>
 					{/* Decorative elements */}
@@ -93,26 +94,12 @@ export default function LoginPage() {
 
 				{/* Right Section - Login Form */}
 				<div className='flex flex-col justify-center p-8 md:p-12 w-full lg:w-1/2'>
-					{/* Logo/Brand */}
-					<div className='mb-8'>
-						<div className='flex items-center gap-2'>
-							<div className='flex justify-center items-center bg-primary rounded-full w-10 h-10'>
-								<span className='font-bold text-primary-foreground text-lg'>E</span>
-							</div>
-							<span className='font-bold text-foreground text-2xl'>
-								Language Learning
-							</span>
-						</div>
-					</div>
+					<Logo />
 
 					{/* Welcome Text */}
 					<div className='mb-8'>
-						<h2 className='mb-3 font-bold text-foreground text-4xl'>
-							Chào mừng trở lại
-						</h2>
-						<p className='text-muted-foreground text-lg'>
-							Vui lòng đăng nhập vào tài khoản của bạn
-						</p>
+						<h2 className='title-text'>Chào mừng trở lại</h2>
+						<p className='content-text'>Vui lòng đăng nhập vào tài khoản của bạn</p>
 					</div>
 
 					{/* Form */}
@@ -149,21 +136,19 @@ export default function LoginPage() {
 						<div className='flex justify-end'>
 							<Link
 								href='/forgot-password'
-								className='font-medium text-primary hover:text-primary/80 text-sm transition'>
+								className='label-text'>
 								Quên mật khẩu?
 							</Link>
 						</div>
-						{errors.root?.apiError && (
-							<p className='mt-1 error-text animate-in duration-700 fade-in-5'>
-								{errors.root?.apiError.message}
-							</p>
-						)}
+						<Activity mode={errors.root?.apiError ? 'visible' : 'hidden'}>
+							<p className='error-text'>{errors.root?.apiError.message}</p>
+						</Activity>
 						{/* Login Button */}
 						<Button
 							type='submit'
 							size='lg'
 							disabled={isPending}
-							className='bg-primary hover:bg-primary/80 disabled:opacity-50 mt-6 px-4 py-3 rounded-lg w-full font-semibold text-primary-foreground transition disabled:cursor-not-allowed'>
+							className='w-full'>
 							{isPending ? 'Đang đăng nhập...' : 'Đăng nhập'}
 						</Button>
 					</form>
@@ -171,12 +156,12 @@ export default function LoginPage() {
 					{/* Divider */}
 					<div className='flex items-center gap-4 my-6'>
 						<div className='flex-1 bg-border h-px'></div>
-						<span className='text-muted-foreground text-sm'>Hoặc đăng nhập bằng</span>
+						<span className='help-text'>Hoặc đăng nhập bằng</span>
 						<div className='flex-1 bg-border h-px'></div>
 					</div>
 
 					{/* Social Login */}
-					<div className='flex justify-center gap-4'>
+					<div className='flex justify-center flex-wrap gap-2 lg:gap-4'>
 						<Button
 							size='lg'
 							variant='secondary'>
@@ -200,11 +185,11 @@ export default function LoginPage() {
 
 					{/* Signup Link */}
 					<div className='mt-8 text-center'>
-						<span className='text-muted-foreground'>
+						<span className='help-text'>
 							Chưa có tài khoản?{' '}
 							<Link
 								href='/signup'
-								className='font-semibold text-primary hover:text-primary/80 transition'>
+								className='label-text'>
 								Đăng ký
 							</Link>
 						</span>
